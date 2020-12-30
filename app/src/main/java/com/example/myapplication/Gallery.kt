@@ -1,15 +1,16 @@
 package com.example.myapplication
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * A simple [Fragment] subclass.
@@ -17,16 +18,15 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class Gallery : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    lateinit var recyclerView: RecyclerView
+    lateinit var galleryAdapter: GalleryAdapter
+    lateinit var images:List<String>
+    lateinit var gallery_number: TextView
+
+    val MY_READ_PERMISSION_CODE: Int = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -34,26 +34,31 @@ class Gallery : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_gallery, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_gallery, container, false)
+        gallery_number = view.findViewById(R.id.gallery_number)
+        recyclerView = view.findViewById(R.id.recyclerview_gallery_images)
+        if(ContextCompat.checkSelfPermission(this.activity!!, Manifest.permission.READ_EXTERNAL_STORAGE) !=  PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_READ_PERMISSION_CODE)
+        } else{
+            loadImages();
+        }
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Gallery.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Gallery().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode == MY_READ_PERMISSION_CODE) {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this.activity, "Read external storage permission granted", Toast.LENGTH_SHORT).show()
+                loadImage()
+            } else {
+                Toast.makeText(this.activity, "Read external storage permission denied", Toast.LENGTH_SHORT).show()
             }
+        }
     }
 }
