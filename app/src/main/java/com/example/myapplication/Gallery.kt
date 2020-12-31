@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -19,15 +20,13 @@ import androidx.recyclerview.widget.RecyclerView
  * create an instance of this fragment.
  */
 class Gallery : Fragment() {
-    lateinit var recyclerView: RecyclerView
-    lateinit var galleryAdapter: GalleryAdapter
-    lateinit var images:List<String>
-    lateinit var gallery_number: TextView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var galleryAdapter: GalleryAdapter
+    private lateinit var images:List<String>
+    private lateinit var galleryNumber: TextView
 
-    val MY_READ_PERMISSION_CODE: Int = 101
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    companion object {
+        private val MY_READ_PERMISSION_CODE: Int = 101
     }
 
     override fun onCreateView(
@@ -36,7 +35,7 @@ class Gallery : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_gallery, container, false)
-        gallery_number = view.findViewById(R.id.gallery_number)
+        galleryNumber = view.findViewById(R.id.gallery_number)
         recyclerView = view.findViewById(R.id.recyclerview_gallery_images)
         if(ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) !=  PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), MY_READ_PERMISSION_CODE)
@@ -47,16 +46,18 @@ class Gallery : Fragment() {
     }
 
     private fun loadImages() {
+        val context: Context = this.requireContext()
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = GridLayoutManager(this.requireContext(), 4)
         images = ImagesGallery.listOfImages(this.requireContext())
-        galleryAdapter = GalleryAdapter(this.requireContext(), images, object: GalleryAdapter.PhotoListner{
+        galleryAdapter = GalleryAdapter(this.requireContext(), images, object: GalleryAdapter.PhotoListener{
             override fun onPhotoClick(path: String) {
+                Toast.makeText(context, ""+path, Toast.LENGTH_SHORT).show()
             }
         })
 
-        recyclerView.setAdapter(galleryAdapter)
-        gallery_number.setText("Photos ("+images.size+")")
+        recyclerView.adapter = galleryAdapter
+        galleryNumber.text = "Photos ("+images.size+")"
     }
 
     override fun onRequestPermissionsResult(

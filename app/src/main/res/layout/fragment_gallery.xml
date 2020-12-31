@@ -8,28 +8,20 @@
     android:orientation="vertical">
 
     <!-- todo: update blank fragment layout -->
-    <Relativelayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="56dp">
-        <textview
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/gallery_number"
-<<<<<<< HEAD
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:textColor="@color/white"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold"
-=======
-            android:layout_centervertical="true"
-            android:layout_marginleft="16dp"
-            android:textcolor="@color/white"
-            android:textsize="18dp"
-            android:textstyle="bold"
->>>>>>> Gallery_Moon
-            />
-    </Relativelayout>
+            android:layout_marginStart="16dp" />
+    </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
