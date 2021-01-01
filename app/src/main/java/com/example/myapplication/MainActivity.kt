@@ -10,6 +10,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val tabLayout: TabLayout = findViewById(R.id.tabs)
