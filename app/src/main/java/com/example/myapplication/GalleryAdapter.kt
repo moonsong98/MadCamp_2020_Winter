@@ -23,9 +23,7 @@ class GalleryAdapter(private val context: Context, private val images: List<Stri
         holder.itemView.setOnClickListener { photoListener.onPhotoClick(image) }
     }
 
-    override fun getItemCount(): Int {
-        return images.size;
-    }
+    override fun getItemCount(): Int = images.size;
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.image);

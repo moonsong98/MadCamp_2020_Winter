@@ -4,28 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Gallery"
-    android:background="#333333"
-    android:orientation="vertical">
-
-    <!-- todo: update blank fragment layout -->
-    <RelativeLayout
+    android:background="@color/white"
+    >
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp">
-        <TextView
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/gallery_number"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginStart="16dp" />
-    </RelativeLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recyclerview_gallery_images"/>
-
-
+            android:id="@+id/general_photos"
+            android:visibility="visible"
+            android:orientation="vertical"
+            >
+            <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/gallery_number"
+               android:layout_centerVertical="true"
+               android:textColor="@color/black"
+               android:textSize="16sp"
+               android:textStyle="bold"
+                android:padding="16dp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recyclerview_gallery_images"/>
+        </LinearLayout>
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/gallery_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible" />
+    </FrameLayout>
 </LinearLayout>

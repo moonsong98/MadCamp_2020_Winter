@@ -1,11 +1,16 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
+import androidx.annotation.RequiresApi
 
 class ImagesGallery {
     companion object {
+        @SuppressLint("Recycle")
+        @RequiresApi(Build.VERSION_CODES.Q)
         fun listOfImages(context: Context): ArrayList<String> {
             val listOfAllImages:ArrayList<String> = arrayListOf();
             val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;

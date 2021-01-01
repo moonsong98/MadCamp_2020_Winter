@@ -8,6 +8,25 @@ import androidx.fragment.app.FragmentPagerAdapter
 
 class ViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm)
 {
+    override fun getItem(position: Int): Fragment {
+        return when (position) {
+            0 -> Contact()
+            1 -> Gallery()
+            2 -> Test()
+            else -> Contact()
+        }
+    }
+
+    override fun getCount(): Int = 3
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return when(position) {
+            0 -> "Contact"
+            1 -> "Gallery"
+            2 -> "Test"
+            else -> null
+        }
+    }
     /*
     private val fragmentList: ArrayList<Fragment> = ArrayList<Fragment>();
     private val fragmentTitleList: ArrayList<String> = ArrayList<String>();
@@ -31,23 +50,4 @@ class ViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm)
 
 */
 
-    override fun getItem(position: Int): Fragment {
-        return when (position) {
-            0 -> Contact()
-            1 -> Gallery()
-            2 -> Test()
-            else -> Contact()
-        }
-    }
-
-    override fun getCount(): Int = 3
-
-    override fun getPageTitle(position: Int): CharSequence? {
-        return when(position) {
-            0 -> "Contact"
-            1 -> "Gallery"
-            2 -> "Test"
-            else -> null
-        }
-    }
 }
