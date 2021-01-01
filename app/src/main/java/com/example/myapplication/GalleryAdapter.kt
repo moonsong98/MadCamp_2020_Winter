@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 
 class GalleryAdapter(private val context: Context, private val images: List<String>, private val photoListener: PhotoListener):
     RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.gallery_item, parent, false))
     }
