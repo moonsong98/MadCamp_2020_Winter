@@ -17,6 +17,7 @@ class ImagesGallery {
         @RequiresApi(Build.VERSION_CODES.Q)
         fun listOfImages(context: Context): ArrayList<String> {
             val listOfAllImages:ArrayList<String> = arrayListOf();
+            /*
             val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             val projection = arrayOf(MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
             val orderBy: String = MediaStore.Video.Media.DATE_TAKEN
@@ -28,6 +29,7 @@ class ImagesGallery {
                     listOfAllImages.add(absolutePathOfImage)
                 }
             }
+            */
             val externalFile: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
             if(externalFile!= null) run {
                 val files = externalFile.listFiles()
