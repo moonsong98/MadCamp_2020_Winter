@@ -15,7 +15,7 @@ class ImagesGallery {
     companion object {
         @SuppressLint("Recycle")
         @RequiresApi(Build.VERSION_CODES.Q)
-        fun listOfImages(context: Context): ArrayList<String> {
+        fun listOfImages(context: Context, file:File): ArrayList<String> {
             val listOfAllImages:ArrayList<String> = arrayListOf();
             /*
             Retrieve Images from Gallery
@@ -31,12 +31,23 @@ class ImagesGallery {
                 }
             }
             */
-            val externalFile: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            //val externalFile: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            /*
             if(externalFile!= null) run {
                 val files = externalFile.listFiles()
                 for(f in files) {
-                    listOfAllImages.add(f.absolutePath)
-
+                    if(f.isFile)
+                        listOfAllImages.add(f.absolutePath)
+                }
+            }
+             */
+            if(file!= null) run {
+                val files = file.listFiles()
+                if(files != null) {
+                    for(f in files) {
+                        if(f.isFile)
+                            listOfAllImages.add(f.absolutePath)
+                    }
                 }
             }
             return listOfAllImages
