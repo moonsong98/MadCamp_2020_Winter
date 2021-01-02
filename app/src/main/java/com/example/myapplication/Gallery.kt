@@ -7,8 +7,6 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,8 +16,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -45,19 +42,20 @@ class Gallery : Fragment() {
     private lateinit var images:List<String>
     private lateinit var galleryNumber: TextView
     private lateinit var viewPager: ViewPager
-    private lateinit var title: LinearLayout
+    private lateinit var title: RelativeLayout
     private lateinit var addPhotoButton: ImageButton
     private var takenPhoto: File? = null
+    private lateinit var minflater:LayoutInflater
+    private var mcontainer:ViewGroup? = null
 
     companion object {
         private val REQUEST_READ_STORACE: Int = 101
         private val REQUEST_TAKE_PHOTO: Int = 1
         private val TAKE_PHOTO: Int = 1
-        private val READ_SAF: Int = 2
     }
-    fun closeSlide() {
+    private fun closeSlide() {
         recyclerView.visibility = VISIBLE
-        viewPager.visibility = INVISIBLE
+        viewPager.visibility = GONE
         title.visibility = VISIBLE
     }
 
@@ -65,17 +63,20 @@ class Gallery : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        minflater = inflater
+        mcontainer = container
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_gallery, container, false)
         galleryNumber = view.findViewById(R.id.gallery_number)
         recyclerView = view.findViewById(R.id.recyclerview_gallery_images)
         title = view.findViewById(R.id.general_photos)
         viewPager = view.findViewById(R.id.gallery_viewpager)
+
+        /*Add Photo Button*/
         addPhotoButton = view.findViewById(R.id.add_photo)
         addPhotoButton.isClickable = true
         addPhotoButton.setOnClickListener {
-            Log.d(TAG, "ADD PHOTO CLICKED")
             if(ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                     && ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) ==  PackageManager.PERMISSION_GRANTED) {
                 dispatchTakePictureIntent()
@@ -83,45 +84,45 @@ class Gallery : Fragment() {
                 requestPermissions(arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_TAKE_PHOTO)
             }
         }
+
+        /* Photo Swipe */
         viewPager.clipToPadding = false
         val density: Float = resources.displayMetrics.density
         val margin: Int = (24*density).toInt()
         viewPager.setPadding(margin, 0, margin, 0)
         viewPager.pageMargin = margin/2
+
+        /* Request Permission To Read External Storage */
         if(ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) !=  PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_STORACE)
         } else{
             loadImages();
         }
 
-
         return view
-    }
-
-    override fun onStart() {
-        super.onStart()
-        requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_READ_STORACE)
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("SetTextI18n")
     private fun loadImages() {
-        val context: Context = this.requireContext()
+        val activity = this.activity
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = GridLayoutManager(this.requireContext(), 3)
+        recyclerView.layoutManager = GridLayoutManager(this.requireContext(), 2)
         images = ImagesGallery.listOfImages(this.requireContext())
         galleryAdapter = GalleryAdapter(this.requireContext(), images, object: GalleryAdapter.PhotoListener{
             override fun onPhotoClick(path: String) {
-                viewPager.setCurrentItem(images.indexOf(path),false)
-                recyclerView.visibility = INVISIBLE
-                viewPager.visibility = VISIBLE
-                title.visibility = INVISIBLE
+                val intent = Intent(activity, ImageSlider::class.java).apply{
+                    putExtra("path", path)
+                }
+                startActivity(intent)
             }
         })
-        galleryViewPagerAdapter = GalleryViewPagerAdapter(this.requireContext(), images) { closeSlide() }
+        galleryAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
         recyclerView.adapter = galleryAdapter
-        viewPager.adapter = galleryViewPagerAdapter
         galleryNumber.text = "General ("+images.size+")"
+        /* Gallery View Pager Adapter */
+        galleryViewPagerAdapter = GalleryViewPagerAdapter(this.requireContext(), images)
+        viewPager.adapter = galleryViewPagerAdapter
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -134,18 +135,12 @@ class Gallery : Fragment() {
 
         if(requestCode == REQUEST_READ_STORACE) {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "Permission for reading storage is granted")
                 loadImages()
-            } else {
-                Log.d(TAG, "Permission for reading storage is denied")
             }
         }
         if(requestCode == REQUEST_TAKE_PHOTO) {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 dispatchTakePictureIntent()
-                Log.d(TAG, "Permission for taking picture is granted")
-            } else {
-                Log.d(TAG, "Permission for taking picture is denied")
             }
         }
     }
@@ -156,12 +151,7 @@ class Gallery : Fragment() {
 
         if(requestCode == TAKE_PHOTO) {
             if (data != null) {
-                if(resultCode == RESULT_OK ) {
-                    loadImages()
-                }
-                else {
-                    takenPhoto?.delete()
-                }
+                if(resultCode == RESULT_OK) loadImages() else takenPhoto?.delete()
             }
         }
     }
@@ -172,12 +162,11 @@ class Gallery : Fragment() {
         val timeStamp:String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val imageFileName:String = "JPEG_" + timeStamp + "_"
         val storageDir: File? = this.requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val image:File = File.createTempFile(
+        return File.createTempFile(
                 imageFileName,
                 ".jpg",
                 storageDir
         )
-        return image
     }
 
     @SuppressLint("QueryPermissionsNeeded")
@@ -194,4 +183,5 @@ class Gallery : Fragment() {
             startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
         }
     }
+
 }

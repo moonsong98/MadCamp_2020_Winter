@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
-        android:contentDescription="Gallery Image"
+        android:contentDescription="@string/gallery_image"
         app:layout_constraintDimensionRatio = "1"
         android:id="@+id/image"
         tools:ignore="MissingConstraints" />

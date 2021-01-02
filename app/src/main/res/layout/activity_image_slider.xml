@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ImageSlider">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding = "14dp"
+            android:orientation = "horizontal"
+            >
+        <ImageButton
+            android:id = "@+id/back_button"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src = "@drawable/back_button"
+            android:background="@color/transparent"
+            />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id = "@+id/gallery_name"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text = "General"
+            android:layout_centerInParent="true"/>
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/gallery_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <include layout="@layout/content_image_slider" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

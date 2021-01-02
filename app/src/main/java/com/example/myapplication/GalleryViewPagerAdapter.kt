@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import java.io.File
 
-class GalleryViewPagerAdapter(private val context: Context, private val imageList: List<String>, private val callback:()->(Unit)): PagerAdapter() {
+class GalleryViewPagerAdapter(private val context: Context, private val imageList: List<String>): PagerAdapter() {
     override fun instantiateItem(container: ViewGroup, position: Int): View {
         val inflater:LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view:View = inflater.inflate(R.layout.image_page, null)
@@ -27,9 +27,6 @@ class GalleryViewPagerAdapter(private val context: Context, private val imageLis
         val imgFile = File(imageList[position])
         val bitmap: Bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
         imageView.setImageBitmap(bitmap)
-        imageView.setOnClickListener{
-            callback()
-        }
         container.addView(view)
         return view
     }
