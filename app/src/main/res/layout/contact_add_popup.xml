@@ -2,67 +2,108 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <EditText
+        android:id="@+id/ask_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="name" />
+
+    <EditText
+        android:id="@+id/ask_food_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="food type" />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Delivery"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight ="20dp"
+            android:layout_marginTop="20dp" />
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Visit"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight ="20dp"
+            android:layout_marginTop="20dp" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/restaurant_type_warn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Please select Delivery / Visit"
+        android:textColor="#FF2020"
+        android:gravity="center"
+        android:visibility="gone"/>
+
+
+    <EditText
+        android:id="@+id/ask_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="phone number" />
+
+    <EditText
+        android:id="@+id/ask_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="location" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
+        android:orientation="horizontal"
+        android:gravity="right"
+        android:background="@android:color/white"
+        android:paddingBottom="10dp">
+
+        <Button
+            android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="NAME: "
-            android:gravity="center_vertical"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp" />
-
-        <EditText
-            android:id="@+id/ask_name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
-    </LinearLayout>
+            android:layout_marginRight="10dp"
+            android:text="CANCEL"
+            android:textColor="@color/purple_500"
+            app:backgroundTint="#FFFFFF"
+            app:iconTint="#FFFFFF" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
+        <Button
+            android:id="@+id/add_button"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="PHONE NUMBER: "
-            android:gravity="center_vertical"
-            android:layout_marginLeft="20dp" />
-
-        <EditText
-            android:id="@+id/ask_phone_number"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="LOCATION: "
-            android:gravity="center_vertical"
-            android:layout_marginLeft="20dp" />
-
-        <EditText
-            android:id="@+id/ask_location"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="ADD"
+            android:textColor="@color/purple_500"
+            app:backgroundTint="#FFFFFF" />
     </LinearLayout>
 
 </LinearLayout>
