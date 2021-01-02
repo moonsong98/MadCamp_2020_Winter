@@ -18,6 +18,7 @@ class ImagesGallery {
         fun listOfImages(context: Context): ArrayList<String> {
             val listOfAllImages:ArrayList<String> = arrayListOf();
             /*
+            Retrieve Images from Gallery
             val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             val projection = arrayOf(MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
             val orderBy: String = MediaStore.Video.Media.DATE_TAKEN
@@ -38,7 +39,6 @@ class ImagesGallery {
 
                 }
             }
-
             return listOfAllImages
         }
 

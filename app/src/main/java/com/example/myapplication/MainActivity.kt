@@ -7,8 +7,6 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
-    lateinit var viewPager: ViewPager
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
