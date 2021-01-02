@@ -2,7 +2,9 @@ package com.example.myapplication
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity.LAYOUT_INFLATER_SERVICE
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
@@ -41,22 +43,14 @@ class Gallery : Fragment() {
     private lateinit var galleryViewPagerAdapter: GalleryViewPagerAdapter
     private lateinit var images:List<String>
     private lateinit var galleryNumber: TextView
-    private lateinit var viewPager: ViewPager
     private lateinit var title: RelativeLayout
     private lateinit var addPhotoButton: ImageButton
     private var takenPhoto: File? = null
-    private lateinit var minflater:LayoutInflater
-    private var mcontainer:ViewGroup? = null
 
     companion object {
         private val REQUEST_READ_STORACE: Int = 101
         private val REQUEST_TAKE_PHOTO: Int = 1
         private val TAKE_PHOTO: Int = 1
-    }
-    private fun closeSlide() {
-        recyclerView.visibility = VISIBLE
-        viewPager.visibility = GONE
-        title.visibility = VISIBLE
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -64,14 +58,11 @@ class Gallery : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        minflater = inflater
-        mcontainer = container
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_gallery, container, false)
         galleryNumber = view.findViewById(R.id.gallery_number)
         recyclerView = view.findViewById(R.id.recyclerview_gallery_images)
         title = view.findViewById(R.id.general_photos)
-        viewPager = view.findViewById(R.id.gallery_viewpager)
 
         /*Add Photo Button*/
         addPhotoButton = view.findViewById(R.id.add_photo)
@@ -84,13 +75,6 @@ class Gallery : Fragment() {
                 requestPermissions(arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_TAKE_PHOTO)
             }
         }
-
-        /* Photo Swipe */
-        viewPager.clipToPadding = false
-        val density: Float = resources.displayMetrics.density
-        val margin: Int = (24*density).toInt()
-        viewPager.setPadding(margin, 0, margin, 0)
-        viewPager.pageMargin = margin/2
 
         /* Request Permission To Read External Storage */
         if(ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) !=  PackageManager.PERMISSION_GRANTED) {
@@ -111,10 +95,13 @@ class Gallery : Fragment() {
         images = ImagesGallery.listOfImages(this.requireContext())
         galleryAdapter = GalleryAdapter(this.requireContext(), images, object: GalleryAdapter.PhotoListener{
             override fun onPhotoClick(path: String) {
+                addDelieveryReview()
+                /*
                 val intent = Intent(activity, ImageSlider::class.java).apply{
                     putExtra("path", path)
                 }
                 startActivity(intent)
+                 */
             }
         })
         galleryAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
@@ -122,7 +109,6 @@ class Gallery : Fragment() {
         galleryNumber.text = "General ("+images.size+")"
         /* Gallery View Pager Adapter */
         galleryViewPagerAdapter = GalleryViewPagerAdapter(this.requireContext(), images)
-        viewPager.adapter = galleryViewPagerAdapter
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -184,4 +170,21 @@ class Gallery : Fragment() {
         }
     }
 
+    private fun addDelieveryReview() {
+        val inflater = this.requireContext().getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.add_review_dialog, null)
+        val reviewDialogRestaurantList: Spinner = view.findViewById(R.id.review_dialog_restaurant_list)
+        val reviewDialogRatingBar: RatingBar = view.findViewById(R.id.review_dialog_rating_bar)
+        val reviewDialogReview: EditText = view.findViewById(R.id.review_dialog_review)
+        val reviewDialogRecyclerView: RecyclerView = view.findViewById(R.id.review_dialog_recycler_view)
+
+        val addPopup = AlertDialog.Builder(this.requireContext())
+            .setTitle("Add Deliver Review")
+            .setPositiveButton("ADD", null)
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        addPopup.setView(view)
+        addPopup.show()
+    }
 }

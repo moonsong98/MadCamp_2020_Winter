@@ -3,39 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Gallery"
     android:background="@color/white"
-    android:orientation = "vertical"
-    >
+    android:orientation="vertical"
+    tools:context=".Gallery">
+
     <RelativeLayout
+        android:id="@+id/general_photos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/general_photos"
-        android:padding="16dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="16dp">
+
         <TextView
+            android:id="@+id/gallery_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/gallery_number"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <ImageButton
-            android:layout_height="wrap_content"
+            android:id="@+id/add_photo"
             android:layout_width="wrap_content"
-            android:src = "@drawable/add_photo"
-            android:background="@color/white"
-            android:id = "@+id/add_photo"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:background="@color/white"
+            android:src="@drawable/add_photo" />
     </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_gallery_images"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recyclerview_gallery_images"/>
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/gallery_viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible" />
+        android:layout_height="wrap_content" />
 </LinearLayout>
