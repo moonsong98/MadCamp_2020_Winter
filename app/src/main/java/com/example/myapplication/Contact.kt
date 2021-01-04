@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.app.AlertDialog
 import android.content.Context
+import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import org.json.JSONArray
 import org.json.JSONObject
+import org.w3c.dom.Text
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -86,8 +88,8 @@ class Contact : Fragment() {
     fun showAddPopup() {
         val inflater = this.requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.contact_add_popup, null)
-        val addButton = view.findViewById(R.id.add_button) as Button
-        val cancelButton = view.findViewById(R.id.cancel_button) as Button
+        val addButton = view.findViewById(R.id.add_button) as ImageButton
+        val cancelButton = view.findViewById(R.id.cancel_button) as ImageButton
         var new_name = view.findViewById(R.id.ask_name) as EditText
         var new_food_type = view.findViewById(R.id.ask_food_type) as EditText
         val radioGroup = view.findViewById(R.id.radio_group) as RadioGroup
@@ -150,7 +152,7 @@ class Contact : Fragment() {
                 showlist(jsonString)
 
                 AddPopup.dismiss()
-                Toast.makeText(this.requireContext(), "SUCCESS", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.requireContext(), "ADDED", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -163,11 +165,19 @@ class Contact : Fragment() {
         val view = inflater.inflate(R.layout.contact_restaurant_popup, null)
         val editButton = view.findViewById(R.id.edit_button) as ImageButton
         val deleteButton = view.findViewById(R.id.delete_button) as ImageButton
-        val cancelButton = view.findViewById(R.id.cancel_button) as ImageButton
+        val editokButton = view.findViewById(R.id.edit_ok_button) as ImageButton
+        val editcancelButton = view.findViewById(R.id.edit_cancel_button) as ImageButton
+        val askrestaurantdelete = view.findViewById(R.id.ask_restaurant_delete) as TextView
+        val deleteokButton = view.findViewById(R.id.delete_ok_button) as ImageButton
+        val deletecancelButton = view.findViewById(R.id.delete_cancel_button) as ImageButton
         var name = view.findViewById<TextView>(R.id.nname)
         var food_type = view.findViewById<TextView>(R.id.nfood_type)
         var phone_number = view.findViewById<TextView>(R.id.nphone_number)
         var location = view.findViewById<TextView>(R.id.nlocation)
+        var edit_name = view.findViewById<TextView>(R.id.edit_name)
+        var edit_food_type = view.findViewById<TextView>(R.id.edit_food_type)
+        var edit_phone_number = view.findViewById<TextView>(R.id.edit_phone_number)
+        var edit_location = view.findViewById<TextView>(R.id.edit_location)
 
         name.text = item.name
         food_type.text = item.food_type
@@ -181,17 +191,149 @@ class Contact : Fragment() {
         editButton.setOnClickListener {
             editButton.visibility = View.GONE
             deleteButton.visibility = View.GONE
-            cancelButton.visibility = View.VISIBLE
+            editokButton.visibility = View.VISIBLE
+            editcancelButton.visibility = View.VISIBLE
+            askrestaurantdelete.visibility = View.GONE
+            deleteokButton.visibility = View.GONE
+            deletecancelButton.visibility = View.GONE
+
+            name.visibility = View.GONE
+            food_type.visibility = View.GONE
+            phone_number.visibility = View.GONE
+            location.visibility = View.GONE
+            edit_name.visibility = View.VISIBLE
+            edit_food_type.visibility = View.VISIBLE
+            edit_phone_number.visibility = View.VISIBLE
+            edit_location.visibility = View.VISIBLE
+
+            edit_name.text = name.text
+            edit_food_type.text = food_type.text
+            edit_phone_number.text = phone_number.text
+            edit_location.text = location.text
         }
 
         deleteButton.setOnClickListener {
-
+            editButton.visibility = View.GONE
+            deleteButton.visibility = View.GONE
+            editokButton.visibility = View.GONE
+            editcancelButton.visibility = View.GONE
+            askrestaurantdelete.visibility = View.VISIBLE
+            deleteokButton.visibility = View.VISIBLE
+            deletecancelButton.visibility = View.VISIBLE
         }
 
-        cancelButton.setOnClickListener {
+        editokButton.setOnClickListener {
+            if(edit_name.text.toString().replace(" ", "").equals("")){
+                edit_name.setError("Enter Name", )
+            }
+            else if(edit_food_type.text.toString().replace(" ", "").equals("")){
+                edit_food_type.setError("Enter Food Type")
+            }
+            else{
+                editButton.visibility = View.VISIBLE
+                deleteButton.visibility = View.VISIBLE
+                editokButton.visibility = View.GONE
+                editcancelButton.visibility = View.GONE
+                askrestaurantdelete.visibility = View.GONE
+                deleteokButton.visibility = View.GONE
+                deletecancelButton.visibility = View.GONE
+
+                name.visibility = View.VISIBLE
+                food_type.visibility = View.VISIBLE
+                phone_number.visibility = View.VISIBLE
+                location.visibility = View.VISIBLE
+                edit_name.visibility = View.GONE
+                edit_food_type.visibility = View.GONE
+                edit_phone_number.visibility = View.GONE
+                edit_location.visibility = View.GONE
+
+                var jsonString: String = read_json()
+                var newjsonString: String = "["
+                val jsonArray = JSONArray(jsonString)
+                var i = 0
+
+                val newjsonObject = JSONObject()
+
+                newjsonObject.put("id", item.id)
+                newjsonObject.put("name", edit_name.text)
+                newjsonObject.put("food_type", edit_food_type.text)
+                newjsonObject.put("restaurant_type", item.restaurant_type)
+                newjsonObject.put("phone_number", edit_phone_number.text)
+                newjsonObject.put("location", edit_location.text)
+
+                while(i < jsonArray.length()){
+                    val jsonObject = jsonArray.getJSONObject(i)
+                    if(jsonObject.getInt("id") != item.id)  newjsonString += jsonObject.toString() + ","
+                    else    newjsonString += newjsonObject.toString() + ","
+                    i++
+                }
+                newjsonString = newjsonString.slice(IntRange(0, newjsonString.length - 2)) + "]"
+
+                this.requireContext().openFileOutput("contacts.json", Context.MODE_PRIVATE).use { output ->
+                    output.write(newjsonString.toByteArray())
+                }
+                showlist(newjsonString)
+
+                name.text = edit_name.text
+                food_type.text = edit_food_type.text
+                phone_number.text = edit_phone_number.text
+                location.text = edit_location.text
+
+                Toast.makeText(this.requireContext(), "EDITED", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        editcancelButton.setOnClickListener {
             editButton.visibility = View.VISIBLE
             deleteButton.visibility = View.VISIBLE
-            cancelButton.visibility = View.GONE
+            editokButton.visibility = View.GONE
+            editcancelButton.visibility = View.GONE
+            askrestaurantdelete.visibility = View.GONE
+            deleteokButton.visibility = View.GONE
+            deletecancelButton.visibility = View.GONE
+
+            name.visibility = View.VISIBLE
+            food_type.visibility = View.VISIBLE
+            phone_number.visibility = View.VISIBLE
+            location.visibility = View.VISIBLE
+            edit_name.visibility = View.GONE
+            edit_food_type.visibility = View.GONE
+            edit_phone_number.visibility = View.GONE
+            edit_location.visibility = View.GONE
+        }
+
+        deleteokButton.setOnClickListener {
+            var jsonString: String = read_json()
+            var newjsonString: String = "["
+            val jsonArray = JSONArray(jsonString)
+            var i = 0
+
+            while(i < jsonArray.length()){
+                val jsonObject = jsonArray.getJSONObject(i)
+                if(jsonObject.getInt("id") != item.id)  newjsonString += jsonObject.toString() + ","
+                i++
+            }
+            if(i != 1)  newjsonString = newjsonString.slice(IntRange(0, newjsonString.length - 2)) + "]"
+            else    newjsonString = "[]"
+
+            this.requireContext().openFileOutput("contacts.json", Context.MODE_PRIVATE).use { output ->
+                output.write(newjsonString.toByteArray())
+            }
+            showlist(newjsonString)
+
+            RestaurantPopup.dismiss()
+
+            Toast.makeText(this.requireContext(), "DELETED", Toast.LENGTH_SHORT).show()
+        }
+
+        deletecancelButton.setOnClickListener {
+            editButton.visibility = View.VISIBLE
+            deleteButton.visibility = View.VISIBLE
+            editokButton.visibility = View.GONE
+            editcancelButton.visibility = View.GONE
+            askrestaurantdelete.visibility = View.GONE
+            deleteokButton.visibility = View.GONE
+            deletecancelButton.visibility = View.GONE
         }
 
         RestaurantPopup.setView(view)

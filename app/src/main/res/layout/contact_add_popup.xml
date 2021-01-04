@@ -60,7 +60,6 @@
         android:gravity="center"
         android:visibility="gone"/>
 
-
     <EditText
         android:id="@+id/ask_phone_number"
         android:layout_width="match_parent"
@@ -68,6 +67,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:hint="phone number" />
+
 
     <EditText
         android:id="@+id/ask_location"
@@ -85,25 +85,24 @@
         android:background="@android:color/white"
         android:paddingBottom="10dp">
 
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"
-            android:text="CANCEL"
-            android:textColor="@color/purple_500"
-            app:backgroundTint="#FFFFFF"
-            app:iconTint="#FFFFFF" />
-
-        <Button
+        <ImageButton
             android:id="@+id/add_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:text="ADD"
-            android:textColor="@color/purple_500"
-            app:backgroundTint="#FFFFFF" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ok"
+            app:backgroundTint="#FFFFFF"/>
+
+        <ImageButton
+            android:id="@+id/cancel_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/cancel"
+            app:backgroundTint="#FFFFFF"/>
     </LinearLayout>
 
 </LinearLayout>
