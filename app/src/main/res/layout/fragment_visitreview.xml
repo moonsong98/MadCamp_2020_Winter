@@ -9,6 +9,18 @@
         android:id="@+id/mapsView"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="300dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ADD NEW REVIEWS"
+        android:textSize="24dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:background="@color/purple_500"
+        android:textColor="@color/white"
+        android:layout_gravity="bottom" />
 
 </FrameLayout>
