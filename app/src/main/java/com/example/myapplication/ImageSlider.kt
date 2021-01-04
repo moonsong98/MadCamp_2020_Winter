@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import java.io.File
 
 class ImageSlider : AppCompatActivity() {
     private lateinit var backButton:ImageButton
@@ -25,7 +26,8 @@ class ImageSlider : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val path = intent.getStringExtra("path")
-        val listOfAllImages = ImagesGallery.listOfImages(this)
+        /* To Be Modified - Retrieve images from given path*/
+        val listOfAllImages = ImagesGallery.listOfImages(this, File(""))
         val galleryViewPagerAdapter= GalleryViewPagerAdapter(this, listOfAllImages)
         galleryViewPager.adapter = galleryViewPagerAdapter
         galleryViewPager.setCurrentItem(listOfAllImages.indexOf(path), false)
