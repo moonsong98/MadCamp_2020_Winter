@@ -44,7 +44,6 @@
             android:isIndicator="false"
             android:layout_marginTop="3dp"
             android:numStars="5"
-            android:saveEnabled="true"
             android:scaleX=".5"
             android:scaleY=".5"
             android:stepSize="1"
