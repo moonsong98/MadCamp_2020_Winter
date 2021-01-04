@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 class TabViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm)
 {
     private var fragmentList = listOf(
-        Pair("Contact", Contact()), Pair("Gallery", Gallery()), Pair("Test", Contact())
+        Pair("Restaurant List", Contact()), Pair("Delivery", Gallery()), Pair("Visit", VisitReview())
     )
 
     override fun getItem(position: Int): Fragment {
