@@ -7,35 +7,42 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="left"
+        android:textSize="22dp"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/nname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:gravity="center"/>
+        android:gravity="left"/>
 
     <TextView
         android:id="@+id/nfood_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:gravity="center"/>
+        android:gravity="left"/>
 
     <TextView
         android:id="@+id/nphone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:gravity="center"/>
-    <TextView
-        android:id="@+id/nlocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:gravity="center"/>
+        android:gravity="left"/>
 
     <EditText
         android:id="@+id/edit_name"
@@ -64,16 +71,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:hint="phone number"
-        android:textSize="14sp"
-        android:visibility="gone" />
-
-    <EditText
-        android:id="@+id/edit_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:hint="location"
         android:textSize="14sp"
         android:visibility="gone" />
 
