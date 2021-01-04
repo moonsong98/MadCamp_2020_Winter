@@ -15,7 +15,6 @@ import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -23,10 +22,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.json.JSONArray
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.jvm.Throws
 
 /**
  * A simple [Fragment] subclass.
@@ -34,19 +35,22 @@ import java.util.*
  * create an instance of this fragment.
  */
 class Gallery : Fragment() {
-    private lateinit var recyclerView: RecyclerView
     private lateinit var galleryAdapter: GalleryAdapter
     private lateinit var galleryViewPagerAdapter: GalleryViewPagerAdapter
     private lateinit var images:List<String>
-    private lateinit var imagesAddedInDialog:List<String>
     private lateinit var galleryNumber: TextView
     private lateinit var title: RelativeLayout
-    private lateinit var addPhotoButton: ImageButton
+    private lateinit var addReview: ImageButton
+    private lateinit var reviewList: ListView
+    private lateinit var addDeliveryReviewDialog: AddDeliveryReviewDialog
     private var takenPhoto: File? = null
     /* Review Storage */
     private lateinit var reviewTimeStamp:String
     private var reviewImagesStorage: File = File("")
 
+    enum class ModifyState{
+        ADD, DELETE, CLEAR
+    }
 
     companion object {
         private val REQUEST_READ_STORACE: Int = 101
@@ -62,20 +66,24 @@ class Gallery : Fragment() {
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_gallery, container, false)
         galleryNumber = view.findViewById(R.id.gallery_number)
-        recyclerView = view.findViewById(R.id.recyclerview_gallery_images)
         title = view.findViewById(R.id.general_photos)
+        reviewList = view.findViewById(R.id.review_list)
+
 
         /*Add Photo Button*/
-        addPhotoButton = view.findViewById(R.id.add_photo)
-        addPhotoButton.isClickable = true
-        addPhotoButton.setOnClickListener {
-            if(ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) ==  PackageManager.PERMISSION_GRANTED) {
-                dispatchTakePictureIntent()
-            } else{
-                requestPermissions(arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_TAKE_PHOTO)
-            }
+        addDeliveryReviewDialog  = AddDeliveryReviewDialog(this.requireContext())
+        addDeliveryReviewDialog.createAddDeliveryReviewDialog()
+
+        addReview = view.findViewById(R.id.add_review)
+        addReview.isClickable = true
+        addReview.setOnClickListener {
+            reviewTimeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+            addDeliveryReviewDialog.updateRestaurantSpinner()
+            addDeliveryReviewDialog.showPopup()
+            updateAddDeliveryReviewDialogImages(addDeliveryReviewDialog.reviewDialogGalleryAdapter, addDeliveryReviewDialog.images, "", ModifyState.CLEAR)
         }
+        setDeliveryAddDialogPhoto()
+        setReviewDialogGalleryAdapter()
 
         /* Request Permission To Read External Storage */
         if(ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) !=  PackageManager.PERMISSION_GRANTED) {
@@ -91,25 +99,16 @@ class Gallery : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun loadImages() {
         val activity = this.activity
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = GridLayoutManager(this.requireContext(), 2)
         images = ImagesGallery.listOfImages(this.requireContext(), reviewImagesStorage)
         galleryAdapter = GalleryAdapter(this.requireContext(), images, object: GalleryAdapter.PhotoListener{
             override fun onPhotoClick(path: String) {
-                addDeliveryReview()
-                /*
-                imagesAddedInDialog = listOf()
-                */
-                /*
                 val intent = Intent(activity, ImageSlider::class.java).apply{
                     putExtra("path", path)
                 }
                 startActivity(intent)
-                 */
             }
         })
         galleryAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
-        recyclerView.adapter = galleryAdapter
         galleryNumber.text = "General ("+images.size+")"
         /* Gallery View Pager Adapter */
         galleryViewPagerAdapter = GalleryViewPagerAdapter(this.requireContext(), images)
@@ -143,12 +142,12 @@ class Gallery : Fragment() {
         if(requestCode == TAKE_PHOTO) {
             if (data != null) {
                 if(resultCode == RESULT_OK) {
-                    loadImages()
-                    addDeliveryReview()
+                    updateAddDeliveryReviewDialogImages(addDeliveryReviewDialog.reviewDialogGalleryAdapter,addDeliveryReviewDialog.images,takenPhoto!!.absolutePath, ModifyState.ADD)
                 } else {
                     takenPhoto?.delete()
                 }
             }
+            addDeliveryReviewDialog.showPopup()
         }
     }
 
@@ -185,8 +184,9 @@ class Gallery : Fragment() {
         }
     }
 
+    /*
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun addDeliveryReview() {
+    private fun createAddDeliveryReviewDialog() {
         val inflater = this.requireContext().getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.add_review_dialog, null)
         val reviewDialogRestaurantList: Spinner = view.findViewById(R.id.review_dialog_restaurant_list)
@@ -194,18 +194,28 @@ class Gallery : Fragment() {
         val reviewDialogReview: EditText = view.findViewById(R.id.review_dialog_review)
         val reviewDialogRecyclerView: RecyclerView = view.findViewById(R.id.review_dialog_recycler_view)
         val reviewDialogAddPhoto: ImageButton = view.findViewById(R.id.review_dialog_add_photo)
-        val listOfAllImages:List<String> = listOf()
-        var reviewDialogGalleryAdapter = GalleryAdapter(this.requireContext(), images, object: GalleryAdapter.PhotoListener{
+        val listOfAllImages:ArrayList<String> = ArrayList<String>()
+        val reviewDialogGalleryAdapter = GalleryAdapter(this.requireContext(), imagesAddedInDialog, object: GalleryAdapter.PhotoListener{
             override fun onPhotoClick(path: String) {
                 TODO("Not yet implemented")
             }
         })
+        /* Create Dialog */
+        val addPopup = AlertDialog.Builder(this.requireContext())
+                .setTitle("Add Deliver Review")
+                .setPositiveButton("ADD", null)
+                .setNegativeButton("Cancel", null)
+                .create()
+        addPopup.setView(view)
+
+        /* Setup Dialog Componenets */
         var editMode:Boolean = false
         reviewDialogAddPhoto.isClickable = true
         reviewDialogAddPhoto.setOnClickListener {
             if(ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) ==  PackageManager.PERMISSION_GRANTED) {
                 dispatchTakePictureIntent()
+                addPopup.dismiss()
             } else{
                 requestPermissions(arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_TAKE_PHOTO)
             }
@@ -216,13 +226,53 @@ class Gallery : Fragment() {
         reviewDialogRecyclerView.setHasFixedSize(true)
         reviewDialogRecyclerView.layoutManager = GridLayoutManager(this.requireContext(), 4)
 
-        val addPopup = AlertDialog.Builder(this.requireContext())
-            .setTitle("Add Deliver Review")
-            .setPositiveButton("ADD", null)
-            .setNegativeButton("Cancel", null)
-            .create()
 
-        addPopup.setView(view)
         addPopup.show()
     }
+    */
+    private fun updateAddDeliveryReviewDialogImages(galleryAdapter:GalleryAdapter,  images:ArrayList<String>, imageToBeAdded:String, modifyState: Gallery.ModifyState){
+        when (modifyState) {
+            ModifyState.ADD -> run {
+                val len = images.size
+                images.add(len, imageToBeAdded)
+                galleryAdapter.notifyItemInserted(len)
+            }
+            ModifyState.DELETE -> {
+                TODO("Not yet implemented")
+            }
+            ModifyState.CLEAR -> {
+                images.clear()
+                galleryAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun setDeliveryAddDialogPhoto () {
+        addDeliveryReviewDialog.reviewDialogAddPhoto.isClickable = true
+        addDeliveryReviewDialog.reviewDialogAddPhoto.setOnClickListener {
+            if(ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) ==  PackageManager.PERMISSION_GRANTED) {
+                dispatchTakePictureIntent()
+                addDeliveryReviewDialog.dismissPopup()
+            } else{
+                requestPermissions(arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    Gallery.REQUEST_TAKE_PHOTO)
+            }
+        }
+
+    }
+
+    private fun setReviewDialogGalleryAdapter() {
+        addDeliveryReviewDialog.reviewDialogGalleryAdapter = GalleryAdapter(this.requireContext(), addDeliveryReviewDialog.images, object: GalleryAdapter.PhotoListener{
+            override fun onPhotoClick(path: String) {
+                val intent = Intent(activity, ImageSlider::class.java).apply{
+                    putExtra("path", path)
+                }
+                startActivity(intent)
+            }
+        })
+        addDeliveryReviewDialog.reviewDialogRecyclerView.adapter = addDeliveryReviewDialog.reviewDialogGalleryAdapter
+
+    }
+
 }

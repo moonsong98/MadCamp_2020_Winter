@@ -26,6 +26,7 @@ class ImageSlider : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val path = intent.getStringExtra("path")
+        /* To Be Modified - Retrieve images from given path*/
         val listOfAllImages = ImagesGallery.listOfImages(this, File(""))
         val galleryViewPagerAdapter= GalleryViewPagerAdapter(this, listOfAllImages)
         galleryViewPager.adapter = galleryViewPagerAdapter

@@ -41,7 +41,7 @@ class ImagesGallery {
                 }
             }
              */
-            if(file!= null) run {
+            run {
                 val files = file.listFiles()
                 if(files != null) {
                     for(f in files) {
