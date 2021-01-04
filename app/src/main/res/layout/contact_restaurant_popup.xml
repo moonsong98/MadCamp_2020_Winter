@@ -37,6 +37,46 @@
         android:layout_marginRight="20dp"
         android:gravity="center"/>
 
+    <EditText
+        android:id="@+id/edit_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="name"
+        android:textSize="14sp"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/edit_food_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="food type"
+        android:textSize="14sp"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/edit_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="phone number"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/edit_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="location"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,7 +105,17 @@
             android:visibility="visible" />
 
         <ImageButton
-            android:id="@+id/cancel_button"
+            android:id="@+id/edit_ok_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ok"
+            app:backgroundTint="#FFFFFF"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/edit_cancel_button"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="right"
@@ -76,4 +126,40 @@
             android:visibility="gone" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/ask_restaurant_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="Wanna delete this information?"
+            android:textColor="#FF2020"
+            android:gravity="center"
+            android:visibility="gone"/>
+
+        <ImageButton
+            android:id="@+id/delete_ok_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:src="@drawable/ok"
+            app:backgroundTint="#FFFFFF"
+            android:visibility="gone"/>
+
+        <ImageButton
+            android:id="@+id/delete_cancel_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:src="@drawable/cancel"
+            app:backgroundTint="#FFFFFF"
+            android:visibility="gone" />
+
+    </LinearLayout>
 </LinearLayout>
