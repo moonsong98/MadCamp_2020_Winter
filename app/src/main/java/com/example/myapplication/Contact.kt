@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.app.AlertDialog
+import android.app.SearchManager
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
@@ -29,7 +30,6 @@ class Contact : Fragment() {
     //  meters
     private lateinit var restaurantlist: ListView
     private lateinit var fab: View
-    private lateinit var searchView: androidx.appcompat.widget.SearchView
     val list = ArrayList<ContactData>()
     private lateinit var adapter: ContactAdapter
 
@@ -41,7 +41,6 @@ class Contact : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_contact, container, false)
         restaurantlist = view.findViewById(R.id.restaurant_list)
         fab = view.findViewById(R.id.fab)
-        searchView = view.findViewById(R.id.search_view)
         fab.setOnClickListener {
             showAddPopup()
         }

@@ -38,12 +38,13 @@ class ImageSlider : AppCompatActivity() {
         super.onStart()
         val path = intent.getStringExtra("path")
         val time = intent.getStringExtra("time")
+        val type = intent.getStringExtra("type")
         /* To Be Modified - Retrieve images from given path*/
 
         val listOfAllImages = ArrayList<String>()
 
         val storageDir: File? = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imageDir = File(storageDir, "/$time")
+        val imageDir = File(storageDir, "/$type/$time")
         Log.d("@@@@@@@@@@@@@@dir",imageDir.absolutePath)
         if (imageDir.listFiles() != null) {
             for (f in imageDir.listFiles()) {

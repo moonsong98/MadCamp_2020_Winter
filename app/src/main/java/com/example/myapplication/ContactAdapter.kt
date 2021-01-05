@@ -8,6 +8,9 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 
 class ContactAdapter(val context: Context, val list:ArrayList<ContactData>):BaseAdapter() {
+
+    private var filtered: ArrayList<ContactData>? = list
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view:View = LayoutInflater.from(context).inflate(R.layout.contact_layout, parent, false)
         val imageView = view.findViewById<ImageView>(R.id.pimage)

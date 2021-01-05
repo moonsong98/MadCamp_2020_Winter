@@ -180,6 +180,7 @@ class Gallery : Fragment() {
                 takenPhoto?.delete()
             }
             deliveryReviewDialog.popup()
+            deliveryReviewDialog.editMode = true
         }
 
     }
@@ -194,9 +195,9 @@ class Gallery : Fragment() {
         var imageDir: File = File("")
         imageDir =
             if (requestCode == REQUEST_TAKE_PHOTO_ADD_REVIEW)
-                File(storageDir, "/$reviewTimeStamp")
+                File(storageDir, "/delivery/$reviewTimeStamp")
             else
-                File(storageDir, "/" + deliveryReviewDialog.reviewTime)
+                File(storageDir, "/delivery/" + deliveryReviewDialog.reviewTime)
         reviewImagesStorage = imageDir
         if (!imageDir.isDirectory) {
             imageDir.mkdirs()
@@ -346,6 +347,7 @@ class Gallery : Fragment() {
                             val intent = Intent(activity, ImageSlider::class.java).apply {
                                 putExtra("path", path)
                                 putExtra("time", addDeliveryReviewDialog.timeStampReviewAdded)
+                                putExtra("type", "delivery")
                             }
                             startActivity(intent)
                         }
@@ -377,6 +379,7 @@ class Gallery : Fragment() {
                         val intent = Intent(activity, ImageSlider::class.java).apply {
                             putExtra("path", path)
                             putExtra("time", deliveryReviewDialog.reviewTime)
+                            putExtra("type", "delivery")
                         }
                         startActivity(intent)
                     }

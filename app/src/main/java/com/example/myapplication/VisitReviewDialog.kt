@@ -7,7 +7,7 @@ import android.graphics.Color
 import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View.*
+import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,9 +16,9 @@ import org.json.JSONObject
 import java.io.File
 import java.util.ArrayList
 
-class DeliveryReviewDialog(
+class VisitReviewDialog(
     private val context: Context,
-    private var deliveryReview: DeliveryReview,
+    private var visitReviewData: VisitReviewData
 ) {
     lateinit var restaurant: TextView
     lateinit var images: ArrayList<String>
@@ -33,6 +33,7 @@ class DeliveryReviewDialog(
     lateinit var review_dialog_add_photo: ImageButton
     lateinit var spinnerAdapter: AddDeliveryReviewDialog.CustomAdapter
 
+    lateinit var reviewDialogLocation: TextView
     lateinit var editButton: ImageButton
     lateinit var cancelButton: ImageButton
     lateinit var removeButton: ImageButton
@@ -41,27 +42,30 @@ class DeliveryReviewDialog(
     lateinit var deleteCancelButton: ImageButton
     lateinit var deleteAskText: TextView
 
+    lateinit var address:String
+
     var restaurantList: ArrayList<String> = ArrayList<String>()
     var editMode: Boolean = false
 
-    val reviewTime = deliveryReview.timeStamp
+    val reviewTime = visitReviewData.timeStamp
     fun createAddDeliveryReviewDialog(
-        removeDeliveryReview: (deliveryReview: DeliveryReview) -> Unit,
+        removeVisitReview: (visitReviewData: VisitReviewData) -> Unit,
         reloadReviewList: () -> Unit
     ) {
         val inflater = context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.delivery_review_dialog, null)
+        val view = inflater.inflate(R.layout.visit_review_dialog, null)
         /* Original view */
         restaurant = view.findViewById(R.id.review_dialog_restaurant_list)
-        restaurant.text = deliveryReview.restaurant
+        restaurant.text = visitReviewData.restaurant
         reviewDialogRatingBar = view.findViewById(R.id.review_dialog_rating_bar)
-        reviewDialogRatingBar.rating = deliveryReview.rating.toFloat()
+        reviewDialogRatingBar.rating = visitReviewData.rating.toFloat()
         reviewDialogReview = view.findViewById(R.id.review_dialog_review)
-        reviewDialogReview.text = deliveryReview.review
+        reviewDialogReview.text = visitReviewData.review
         /* Edit view */
         review_dialog_restaurant_list_edit = view.findViewById(R.id.review_dialog_restaurant_list_edit)
         review_dialog_review_edit = view.findViewById(R.id.review_dialog_review_edit)
         review_dialog_add_photo = view.findViewById(R.id.review_dialog_add_photo)
+        reviewDialogLocation = view.findViewById(R.id.review_dialog_location)
         editButton = view.findViewById(R.id.edit_button)
         cancelButton = view.findViewById(R.id.cancel_button)
         removeButton = view.findViewById(R.id.remove_button)
@@ -74,7 +78,7 @@ class DeliveryReviewDialog(
         images = ArrayList<String>()
 
         val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imageDir = File(storageDir, "/delivery/" + deliveryReview.timeStamp)
+        val imageDir = File(storageDir, "/visit/" + visitReviewData.timeStamp)
         if (imageDir.listFiles() != null) {
             for (f in imageDir.listFiles()) {
                 images.add(f.absolutePath)
@@ -85,19 +89,21 @@ class DeliveryReviewDialog(
         reviewDialogRecyclerView = view.findViewById(R.id.review_dialog_recycler_view)
         reviewDialogRecyclerView.setHasFixedSize(true)
         reviewDialogRecyclerView.layoutManager = GridLayoutManager(context, 4)
+        viewLocation()
+
         popup = AlertDialog.Builder(this.context)
             .setCancelable(false)
             .create()
         editButton.setOnClickListener {
             if (editMode) {
                 if(review_dialog_restaurant_list_edit.selectedItemPosition == 0) {
-                    val warningMessage:TextView = view.findViewById(R.id.warning_message)
-                    warningMessage.visibility = VISIBLE
+                    val warningMessage: TextView = view.findViewById(R.id.warning_message)
+                    warningMessage.visibility = View.VISIBLE
                     warningMessage.setTextColor(Color.RED)
                 } else {
                     var json = "[]"
                     try {
-                        val inputStream = this.context.openFileInput("delivery_review.json")
+                        val inputStream = this.context.openFileInput("visit_review.json")
                         json = inputStream.bufferedReader().use { it.readText() }
 
                     } catch (ex: Exception) {
@@ -114,50 +120,52 @@ class DeliveryReviewDialog(
                         review_dialog_restaurant_list_edit.selectedItem.toString())
                     newJsonObject.put("rating", reviewDialogRatingBar.rating)
                     newJsonObject.put("review", review_dialog_review_edit.text)
-                    newJsonObject.put("timeStamp", deliveryReview.timeStamp)
+                    newJsonObject.put("timeStamp", visitReviewData.timeStamp)
 
                     for (i in 0 until jsonArray.length()) {
                         val jsonObject = jsonArray.getJSONObject(i)
                         newJson +=
-                            if (jsonObject.getString("timeStamp") != deliveryReview.timeStamp) "$jsonObject,"
+                            if (jsonObject.getString("timeStamp") != visitReviewData.timeStamp) "$jsonObject,"
                             else "$newJsonObject,"
                     }
                     newJson = newJson.slice(IntRange(0, newJson.length - 2)) + "]"
 
-                    this.context.openFileOutput("delivery_review.json", Context.MODE_PRIVATE)
+                    this.context.openFileOutput("visit_review.json", Context.MODE_PRIVATE)
                         .use { output ->
                             output.write(newJson.toByteArray())
                         }
                     restaurant.text = review_dialog_restaurant_list_edit.selectedItem.toString()
                     reviewDialogReview.text = review_dialog_review_edit.text
 
-                    deliveryReview.restaurant = review_dialog_restaurant_list_edit.selectedItem.toString()
-                    deliveryReview.rating = reviewDialogRatingBar.rating.toInt()
-                    deliveryReview.review = review_dialog_review_edit.text.toString()
-                    val warningMessage:TextView = view.findViewById(R.id.warning_message)
-                    warningMessage.visibility = INVISIBLE
+                    visitReviewData.restaurant = review_dialog_restaurant_list_edit.selectedItem.toString()
+                    visitReviewData.rating = reviewDialogRatingBar.rating.toInt()
+                    visitReviewData.review = review_dialog_review_edit.text.toString()
+                    val warningMessage: TextView = view.findViewById(R.id.warning_message)
+                    warningMessage.visibility = View.INVISIBLE
+                    viewLocation()
                     setMode()
                 }
             }
             else {
+                viewLocation()
                 setMode()
             }
         }
 
         removeButton.setOnClickListener {
-            editButton.visibility = GONE
-            removeButton.visibility = GONE
-            cancelButton.visibility = GONE
-            editCancelButton.visibility = GONE
-            deleteAskText.visibility = VISIBLE
-            deleteOkButton.visibility = VISIBLE
-            deleteCancelButton.visibility = VISIBLE
+            editButton.visibility = View.GONE
+            removeButton.visibility = View.GONE
+            cancelButton.visibility = View.GONE
+            editCancelButton.visibility = View.GONE
+            deleteAskText.visibility = View.VISIBLE
+            deleteOkButton.visibility = View.VISIBLE
+            deleteCancelButton.visibility = View.VISIBLE
         }
 
         deleteOkButton.setOnClickListener {
             var json = "[]"
             try {
-                val inputStream = this.context.openFileInput("delivery_review.json")
+                val inputStream = this.context.openFileInput("visit_review.json")
                 json = inputStream.bufferedReader().use { it.readText() }
 
             } catch (ex: Exception) {
@@ -173,28 +181,28 @@ class DeliveryReviewDialog(
             if (jsonArray.length() > 1) {
                 for (i in 0 until jsonArray.length()) {
                     val jsonObject = jsonArray.getJSONObject(i)
-                    if (jsonObject.getString("timeStamp") != deliveryReview.timeStamp) newjsonString += jsonObject.toString() + ","
+                    if (jsonObject.getString("timeStamp") != visitReviewData.timeStamp) newjsonString += jsonObject.toString() + ","
                 }
                 newjsonString = newjsonString.slice(IntRange(0, newjsonString.length - 2)) + "]"
             } else {
                 newjsonString = "[]"
             }
 
-            context.openFileOutput("delivery_review.json", Context.MODE_PRIVATE).use { output ->
+            context.openFileOutput("visit_review.json", Context.MODE_PRIVATE).use { output ->
                 output.write(newjsonString.toByteArray())
             }
-            removeDeliveryReview(deliveryReview)
+            removeVisitReview(visitReviewData)
             popup.dismiss()
         }
 
         deleteCancelButton.setOnClickListener {
-            editButton.visibility = VISIBLE
-            removeButton.visibility = VISIBLE
-            cancelButton.visibility = VISIBLE
-            editCancelButton.visibility = GONE
-            deleteAskText.visibility = GONE
-            deleteOkButton.visibility = GONE
-            deleteCancelButton.visibility = GONE
+            editButton.visibility = View.VISIBLE
+            removeButton.visibility = View.VISIBLE
+            cancelButton.visibility = View.VISIBLE
+            editCancelButton.visibility = View.GONE
+            deleteAskText.visibility = View.GONE
+            deleteOkButton.visibility = View.GONE
+            deleteCancelButton.visibility = View.GONE
         }
 
         cancelButton.setOnClickListener {
@@ -209,34 +217,62 @@ class DeliveryReviewDialog(
         popup.setView(view)
     }
 
+    private fun viewLocation() {
+        var json: String = "[]"
+        try {
+            val inputStream = this.context.openFileInput("contacts.json")
+            json = inputStream.bufferedReader().use { it.readText() }
+
+        } catch (ex: Exception) {
+            Log.d("Oh", "Exception Occurred")
+            ex.printStackTrace()
+        }
+        if (json == "")
+            json = "[]"
+
+        var i = 0
+        val jsonArray = JSONArray(json)
+        while (i < jsonArray.length()) {
+            val res = jsonArray.getJSONObject(i).getString("name")
+            val type = jsonArray.getJSONObject(i).getInt("restaurant_type")
+            if (res == restaurant.text && type == 2){
+                reviewDialogLocation.text = jsonArray.getJSONObject(i).getJSONObject("location").getString("address")
+                break
+            }
+            i++
+        }
+    }
+
     private fun setMode() {
         if (!editMode) {
-            review_dialog_restaurant_list_edit.visibility = VISIBLE
+            review_dialog_restaurant_list_edit.visibility = View.VISIBLE
             updateRestaurantSpinner()
             val restaurantIndex = spinnerAdapter.getPosition(restaurant.text.toString())
             review_dialog_restaurant_list_edit.setSelection(restaurantIndex)
-            review_dialog_review_edit.visibility = VISIBLE
+            review_dialog_review_edit.visibility = View.VISIBLE
             review_dialog_review_edit.setText(reviewDialogReview.text.toString())
-            review_dialog_add_photo.visibility = VISIBLE
-            restaurant.visibility = GONE
-            reviewDialogReview.visibility = GONE
+            review_dialog_add_photo.visibility = View.VISIBLE
+            restaurant.visibility = View.GONE
+            reviewDialogReview.visibility = View.GONE
             reviewDialogRatingBar.setIsIndicator(false)
+            reviewDialogLocation.visibility = View.GONE
             editButton.setImageResource(R.drawable.ok)
-            removeButton.visibility = GONE
-            cancelButton.visibility = GONE
-            editCancelButton.visibility = VISIBLE
+            removeButton.visibility = View.GONE
+            cancelButton.visibility = View.GONE
+            editCancelButton.visibility = View.VISIBLE
             editMode = true
         } else {
-            review_dialog_restaurant_list_edit.visibility = GONE
-            review_dialog_review_edit.visibility = GONE
-            review_dialog_add_photo.visibility = GONE
-            restaurant.visibility = VISIBLE
-            reviewDialogReview.visibility = VISIBLE
+            review_dialog_restaurant_list_edit.visibility = View.GONE
+            review_dialog_review_edit.visibility = View.GONE
+            review_dialog_add_photo.visibility = View.GONE
+            restaurant.visibility = View.VISIBLE
+            reviewDialogReview.visibility = View.VISIBLE
             reviewDialogRatingBar.setIsIndicator(true)
+            reviewDialogLocation.visibility = View.VISIBLE
             editButton.setImageResource(R.drawable.edit)
-            removeButton.visibility = VISIBLE
-            cancelButton.visibility = VISIBLE
-            editCancelButton.visibility = GONE
+            removeButton.visibility = View.VISIBLE
+            cancelButton.visibility = View.VISIBLE
+            editCancelButton.visibility = View.GONE
             editMode = false
         }
     }
@@ -256,11 +292,12 @@ class DeliveryReviewDialog(
 
         var i = 0
         val jsonArray = JSONArray(json)
+        restaurantList = ArrayList()
         restaurantList.add("Choose Restaurant...")
         while (i < jsonArray.length()) {
             val res = jsonArray.getJSONObject(i).getString("name")
             val type = jsonArray.getJSONObject(i).getInt("restaurant_type")
-            if (!restaurantList.contains(res) && type == 1)
+            if (!restaurantList.contains(res) && type == 2)
                 restaurantList.add(res)
             i++
         }
