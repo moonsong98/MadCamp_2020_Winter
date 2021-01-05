@@ -3,11 +3,11 @@ package com.example.myapplication
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
 import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.widget.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -79,49 +79,61 @@ class DeliveryReviewDialog(
         reviewDialogRecyclerView.layoutManager = GridLayoutManager(context, 4)
         popup = AlertDialog.Builder(this.context)
             .setTitle("Deliver Review")
+            .setCancelable(false)
             .create()
         editButton.setOnClickListener {
-            setMode()
-            if (!editMode) {
-                var json = "[]"
-                try {
-                    val inputStream = this.context.openFileInput("delivery_review.json")
-                    json = inputStream.bufferedReader().use { it.readText() }
+            if (editMode) {
+                if(review_dialog_restaurant_list_edit.selectedItemPosition == 0) {
+                    val warningMessage:TextView = view.findViewById(R.id.warning_message)
+                    warningMessage.visibility = VISIBLE
+                    warningMessage.setTextColor(Color.RED)
+                } else {
+                    var json = "[]"
+                    try {
+                        val inputStream = this.context.openFileInput("delivery_review.json")
+                        json = inputStream.bufferedReader().use { it.readText() }
 
-                } catch (ex: Exception) {
-                    Log.d("Oh", "Exception Occurred")
-                    ex.printStackTrace()
-                }
-                if (json == "")
-                    json = "[]"
-                var newJson= "["
-                val jsonArray = JSONArray(json)
-                val newJsonObject = JSONObject()
-
-                newJsonObject.put("restaurant",
-                    review_dialog_restaurant_list_edit.selectedItem.toString())
-                newJsonObject.put("rating", reviewDialogRatingBar.rating)
-                newJsonObject.put("review", review_dialog_review_edit.text)
-                newJsonObject.put("timeStamp", deliveryReview.timeStamp)
-
-                for (i in 0 until jsonArray.length()) {
-                    val jsonObject = jsonArray.getJSONObject(i)
-                    newJson +=
-                        if (jsonObject.getString("timeStamp") != deliveryReview.timeStamp) "$jsonObject,"
-                        else "$newJsonObject,"
-                }
-                newJson = newJson.slice(IntRange(0, newJson.length - 2)) + "]"
-
-                this.context.openFileOutput("delivery_review.json", Context.MODE_PRIVATE)
-                    .use { output ->
-                        output.write(newJson.toByteArray())
+                    } catch (ex: Exception) {
+                        Log.d("Oh", "Exception Occurred")
+                        ex.printStackTrace()
                     }
-                restaurant.text = review_dialog_restaurant_list_edit.selectedItem.toString()
-                reviewDialogReview.text = review_dialog_review_edit.text
+                    if (json == "")
+                        json = "[]"
+                    var newJson= "["
+                    val jsonArray = JSONArray(json)
+                    val newJsonObject = JSONObject()
 
-                deliveryReview.restaurant = review_dialog_restaurant_list_edit.selectedItem.toString()
-                deliveryReview.rating = reviewDialogRatingBar.rating.toInt()
-                deliveryReview.review = review_dialog_review_edit.text.toString()
+                    newJsonObject.put("restaurant",
+                        review_dialog_restaurant_list_edit.selectedItem.toString())
+                    newJsonObject.put("rating", reviewDialogRatingBar.rating)
+                    newJsonObject.put("review", review_dialog_review_edit.text)
+                    newJsonObject.put("timeStamp", deliveryReview.timeStamp)
+
+                    for (i in 0 until jsonArray.length()) {
+                        val jsonObject = jsonArray.getJSONObject(i)
+                        newJson +=
+                            if (jsonObject.getString("timeStamp") != deliveryReview.timeStamp) "$jsonObject,"
+                            else "$newJsonObject,"
+                    }
+                    newJson = newJson.slice(IntRange(0, newJson.length - 2)) + "]"
+
+                    this.context.openFileOutput("delivery_review.json", Context.MODE_PRIVATE)
+                        .use { output ->
+                            output.write(newJson.toByteArray())
+                        }
+                    restaurant.text = review_dialog_restaurant_list_edit.selectedItem.toString()
+                    reviewDialogReview.text = review_dialog_review_edit.text
+
+                    deliveryReview.restaurant = review_dialog_restaurant_list_edit.selectedItem.toString()
+                    deliveryReview.rating = reviewDialogRatingBar.rating.toInt()
+                    deliveryReview.review = review_dialog_review_edit.text.toString()
+                    val warningMessage:TextView = view.findViewById(R.id.warning_message)
+                    warningMessage.visibility = INVISIBLE
+                    setMode()
+                }
+            }
+            else {
+                setMode()
             }
         }
         removeButton.setOnClickListener {
@@ -220,5 +232,9 @@ class DeliveryReviewDialog(
 
     fun popup() {
         popup.show()
+    }
+
+    fun dismiss() {
+        popup.dismiss()
     }
 }

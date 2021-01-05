@@ -125,7 +125,7 @@ class VisitReview : Fragment(), OnMapReadyCallback {
 
         if(ActivityCompat.checkSelfPermission(this.requireActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             fusedLocationProviderClient.lastLocation.addOnCompleteListener {
-                val location: Location = it.result
+                val location: Location? = it.result
                 if (location != null) {
                     try {
                         val geocoder: Geocoder = Geocoder(this.requireContext(), Locale.getDefault())
