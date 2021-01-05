@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
@@ -22,6 +24,7 @@ class VisitReview : Fragment(), OnMapReadyCallback {
     lateinit var googleMap: GoogleMap
     lateinit var mapView: MapView
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private val LOCATION_PERMISSION_REQUEST = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +50,24 @@ class VisitReview : Fragment(), OnMapReadyCallback {
             mapView.onCreate(null)
             mapView.onResume()
             mapView.getMapAsync(this)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST){
+            if(grantResults.contains(PackageManager.PERMISSION_GRANTED)){
+                if (ActivityCompat.checkSelfPermission(
+                        this.requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        this.requireContext(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return
+                }
+                googleMap.isMyLocationEnabled = true
+            }
         }
     }
 
@@ -78,6 +99,7 @@ class VisitReview : Fragment(), OnMapReadyCallback {
                         jsonObject.getInt("restaurant_type"),
                         jsonObject.getString("phone_number"),
                         Place(
+                            jsonObject.getJSONObject("location").getString("address"),
                             jsonObject.getJSONObject("location").getDouble("latitude"),
                             jsonObject.getJSONObject("location").getDouble("longitude")
                         )
@@ -94,6 +116,13 @@ class VisitReview : Fragment(), OnMapReadyCallback {
             mMap.addMarker(MarkerOptions().position(latLng).title(contact.name).snippet(contact.food_type))
         }
 
+        if(ContextCompat.checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            mMap.isMyLocationEnabled = true
+        }
+        else{
+            ActivityCompat.requestPermissions(this.requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST)
+        }
+
         if(ActivityCompat.checkSelfPermission(this.requireActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             fusedLocationProviderClient.lastLocation.addOnCompleteListener {
                 val location: Location = it.result
@@ -107,9 +136,9 @@ class VisitReview : Fragment(), OnMapReadyCallback {
                         current_longitude = addresses.get(0).longitude
 
                         val current_latLng = LatLng(current_latitude, current_longitude)
-                        mMap.addMarker(
-                            MarkerOptions().position(current_latLng).title("current location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                        )
+//                        mMap.addMarker(
+//                            MarkerOptions().position(current_latLng).title("current location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+//                        )
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current_latLng, 12.0f))
                     } catch (e: IOException) {
                         e.printStackTrace()
