@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Practice</string>
+    <string name="app_name">MadCamPlate</string>
     <string name="contact_fragment">Contact fragment</string>
     <string name="gallery_fragment">Gallery fragment</string>
     <string name="test_fragment">Test fragment</string>

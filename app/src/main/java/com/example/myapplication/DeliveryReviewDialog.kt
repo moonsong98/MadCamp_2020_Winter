@@ -37,6 +37,9 @@ class DeliveryReviewDialog(
     lateinit var cancelButton: ImageButton
     lateinit var removeButton: ImageButton
     lateinit var editCancelButton: ImageButton
+    lateinit var deleteOkButton: ImageButton
+    lateinit var deleteCancelButton: ImageButton
+    lateinit var deleteAskText: TextView
 
     var restaurantList: ArrayList<String> = ArrayList<String>()
     var editMode: Boolean = false
@@ -63,6 +66,9 @@ class DeliveryReviewDialog(
         cancelButton = view.findViewById(R.id.cancel_button)
         removeButton = view.findViewById(R.id.remove_button)
         editCancelButton = view.findViewById(R.id.edit_cancel_button)
+        deleteAskText = view.findViewById(R.id.ask_delete)
+        deleteOkButton = view.findViewById(R.id.delete_ok_button)
+        deleteCancelButton = view.findViewById(R.id.delete_cancel_button)
 
         /* Retrieve Images */
         images = ArrayList<String>()
@@ -137,7 +143,18 @@ class DeliveryReviewDialog(
                 setMode()
             }
         }
+
         removeButton.setOnClickListener {
+            editButton.visibility = GONE
+            removeButton.visibility = GONE
+            cancelButton.visibility = GONE
+            editCancelButton.visibility = GONE
+            deleteAskText.visibility = VISIBLE
+            deleteOkButton.visibility = VISIBLE
+            deleteCancelButton.visibility = VISIBLE
+        }
+
+        deleteOkButton.setOnClickListener {
             var json = "[]"
             try {
                 val inputStream = this.context.openFileInput("delivery_review.json")
@@ -169,13 +186,26 @@ class DeliveryReviewDialog(
             removeDeliveryReview(deliveryReview)
             popup.dismiss()
         }
+
+        deleteCancelButton.setOnClickListener {
+            editButton.visibility = VISIBLE
+            removeButton.visibility = VISIBLE
+            cancelButton.visibility = VISIBLE
+            editCancelButton.visibility = GONE
+            deleteAskText.visibility = GONE
+            deleteOkButton.visibility = GONE
+            deleteCancelButton.visibility = GONE
+        }
+
         cancelButton.setOnClickListener {
             reloadReviewList()
             popup.dismiss()
         }
+
         editCancelButton.setOnClickListener {
             setMode()
         }
+
         popup.setView(view)
     }
 
