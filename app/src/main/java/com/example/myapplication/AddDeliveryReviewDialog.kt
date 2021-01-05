@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,6 +29,10 @@ class AddDeliveryReviewDialog(private val context: Context) {
     lateinit var timeStampReviewAdded: String
     lateinit var reviewDialogRatingBar: RatingBar
     lateinit var editButton:ImageView
+    lateinit var reviewDialogReview: EditText
+
+    lateinit var addButton:ImageButton
+    lateinit var cancelButton:ImageButton
     var editMode: Boolean = false
     fun createAddDeliveryReviewDialog(callback:(deliveryReview:DeliveryReview)->Unit) {
         val inflater =
@@ -36,7 +41,7 @@ class AddDeliveryReviewDialog(private val context: Context) {
         reviewDialogRestaurantList =
             view.findViewById(R.id.review_dialog_restaurant_list)
         reviewDialogRatingBar = view.findViewById(R.id.review_dialog_rating_bar)
-        val reviewDialogReview: EditText = view.findViewById(R.id.review_dialog_review)
+        reviewDialogReview = view.findViewById(R.id.review_dialog_review)
         var deliveryReview: DeliveryReview
 
         reviewDialogAddPhoto = view.findViewById(R.id.review_dialog_add_photo)
@@ -49,44 +54,63 @@ class AddDeliveryReviewDialog(private val context: Context) {
         }
         reviewDialogRecyclerView = view.findViewById(R.id.review_dialog_recycler_view)
         images = ArrayList<String>()
+
+        addButton = view.findViewById(R.id.add_button)
+        addButton.isClickable = true
+        cancelButton = view.findViewById(R.id.cancel_button)
+        cancelButton.isClickable = true
+
         /* Create Dialog */
         /* Setup Dialog Components */
         reviewDialogRecyclerView.setHasFixedSize(true)
         reviewDialogRecyclerView.layoutManager = GridLayoutManager(context, 4)
         popup = AlertDialog.Builder(this.context)
             .setTitle("Add Deliver Review")
-            .setPositiveButton("ADD")  { dialogInterface: DialogInterface, i: Int ->
-                val restaurant: String = reviewDialogRestaurantList.selectedItem.toString()
-                val rating: Int = reviewDialogRatingBar.rating.toInt()
-                val review: String = reviewDialogReview.text.toString()
-                deliveryReview = DeliveryReview(restaurant, rating, review, timeStampReviewAdded)
-                callback(deliveryReview)
-
-                var json = "[]"
-                try {
-                    val inputStream = context.openFileInput("delivery_review.json")
-                    json = inputStream.bufferedReader().use { it.readText() }
-
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-                }
-                json = if(json == "") "[]" else json
-                val jsonArray = JSONArray(json)
-                val jsonObject = JSONObject()
-                jsonObject.put("restaurant", restaurant)
-                jsonObject.put("rating", rating)
-                jsonObject.put("review", review)
-                jsonObject.put("timeStamp", timeStampReviewAdded)
-
-                if(json == "[]") json = "[$jsonObject]"
-                else json = json.slice(IntRange(0, json.length - 2)) + "," + jsonObject.toString() + "]"
-                context.openFileOutput("delivery_review.json", Context.MODE_PRIVATE).use {output ->
-                    output.write(json.toByteArray())
-                }
-            }
-            .setNegativeButton("Cancel", null)
+            .setCancelable(false)
             .create()
         popup.setView(view)
+
+
+
+        addButton.setOnClickListener{
+            val restaurant: String = reviewDialogRestaurantList.selectedItem.toString()
+            val rating: Int = reviewDialogRatingBar.rating.toInt()
+            val review: String = reviewDialogReview.text.toString()
+            deliveryReview = DeliveryReview(restaurant, rating, review, timeStampReviewAdded)
+            callback(deliveryReview)
+
+            var json = "[]"
+            try {
+                val inputStream = context.openFileInput("delivery_review.json")
+                json = inputStream.bufferedReader().use { it.readText() }
+
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+            json = if(json == "") "[]" else json
+            val jsonArray = JSONArray(json)
+            val jsonObject = JSONObject()
+            jsonObject.put("restaurant", restaurant)
+            jsonObject.put("rating", rating)
+            jsonObject.put("review", review)
+            jsonObject.put("timeStamp", timeStampReviewAdded)
+
+            if(json == "[]") json = "[$jsonObject]"
+            else json = json.slice(IntRange(0, json.length - 2)) + "," + jsonObject.toString() + "]"
+            context.openFileOutput("delivery_review.json", Context.MODE_PRIVATE).use {output ->
+                output.write(json.toByteArray())
+            }
+            if(reviewDialogRestaurantList.selectedItemPosition == 0) {
+                val warningMessage:TextView = view.findViewById(R.id.warning_message)
+                warningMessage.setTextColor(Color.RED)
+                warningMessage.visibility = VISIBLE
+            } else {
+                popup.dismiss()
+            }
+        }
+        cancelButton.setOnClickListener {
+            popup.dismiss()
+        }
     }
 
     fun showPopup() {
@@ -127,6 +151,12 @@ class AddDeliveryReviewDialog(private val context: Context) {
 
     fun setReviewAddedTime(time:String) {
         timeStampReviewAdded = time
+    }
+
+    fun resetDialog() {
+        reviewDialogRatingBar.rating = 0F
+        reviewDialogReview.setText("")
+        updateRestaurantSpinner()
     }
 
     class CustomAdapter(context: Context, resource: Int, list: ArrayList<String>): ArrayAdapter<String>(context, resource, list) {

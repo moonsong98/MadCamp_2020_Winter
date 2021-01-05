@@ -45,8 +45,10 @@ class DeliveryReviewAdapter(val context: Context, val list: ArrayList<DeliveryRe
             val bitmap: Bitmap = BitmapFactory.decodeFile(thumbnailImage)
             deliveryReviewImage.setImageBitmap(bitmap)
         }
+        val parsedString = list[position].timeStamp.split('_').toTypedArray()[0]
+        val timeShow = parsedString.substring(0,4) + "/" + parsedString.substring(4, 6) + "/" + parsedString.substring(6, 8)
         deliveryReviewRestaurant.text = list[position].restaurant
-        deliveryReviewTime.text = list[position].timeStamp
+        deliveryReviewTime.text = timeShow
         deliveryReviewRatingBar.rating = list[position].rating.toFloat()
         return view
         }
