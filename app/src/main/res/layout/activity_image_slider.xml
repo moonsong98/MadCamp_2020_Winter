@@ -23,15 +23,6 @@
             android:src = "@drawable/back_button"
             android:background="@color/transparent"
             />
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:id = "@+id/gallery_name"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text = "General"
-            android:layout_centerInParent="true"/>
         </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.viewpager.widget.ViewPager
