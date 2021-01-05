@@ -11,16 +11,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.JavascriptInterface
-import android.webkit.WebChromeClient
-import android.webkit.WebView
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.google.android.gms.maps.model.LatLng
 import org.json.JSONArray
 import org.json.JSONObject
-import org.w3c.dom.Text
 import java.io.IOException
 
 
@@ -35,6 +30,8 @@ class Contact : Fragment() {
     private lateinit var restaurantlist: ListView
     private lateinit var fab: View
     private lateinit var searchView: androidx.appcompat.widget.SearchView
+    val list = ArrayList<ContactData>()
+    private lateinit var adapter: ContactAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,7 +73,6 @@ class Contact : Fragment() {
         while(i < jsonArray.length()){
             val jsonObject = jsonArray.getJSONObject(i)
             val locationjsonObject = jsonObject.getJSONObject("location")
-            Log.i("WER", locationjsonObject.toString())
             list.add(
                     ContactData(
                             jsonObject.getInt("id"),
@@ -85,6 +81,7 @@ class Contact : Fragment() {
                             jsonObject.getInt("restaurant_type"),
                             jsonObject.getString("phone_number"),
                             Place(
+                                locationjsonObject.getString("address"),
                                 locationjsonObject.getDouble("latitude"),
                                 locationjsonObject.getDouble("longitude")
                             )
@@ -93,7 +90,8 @@ class Contact : Fragment() {
             i++
         }
 
-        val adapter = ContactAdapter(this.requireContext(), list)
+        adapter = ContactAdapter(this.requireContext(), list)
+
         restaurantlist.adapter = adapter
         restaurantlist.onItemClickListener = AdapterView.OnItemClickListener{ parent, view, position, id ->
             val item = parent.getItemAtPosition(position) as ContactData
@@ -131,7 +129,7 @@ class Contact : Fragment() {
         }
 
         addButton.setOnClickListener {
-            val latLng = getlatLng(new_location.text.toString())
+            val address = getfromlocationname(new_location.text.toString())
             if(new_name.text.toString().replace(" ", "").equals("")){
                 restaurant_type_warn.visibility = View.GONE
                 new_name.setError("Enter Name", )
@@ -143,7 +141,7 @@ class Contact : Fragment() {
             else if(new_restaurant_type == 0){
                 restaurant_type_warn.visibility = View.VISIBLE
             }
-            else if(latLng == null){
+            else if(address == null && new_restaurant_type == 2){
                 Toast.makeText(this.requireContext(), "No such location", Toast.LENGTH_SHORT).show()
             }
             else{
@@ -161,8 +159,16 @@ class Contact : Fragment() {
                 jsonObject.put("food_type", new_food_type.text)
                 jsonObject.put("restaurant_type", new_restaurant_type)
                 jsonObject.put("phone_number", new_phone_number.text)
-                locationjsonObject.put("latitude", latLng.latitude)
-                locationjsonObject.put("longitude", latLng.longitude)
+                if(address == null){
+                    locationjsonObject.put("address", "")
+                    locationjsonObject.put("latitude", 0.0)
+                    locationjsonObject.put("longitude", 0.0)
+                }
+                else{
+                    locationjsonObject.put("address", address.getAddressLine(0))
+                    locationjsonObject.put("latitude", address.latitude)
+                    locationjsonObject.put("longitude", address.longitude)
+                }
                 jsonObject.put("location", locationjsonObject)
 
                 if (jsonString == "[]") jsonString = "[" + jsonObject.toString() + "]"
@@ -182,14 +188,12 @@ class Contact : Fragment() {
         AddPopup.show()
     }
 
-    private fun getlatLng(location_string: String): LatLng? {
+    private fun getfromlocationname(location_string: String): Address? {
         val geocoder: Geocoder = Geocoder(this.requireContext())
         try {
             val LocationResult: List<Address> = geocoder.getFromLocationName(location_string, 1);
             if(LocationResult.isEmpty())    return null
-            val Lat = LocationResult.get(0).latitude
-            val Lng = LocationResult.get(0).longitude
-            return LatLng(Lat, Lng)
+            return LocationResult.get(0)
         } catch (e: IOException) {
             e.printStackTrace()
             return null
@@ -215,6 +219,7 @@ class Contact : Fragment() {
         var edit_food_type = view.findViewById<TextView>(R.id.edit_food_type)
         var edit_phone_number = view.findViewById<TextView>(R.id.edit_phone_number)
         var edit_location = view.findViewById<TextView>(R.id.edit_location)
+        var address: Address?
 
         if(item.restaurant_type == 1){
             if((item.name.length + item.food_type.length) % 2 == 0){
@@ -236,7 +241,9 @@ class Contact : Fragment() {
         title.text = item.name
         food_type.text = item.food_type
         phone_number.text = item.phone_number
-        location.text = getlocation(LatLng(item.location.latitude, item.location.longitude))
+        address = getfromlocationname(item.location.address)
+        if(address == null) location.text = ""
+        else    location.text = item.location.address
 
         val RestaurantPopup = AlertDialog.Builder(this.requireContext())
                 .create()
@@ -276,14 +283,14 @@ class Contact : Fragment() {
         }
 
         editokButton.setOnClickListener {
-            val latLng = getlatLng(edit_location.text.toString())
+            address = getfromlocationname(edit_location.text.toString())
             if(edit_name.text.toString().replace(" ", "").equals("")){
                 edit_name.setError("Enter Name", )
             }
             else if(edit_food_type.text.toString().replace(" ", "").equals("")){
                 edit_food_type.setError("Enter Food Type")
             }
-            else if(latLng == null){
+            else if(address == null && item.restaurant_type == 2){
                 Toast.makeText(this.requireContext(), "No such location", Toast.LENGTH_SHORT).show()
             }
             else{
@@ -317,8 +324,16 @@ class Contact : Fragment() {
                 newjsonObject.put("food_type", edit_food_type.text)
                 newjsonObject.put("restaurant_type", item.restaurant_type)
                 newjsonObject.put("phone_number", edit_phone_number.text)
-                newlocationjsonObject.put("latitude", latLng.latitude)
-                newlocationjsonObject.put("longitude", latLng.longitude)
+                if(address == null){
+                    newlocationjsonObject.put("address", "")
+                    newlocationjsonObject.put("latitude", 0.0)
+                    newlocationjsonObject.put("longitude", 0.0)
+                }
+                else{
+                    newlocationjsonObject.put("address", address!!.getAddressLine(0))
+                    newlocationjsonObject.put("latitude", address!!.latitude)
+                    newlocationjsonObject.put("longitude", address!!.longitude)
+                }
                 newjsonObject.put("location", newlocationjsonObject)
 
                 while(i < jsonArray.length()){
@@ -337,9 +352,11 @@ class Contact : Fragment() {
                 title.text = edit_name.text
                 food_type.text = edit_food_type.text
                 phone_number.text = edit_phone_number.text
-                location.text = getlocation(latLng)
+                if(address == null)  location.text = ""
+                else    location.text =
+                    getfromlocationname(address!!.getAddressLine(0))?.getAddressLine(0) ?: ""
 
-                Toast.makeText(this.requireContext(), "EDITED", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.requireContext(), "EDITED", Toast.LENGTH_SHORT).show( )
             }
         }
 
@@ -398,18 +415,6 @@ class Contact : Fragment() {
 
         RestaurantPopup.setView(view)
         RestaurantPopup.show()
-    }
-
-    private fun getlocation(latLng: LatLng): String? {
-        val geocoder: Geocoder = Geocoder(this.requireContext())
-        try {
-            val LocationResult: List<Address> = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            if(LocationResult.isEmpty())    return null
-            return LocationResult.get(0).getAddressLine(0)
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return null
-        }
     }
 
     companion object {
