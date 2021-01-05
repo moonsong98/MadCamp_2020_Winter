@@ -1,3 +1,5 @@
 package com.example.myapplication
 
-data class DeliveryReview(val restaurant: String, val rating: Int, val review: String, val timeStamp: String)
+import android.text.Editable
+
+data class DeliveryReview(var restaurant: String, var rating: Int, var review: String, val timeStamp: String)

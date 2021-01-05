@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.GridLayoutManager
@@ -26,6 +27,8 @@ class AddDeliveryReviewDialog(private val context: Context) {
     lateinit var reviewDialogRestaurantList: Spinner
     lateinit var timeStampReviewAdded: String
     lateinit var reviewDialogRatingBar: RatingBar
+    lateinit var editButton:ImageView
+    var editMode: Boolean = false
     fun createAddDeliveryReviewDialog(callback:(deliveryReview:DeliveryReview)->Unit) {
         val inflater =
             this.context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -37,11 +40,17 @@ class AddDeliveryReviewDialog(private val context: Context) {
         var deliveryReview: DeliveryReview
 
         reviewDialogAddPhoto = view.findViewById(R.id.review_dialog_add_photo)
+        editButton = view.findViewById(R.id.review_edit_photo)
+        editButton.isClickable = true
+        editButton.setOnClickListener() {
+            editMode = true
+            editButton.visibility = INVISIBLE
+            reviewDialogAddPhoto.setImageResource(R.drawable.ok)
+        }
         reviewDialogRecyclerView = view.findViewById(R.id.review_dialog_recycler_view)
         images = ArrayList<String>()
         /* Create Dialog */
         /* Setup Dialog Components */
-        var editMode: Boolean = false
         reviewDialogRecyclerView.setHasFixedSize(true)
         reviewDialogRecyclerView.layoutManager = GridLayoutManager(context, 4)
         popup = AlertDialog.Builder(this.context)
@@ -107,7 +116,8 @@ class AddDeliveryReviewDialog(private val context: Context) {
         restaurantList.add("Choose Restaurant...")
         while(i<jsonArray.length()){
             val res = jsonArray.getJSONObject(i).getString("name")
-            if (!restaurantList.contains(res))
+            val type = jsonArray.getJSONObject(i).getInt("restaurant_type")
+            if (!restaurantList.contains(res) && type == 1)
                 restaurantList.add(res)
             i++
         }
