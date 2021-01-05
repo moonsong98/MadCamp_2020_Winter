@@ -73,42 +73,46 @@ class AddDeliveryReviewDialog(private val context: Context) {
 
 
         addButton.setOnClickListener{
-            val restaurant: String = reviewDialogRestaurantList.selectedItem.toString()
-            val rating: Int = reviewDialogRatingBar.rating.toInt()
-            val review: String = reviewDialogReview.text.toString()
-            deliveryReview = DeliveryReview(restaurant, rating, review, timeStampReviewAdded)
-            callback(deliveryReview)
-
-            var json = "[]"
-            try {
-                val inputStream = context.openFileInput("delivery_review.json")
-                json = inputStream.bufferedReader().use { it.readText() }
-
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-            json = if(json == "") "[]" else json
-            val jsonArray = JSONArray(json)
-            val jsonObject = JSONObject()
-            jsonObject.put("restaurant", restaurant)
-            jsonObject.put("rating", rating)
-            jsonObject.put("review", review)
-            jsonObject.put("timeStamp", timeStampReviewAdded)
-
-            if(json == "[]") json = "[$jsonObject]"
-            else json = json.slice(IntRange(0, json.length - 2)) + "," + jsonObject.toString() + "]"
-            context.openFileOutput("delivery_review.json", Context.MODE_PRIVATE).use {output ->
-                output.write(json.toByteArray())
-            }
             if(reviewDialogRestaurantList.selectedItemPosition == 0) {
                 val warningMessage:TextView = view.findViewById(R.id.warning_message)
                 warningMessage.setTextColor(Color.RED)
                 warningMessage.visibility = VISIBLE
             } else {
+                val restaurant: String = reviewDialogRestaurantList.selectedItem.toString()
+                val rating: Int = reviewDialogRatingBar.rating.toInt()
+                val review: String = reviewDialogReview.text.toString()
+                deliveryReview = DeliveryReview(restaurant, rating, review, timeStampReviewAdded)
+                callback(deliveryReview)
+
+                var json = "[]"
+                try {
+                    val inputStream = context.openFileInput("delivery_review.json")
+                    json = inputStream.bufferedReader().use { it.readText() }
+
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                }
+                json = if(json == "") "[]" else json
+                val jsonArray = JSONArray(json)
+                val jsonObject = JSONObject()
+                jsonObject.put("restaurant", restaurant)
+                jsonObject.put("rating", rating)
+                jsonObject.put("review", review)
+                jsonObject.put("timeStamp", timeStampReviewAdded)
+
+                if(json == "[]") json = "[$jsonObject]"
+                else json = json.slice(IntRange(0, json.length - 2)) + "," + jsonObject.toString() + "]"
+                context.openFileOutput("delivery_review.json", Context.MODE_PRIVATE).use {output ->
+                    output.write(json.toByteArray())
+                }
+                val warningMessage:TextView = view.findViewById(R.id.warning_message)
+                warningMessage.visibility = INVISIBLE
                 popup.dismiss()
             }
         }
         cancelButton.setOnClickListener {
+            val warningMessage:TextView = view.findViewById(R.id.warning_message)
+            warningMessage.visibility = INVISIBLE
             popup.dismiss()
         }
     }
