@@ -94,8 +94,7 @@ class Gallery : Fragment() {
         addReview = view.findViewById(R.id.add_review)
         addReview.isClickable = true
         addReview.setOnClickListener {
-            reviewTimeStamp = SimpleDateFormat("yyyy/MM/dd").format(Date())
-            //reviewTimeStampShow = SimpleDateFormat("yyyy/mm/dd").format(Date())
+            reviewTimeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
             addDeliveryReviewDialog.resetDialog()
             addDeliveryReviewDialog.showPopup()
             addDeliveryReviewDialog.setReviewAddedTime(reviewTimeStamp)
