@@ -64,7 +64,8 @@
             android:scaleY=".5"
             android:stepSize="1"
             android:transformPivotX="0dp"
-            android:transformPivotY="0dp" />
+            android:transformPivotY="0dp"
+            android:theme="@style/RatingBar"/>
     </LinearLayout>
 
     <LinearLayout
