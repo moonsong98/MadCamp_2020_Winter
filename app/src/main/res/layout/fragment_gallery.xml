@@ -7,34 +7,22 @@
     android:orientation="vertical"
     tools:context=".Gallery">
 
-    <RelativeLayout
-        android:id="@+id/general_photos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/gallery_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/add_review"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:background="@color/white"
-            android:src="@drawable/add_black" />
-    </RelativeLayout>
-
     <ListView
         android:id = "@+id/review_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight = "1"
         tools:ignore="NestedScrolling" />
+    <TextView
+        android:id = "@+id/add_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ADD NEW REVIEWS"
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textStyle="bold"
+        android:background="@color/purple_500"
+        android:layout_gravity="bottom" />
 </LinearLayout>

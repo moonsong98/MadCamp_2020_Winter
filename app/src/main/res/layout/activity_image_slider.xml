@@ -39,6 +39,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Oh YES"/>
+    </LinearLayout>
 
     <include layout="@layout/content_image_slider" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
