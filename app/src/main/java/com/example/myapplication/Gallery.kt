@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -10,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
@@ -100,6 +102,7 @@ class Gallery : Fragment() {
             addDeliveryReviewDialog.setReviewAddedTime(reviewTimeStamp)
             addDeliveryReviewDialog.reviewDialogRatingBar.rating = 0F
             updateAddDeliveryReviewDialogImages(
+                true,
                 addDeliveryReviewDialog.reviewDialogGalleryAdapter,
                 addDeliveryReviewDialog.images,
                 "",
@@ -152,35 +155,33 @@ class Gallery : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_TAKE_PHOTO_ADD_REVIEW) {
-            if (data != null) {
-                if (resultCode == RESULT_OK) {
-                    updateAddDeliveryReviewDialogImages(
-                        addDeliveryReviewDialog.reviewDialogGalleryAdapter,
-                        addDeliveryReviewDialog.images,
-                        takenPhoto!!.absolutePath,
-                        ModifyState.ADD
-                    )
-                } else {
-                    takenPhoto?.delete()
-                }
+            if (resultCode == RESULT_OK) {
+                updateAddDeliveryReviewDialogImages(
+                    true,
+                    addDeliveryReviewDialog.reviewDialogGalleryAdapter,
+                    addDeliveryReviewDialog.images,
+                    takenPhoto!!.absolutePath,
+                    ModifyState.ADD
+                )
+            } else {
+                takenPhoto?.delete()
             }
             addDeliveryReviewDialog.showPopup()
         } else if (requestCode == REQUEST_TAKE_PHOTO_REVIEW) {
-            if (data != null) {
-                if (resultCode == RESULT_OK) {
-                    updateAddDeliveryReviewDialogImages(
-                        deliveryReviewDialog.reviewDialogGalleryAdapter,
-                        deliveryReviewDialog.images,
-                        takenPhoto!!.absolutePath,
-                        ModifyState.ADD
-                    )
-                } else {
-                    takenPhoto?.delete()
-                }
+            if (resultCode == RESULT_OK) {
+                updateAddDeliveryReviewDialogImages(
+                    false,
+                    deliveryReviewDialog.reviewDialogGalleryAdapter,
+                    deliveryReviewDialog.images,
+                    takenPhoto!!.absolutePath,
+                    ModifyState.ADD
+                )
+            } else {
+                takenPhoto?.delete()
             }
             deliveryReviewDialog.popup()
-
         }
+
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -228,6 +229,7 @@ class Gallery : Fragment() {
     }
 
     private fun updateAddDeliveryReviewDialogImages(
+        addDelivery: Boolean,
         galleryAdapter: GalleryAdapter,
         images: ArrayList<String>,
         image: String,
@@ -238,6 +240,10 @@ class Gallery : Fragment() {
                 val len = images.size
                 images.add(len, image)
                 galleryAdapter.notifyItemInserted(len)
+                if (addDelivery)
+                    setAddReviewDialogGalleryAdapter()
+                else
+                    setDeliveryReviewDialogGalleryAdapter(deliveryReviewDialog)
             }
             ModifyState.DELETE -> {
                 val index = images.indexOf(image)
@@ -327,6 +333,7 @@ class Gallery : Fragment() {
                         val editMode = addDeliveryReviewDialog.editMode
                         if (editMode) {
                             updateAddDeliveryReviewDialogImages(
+                                true,
                                 addDeliveryReviewDialog.reviewDialogGalleryAdapter,
                                 addDeliveryReviewDialog.images,
                                 path,
@@ -354,11 +361,25 @@ class Gallery : Fragment() {
             deliveryReviewDialog.images,
             object : GalleryAdapter.PhotoListener {
                 override fun onPhotoClick(path: String) {
-                    val intent = Intent(activity, ImageSlider::class.java).apply {
-                        putExtra("path", path)
-                        putExtra("time", deliveryReviewDialog.reviewTime)
+                    val editMode = deliveryReviewDialog.editMode
+                    if (editMode) {
+                        updateAddDeliveryReviewDialogImages(
+                            true,
+                            deliveryReviewDialog.reviewDialogGalleryAdapter,
+                            deliveryReviewDialog.images,
+                            path,
+                            ModifyState.DELETE
+                        )
+                        val file = File(path)
+                        file.delete()
+
+                    } else {
+                        val intent = Intent(activity, ImageSlider::class.java).apply {
+                            putExtra("path", path)
+                            putExtra("time", deliveryReviewDialog.reviewTime)
+                        }
+                        startActivity(intent)
                     }
-                    startActivity(intent)
                 }
             })
         deliveryReviewDialog.reviewDialogRecyclerView.adapter =

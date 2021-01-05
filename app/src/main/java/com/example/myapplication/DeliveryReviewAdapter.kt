@@ -40,7 +40,7 @@ class DeliveryReviewAdapter(val context: Context, val list: ArrayList<DeliveryRe
             Log.d("Oh", storageDir.absolutePath)
         }
         val imageDir: File = File(storageDir, "/"+list[position].timeStamp)
-        if(imageDir.listFiles()!=null){
+        if(imageDir.listFiles()!=null && imageDir.listFiles().size > 0){
             val thumbnailImage = imageDir.listFiles()[0].absolutePath
             val bitmap: Bitmap = BitmapFactory.decodeFile(thumbnailImage)
             deliveryReviewImage.setImageBitmap(bitmap)
