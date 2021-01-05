@@ -36,6 +36,7 @@ class DeliveryReviewDialog(
     lateinit var editButton: ImageButton
     lateinit var cancelButton: ImageButton
     lateinit var removeButton: ImageButton
+    lateinit var editCancelButton: ImageButton
 
     var restaurantList: ArrayList<String> = ArrayList<String>()
     var editMode: Boolean = false
@@ -61,6 +62,7 @@ class DeliveryReviewDialog(
         editButton = view.findViewById(R.id.edit_button)
         cancelButton = view.findViewById(R.id.cancel_button)
         removeButton = view.findViewById(R.id.remove_button)
+        editCancelButton = view.findViewById(R.id.edit_cancel_button)
 
         /* Retrieve Images */
         images = ArrayList<String>()
@@ -78,7 +80,6 @@ class DeliveryReviewDialog(
         reviewDialogRecyclerView.setHasFixedSize(true)
         reviewDialogRecyclerView.layoutManager = GridLayoutManager(context, 4)
         popup = AlertDialog.Builder(this.context)
-            .setTitle("Deliver Review")
             .setCancelable(false)
             .create()
         editButton.setOnClickListener {
@@ -172,6 +173,9 @@ class DeliveryReviewDialog(
             reloadReviewList()
             popup.dismiss()
         }
+        editCancelButton.setOnClickListener {
+            setMode()
+        }
         popup.setView(view)
     }
 
@@ -188,6 +192,9 @@ class DeliveryReviewDialog(
             reviewDialogReview.visibility = GONE
             reviewDialogRatingBar.setIsIndicator(false)
             editButton.setImageResource(R.drawable.ok)
+            removeButton.visibility = GONE
+            cancelButton.visibility = GONE
+            editCancelButton.visibility = VISIBLE
             editMode = true
         } else {
             review_dialog_restaurant_list_edit.visibility = GONE
@@ -197,6 +204,9 @@ class DeliveryReviewDialog(
             reviewDialogReview.visibility = VISIBLE
             reviewDialogRatingBar.setIsIndicator(true)
             editButton.setImageResource(R.drawable.edit)
+            removeButton.visibility = VISIBLE
+            cancelButton.visibility = VISIBLE
+            editCancelButton.visibility = GONE
             editMode = false
         }
     }

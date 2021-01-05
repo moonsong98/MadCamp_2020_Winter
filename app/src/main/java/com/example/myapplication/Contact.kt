@@ -122,6 +122,7 @@ class Contact : Fragment() {
 
         val AddPopup = AlertDialog.Builder(this.requireContext())
             .setTitle("Add New Restaurant")
+            .setCancelable(false)
             .create()
 
         cancelButton.setOnClickListener {
@@ -205,6 +206,7 @@ class Contact : Fragment() {
         val view = inflater.inflate(R.layout.contact_restaurant_popup, null)
         val editButton = view.findViewById(R.id.edit_button) as ImageButton
         val deleteButton = view.findViewById(R.id.delete_button) as ImageButton
+        val cancelButton = view.findViewById(R.id.cancel_button) as ImageButton
         val editokButton = view.findViewById(R.id.edit_ok_button) as ImageButton
         val editcancelButton = view.findViewById(R.id.edit_cancel_button) as ImageButton
         val askrestaurantdelete = view.findViewById(R.id.ask_restaurant_delete) as TextView
@@ -246,11 +248,13 @@ class Contact : Fragment() {
         else    location.text = item.location.address
 
         val RestaurantPopup = AlertDialog.Builder(this.requireContext())
-                .create()
+            .setCancelable(false)
+            .create()
 
         editButton.setOnClickListener {
             editButton.visibility = View.GONE
             deleteButton.visibility = View.GONE
+            cancelButton.visibility = View.GONE
             editokButton.visibility = View.VISIBLE
             editcancelButton.visibility = View.VISIBLE
             askrestaurantdelete.visibility = View.GONE
@@ -275,11 +279,16 @@ class Contact : Fragment() {
         deleteButton.setOnClickListener {
             editButton.visibility = View.GONE
             deleteButton.visibility = View.GONE
+            cancelButton.visibility = View.GONE
             editokButton.visibility = View.GONE
             editcancelButton.visibility = View.GONE
             askrestaurantdelete.visibility = View.VISIBLE
             deleteokButton.visibility = View.VISIBLE
             deletecancelButton.visibility = View.VISIBLE
+        }
+
+        cancelButton.setOnClickListener {
+            RestaurantPopup.dismiss()
         }
 
         editokButton.setOnClickListener {
@@ -296,6 +305,7 @@ class Contact : Fragment() {
             else{
                 editButton.visibility = View.VISIBLE
                 deleteButton.visibility = View.VISIBLE
+                cancelButton.visibility = View.VISIBLE
                 editokButton.visibility = View.GONE
                 editcancelButton.visibility = View.GONE
                 askrestaurantdelete.visibility = View.GONE
@@ -363,6 +373,7 @@ class Contact : Fragment() {
         editcancelButton.setOnClickListener {
             editButton.visibility = View.VISIBLE
             deleteButton.visibility = View.VISIBLE
+            cancelButton.visibility = View.VISIBLE
             editokButton.visibility = View.GONE
             editcancelButton.visibility = View.GONE
             askrestaurantdelete.visibility = View.GONE
@@ -406,6 +417,7 @@ class Contact : Fragment() {
         deletecancelButton.setOnClickListener {
             editButton.visibility = View.VISIBLE
             deleteButton.visibility = View.VISIBLE
+            cancelButton.visibility = View.VISIBLE
             editokButton.visibility = View.GONE
             editcancelButton.visibility = View.GONE
             askrestaurantdelete.visibility = View.GONE
