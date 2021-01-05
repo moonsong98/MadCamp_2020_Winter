@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:text="Wanna delete this information?"
+            android:text="Wanna delete?"
             android:textColor="#FF2020"
             android:gravity="center"
             android:visibility="gone"/>

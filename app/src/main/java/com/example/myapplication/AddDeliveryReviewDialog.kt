@@ -50,7 +50,7 @@ class AddDeliveryReviewDialog(private val context: Context) {
         editButton.setOnClickListener() {
             editMode = true
             editButton.visibility = INVISIBLE
-            reviewDialogAddPhoto.setImageResource(R.drawable.ok)
+            reviewDialogAddPhoto.setImageResource(R.drawable.cancel)
         }
         reviewDialogRecyclerView = view.findViewById(R.id.review_dialog_recycler_view)
         images = ArrayList<String>()
@@ -69,8 +69,6 @@ class AddDeliveryReviewDialog(private val context: Context) {
             .setCancelable(false)
             .create()
         popup.setView(view)
-
-
 
         addButton.setOnClickListener{
             if(reviewDialogRestaurantList.selectedItemPosition == 0) {
