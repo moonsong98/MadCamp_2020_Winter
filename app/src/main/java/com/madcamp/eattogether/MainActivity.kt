@@ -16,30 +16,31 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.i("aaaa","main activity")
         viewPager = findViewById(R.id.viewPager)
         tabLayout = findViewById(R.id.tabLayout)
+
         val adapter = FragmentAdapter(this)
-
-        val fragments = listOf<Fragment>(PeopleFragment(), GroupFragment(), ReviewFragment())
-        val tabTitles = listOf<String>("People","Group", "Review")
-
-        adapter.fragments.addAll(fragments)
         viewPager.adapter = adapter
+
         TabLayoutMediator(tabLayout, viewPager){tab, position ->
-            tab.text = tabTitles[position]
+            tab.text = (viewPager.adapter as FragmentAdapter).getTitle(position)
         }.attach()
     }
 }
 
 class FragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity){
-    var fragments = mutableListOf<Fragment>()
+    private val fragmentList = listOf(
+        Pair("People", PeopleFragment()), Pair("Group", GroupFragment()), Pair("Review", ReviewFragment())
+    )
     override fun getItemCount(): Int {
-        return fragments.size
+        return fragmentList.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        return fragments[position]
+        return fragmentList[position].second
     }
 
+    fun getTitle(position:Int):String {
+        return fragmentList[position].first
+    }
 }
