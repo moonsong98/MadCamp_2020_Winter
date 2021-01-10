@@ -29,6 +29,8 @@ class LoginActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout)
+        profile = findViewById(R.id.profile)
+        login = findViewById(R.id.login)
 
         /* Check Whether Login Session is still alive */
         val accessToken = AccessToken.getCurrentAccessToken()
@@ -40,8 +42,6 @@ class LoginActivity: AppCompatActivity() {
             startActivity(nextIntent)
         }
         else {
-            profile = findViewById(R.id.profile)
-            login = findViewById(R.id.login)
             login.visibility = VISIBLE
             // Callback registration
             login.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
@@ -67,6 +67,10 @@ class LoginActivity: AppCompatActivity() {
                 }
             })
         }
+    }
+    override fun onStart() {
+        super.onStart()
+        login.visibility = VISIBLE
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager.onActivityResult(requestCode, resultCode, data)

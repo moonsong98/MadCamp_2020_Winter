@@ -5,5 +5,9 @@
         android:id="@+id/add_group"
         android:title="add_group"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/logout"
+        android:title="로그아웃"
+        app:showAsAction="never" />
 
 </menu>

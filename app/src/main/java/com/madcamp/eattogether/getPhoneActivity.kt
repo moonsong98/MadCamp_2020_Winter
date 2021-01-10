@@ -40,7 +40,9 @@ class getPhoneActivity: AppCompatActivity() {
             Log.i("aaaaa",userPhoneNum)
             var jsonObjectRequest = JsonObjectRequest(Request.Method.POST, url, userInfo, Response.Listener{ },Response.ErrorListener (){})
             val intent = Intent(this@getPhoneActivity, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(intent)
+            this.finish()
         }
     }
 }
