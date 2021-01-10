@@ -3,6 +3,10 @@ package com.madcamp.eattogether
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -16,30 +20,43 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.i("aaaa","main activity")
         viewPager = findViewById(R.id.viewPager)
         tabLayout = findViewById(R.id.tabLayout)
+
         val adapter = FragmentAdapter(this)
-
-        val fragments = listOf<Fragment>(PeopleFragment(), GroupFragment(), ReviewFragment())
-        val tabTitles = listOf<String>("People","Group", "Review")
-
-        adapter.fragments.addAll(fragments)
         viewPager.adapter = adapter
+
         TabLayoutMediator(tabLayout, viewPager){tab, position ->
-            tab.text = tabTitles[position]
+            tab.text = (viewPager.adapter as FragmentAdapter).getTitle(position)
         }.attach()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.add_group -> Toast.makeText(this, "Add Group",LENGTH_SHORT).show()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
 
 class FragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity){
-    var fragments = mutableListOf<Fragment>()
+    private val fragmentList = listOf(
+        Pair("연락처", PeopleFragment()), Pair("예정된 약속", GroupFragment()), Pair("이전 약속", ReviewFragment())
+    )
     override fun getItemCount(): Int {
-        return fragments.size
+        return fragmentList.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        return fragments[position]
+        return fragmentList[position].second
     }
 
+    fun getTitle(position:Int):String {
+        return fragmentList[position].first
+    }
 }
