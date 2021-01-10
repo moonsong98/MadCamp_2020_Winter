@@ -164,7 +164,7 @@ class PeopleFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.setPhone(list[position])
+            holder.setView(list[position])
         }
 
         fun setData(newList:List<Phone>) {
@@ -186,7 +186,7 @@ class PeopleFragment : Fragment() {
                 }
             }
 
-            fun setPhone(phone: Phone) {
+            fun setView(phone: Phone) {
                 this.mPhone = phone
                 val contactName: TextView = itemView.findViewById(R.id.contact_name)
                 val contactNumber: TextView = itemView.findViewById(R.id.contact_phone_number)

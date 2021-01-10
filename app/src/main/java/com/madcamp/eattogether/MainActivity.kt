@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
 class FragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity){
     private val fragmentList = listOf(
-        Pair("People", PeopleFragment()), Pair("Group", GroupFragment()), Pair("Review", ReviewFragment())
+        Pair("연락처", PeopleFragment()), Pair("예정된 약속", GroupFragment()), Pair("이전 약속", ReviewFragment())
     )
     override fun getItemCount(): Int {
         return fragmentList.size
