@@ -16,8 +16,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="188dp"/>
+        android:layout_marginTop="441dp" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login"
@@ -29,5 +28,13 @@
         android:layout_marginTop="500dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:srcCompat="@drawable/logo" />
 
 </RelativeLayout>
