@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
-    <TextView
-        android:id="@+id/info"
-        android:layout_width="288dp"
-        android:layout_height="126dp" />
-
     <ImageView
         android:id="@+id/profile"
         android:layout_width="50dp"
@@ -18,8 +13,17 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="441dp" />
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        app:srcCompat="@drawable/logo" />
+
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -28,13 +32,4 @@
         android:layout_marginTop="500dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        app:srcCompat="@drawable/logo" />
-
 </RelativeLayout>
