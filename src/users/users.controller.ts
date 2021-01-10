@@ -7,14 +7,44 @@ import { ok } from "assert";
 export class UsersController{
     constructor(private readonly usersService: UsersService){}
 
-    @Post()
-    async addUser(@Req()req: Request){
+    // @Get()
+    // async addUser(@Req()req: Request){
+    //     console.log("adduser")
+    //     const id: string = req.body.userId
+    //     const phoneNum : string = req.body.userPhoneNum
+    //     const User = await this.usersService.addUser(id, phoneNum)
+    //     // User.save()
+    //     const users = await this.usersService.getUsers();
+    //     return users
+    // }
+    // @Post('post')
+    // async addUser(@Req()req: Request){
+    //     const id = req.body.userId
+    //     const phoneNum = req.body.userPhoneNum
+    //     const User = await this.usersService.addUser(id, phoneNum)
+    //     await User.save()
+    //     console.log("saved")
+    //     return User
+    //     // const newUser = await this.usersService.addUser(id, phoneNum)
+    //     // return newUser
+    // }
+    // @Post('postman')
+    // async addUser(@Body('userId') id:string, @Body('userPhoneNum') phoneNum:string){
+    //     const User = await this.usersService.addUser(id,phoneNum)
+    //     console.log("saved")
+    // }
+    @Post('postman')
+    async addUser(@Req()req:Request){
         const id = req.body.userId
         const phoneNum = req.body.userPhoneNum
-        const User = await this.usersService.addUser(id, phoneNum)
-        return{
-            statusCode: HttpStatus.OK,
-            message: 'user added succesfully'
-        }
+        const User = await this.usersService.addUser(id,phoneNum)
+        console.log("saved")
+        return User
     }
+    @Get('all')
+    async getUsers(){
+        const users = await this.usersService.getUsers();
+        return users
+    }
+
 }

@@ -23,19 +23,27 @@ let UsersController = class UsersController {
         const id = req.body.userId;
         const phoneNum = req.body.userPhoneNum;
         const User = await this.usersService.addUser(id, phoneNum);
-        return {
-            statusCode: common_1.HttpStatus.OK,
-            message: 'user added succesfully'
-        };
+        console.log("saved");
+        return User;
+    }
+    async getUsers() {
+        const users = await this.usersService.getUsers();
+        return users;
     }
 };
 __decorate([
-    common_1.Post(),
+    common_1.Post('postman'),
     __param(0, common_1.Req()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "addUser", null);
+__decorate([
+    common_1.Get('all'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getUsers", null);
 UsersController = __decorate([
     common_1.Controller('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

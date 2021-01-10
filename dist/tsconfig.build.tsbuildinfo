@@ -1176,16 +1176,6 @@
         "signature": "95b5a3078fdc51508d5d9cde59a1dd9525b53fd42dc12265a55261fd415d3274",
         "affectsGlobalScope": false
       },
-      "../src/app.service.ts": {
-        "version": "eaf8514ce110fa428a93a27408df4d06d133dbd9ed0a775c315ddfdd507853a9",
-        "signature": "653711fba8904aa27fd8911b63cf526e7b334e13a292da4cefdbbe179ac3f3f2",
-        "affectsGlobalScope": false
-      },
-      "../src/app.controller.ts": {
-        "version": "d23688bfefd00260e8d17170cfd6e84c3c240ef54fb2391866254e740e7abbac",
-        "signature": "ef022c91ea9e75ab4082f2e881f9c4db7b346be2da706e876b253bebce5e6140",
-        "affectsGlobalScope": false
-      },
       "../node_modules/@nestjs/mongoose/dist/common/mongoose.decorators.d.ts": {
         "version": "8777e8b9e2aaad9e400a18387113faf9593806889cf4ef4267ce5271fce8b8be",
         "signature": "8777e8b9e2aaad9e400a18387113faf9593806889cf4ef4267ce5271fce8b8be",
@@ -1536,8 +1526,68 @@
         "signature": "8f1241f5d9f0d3d72117768b3c974e462840fbd85026fb66685078945404cf2f",
         "affectsGlobalScope": false
       },
+      "../src/users/user.model.ts": {
+        "version": "d4abf7b482520ae41406e9f867775c9a501ff3ca0155723f6401348e7e822f24",
+        "signature": "28b1ff7fbe950477d216ee60a01a55c709cfd01b4a5be0eb8dfcc3153279d5cf",
+        "affectsGlobalScope": false
+      },
+      "../src/users/users.service.ts": {
+        "version": "da63c2e1e31a70475dbf0a12df29a4b490042ef95190fbf34d75c17811a6d213",
+        "signature": "e8821a4c46bc3004bdf7614768349d3dd005870f7873d6496499f5745055aeb9",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/range-parser/index.d.ts": {
+        "version": "4e88b833be14c7f384e0dcd57bb30acd799e8e34d212635d693e41a75a71164b",
+        "signature": "4e88b833be14c7f384e0dcd57bb30acd799e8e34d212635d693e41a75a71164b",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/qs/index.d.ts": {
+        "version": "c236451df6139a965bb9b8fba15a43a8bebf4400ca589998e2bdc5e1291fa0f9",
+        "signature": "c236451df6139a965bb9b8fba15a43a8bebf4400ca589998e2bdc5e1291fa0f9",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/express-serve-static-core/index.d.ts": {
+        "version": "495cc9f802a6bce4aa21dddf13f8e61b4f0b7976621af90e31c58a4dfe4802ef",
+        "signature": "495cc9f802a6bce4aa21dddf13f8e61b4f0b7976621af90e31c58a4dfe4802ef",
+        "affectsGlobalScope": true
+      },
+      "../node_modules/@types/mime/index.d.ts": {
+        "version": "be27a64e821a3e5af838650e4aa25805c60f057d0c37a9762c378d19d364b3e6",
+        "signature": "be27a64e821a3e5af838650e4aa25805c60f057d0c37a9762c378d19d364b3e6",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/serve-static/index.d.ts": {
+        "version": "a81ca93d000e36f987b91dd5b26a900aeae125bfbeda710b0369d04857c02932",
+        "signature": "a81ca93d000e36f987b91dd5b26a900aeae125bfbeda710b0369d04857c02932",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/connect/index.d.ts": {
+        "version": "e6ffa74698f0a1d23e4223242ed7dcdb89d02bbbb063a1930e9f91d0385abe16",
+        "signature": "e6ffa74698f0a1d23e4223242ed7dcdb89d02bbbb063a1930e9f91d0385abe16",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/body-parser/index.d.ts": {
+        "version": "ebddbd167c2fabd0151f50e5df94ca6d845149c47521280d8867afe3429dd078",
+        "signature": "ebddbd167c2fabd0151f50e5df94ca6d845149c47521280d8867afe3429dd078",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/express/index.d.ts": {
+        "version": "088d420a09a36d241f1ddbdcb553951c02ef0844014727a29712d2ced57edd22",
+        "signature": "088d420a09a36d241f1ddbdcb553951c02ef0844014727a29712d2ced57edd22",
+        "affectsGlobalScope": false
+      },
+      "../src/users/users.controller.ts": {
+        "version": "caa901586ed5c98b6e128dc50cb25bcb96337f26bb2ad94e15487e52771a6f3f",
+        "signature": "5d1e2e1edefa5bd00bdf8b50c2fa7f4e67bd03f6a2affd4b75ba2caa63b2b95c",
+        "affectsGlobalScope": false
+      },
+      "../src/users/users.module.ts": {
+        "version": "514f99f20bab0a6fb8fde50972245f2d856558a1210381c7c4f9b5e8006c315b",
+        "signature": "aa1725e38b5a0b4009f6a74f296f173e7926c119a60454dbd2e523861735df69",
+        "affectsGlobalScope": false
+      },
       "../src/app.module.ts": {
-        "version": "959ac692cd8293c24c5a232f0132c81b56ef6bef92725690e25a4d476bcd7ef1",
+        "version": "1c507605bfbf5b2e3f1ab444531b5423d03b12deb9e26857be57ca539a158af0",
         "signature": "b82491e2990291580288c5602d4c017238977749d52b17391f0e45d9a29be644",
         "affectsGlobalScope": false
       },
@@ -1724,71 +1774,6 @@
       "../src/main.ts": {
         "version": "4e950e61a1722df77a45b83f58bec781ca9b0bc364e7d9aaacd826f1a11e973a",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
-        "affectsGlobalScope": false
-      },
-      "../src/users/user.model.ts": {
-        "version": "d4abf7b482520ae41406e9f867775c9a501ff3ca0155723f6401348e7e822f24",
-        "signature": "28b1ff7fbe950477d216ee60a01a55c709cfd01b4a5be0eb8dfcc3153279d5cf",
-        "affectsGlobalScope": false
-      },
-      "../src/users/user.module.ts": {
-        "version": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "signature": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "affectsGlobalScope": false
-      },
-      "../src/users/users.service.ts": {
-        "version": "18181ebfa1c204a1a7751a323c31e6e91bf37dffacb7d1c75dcf4f037a31fe1c",
-        "signature": "379f0d7612907a1153c2bba69a7399392f987763ee7f73b6f17a1ca652ec3549",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@types/range-parser/index.d.ts": {
-        "version": "4e88b833be14c7f384e0dcd57bb30acd799e8e34d212635d693e41a75a71164b",
-        "signature": "4e88b833be14c7f384e0dcd57bb30acd799e8e34d212635d693e41a75a71164b",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@types/qs/index.d.ts": {
-        "version": "c236451df6139a965bb9b8fba15a43a8bebf4400ca589998e2bdc5e1291fa0f9",
-        "signature": "c236451df6139a965bb9b8fba15a43a8bebf4400ca589998e2bdc5e1291fa0f9",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@types/express-serve-static-core/index.d.ts": {
-        "version": "495cc9f802a6bce4aa21dddf13f8e61b4f0b7976621af90e31c58a4dfe4802ef",
-        "signature": "495cc9f802a6bce4aa21dddf13f8e61b4f0b7976621af90e31c58a4dfe4802ef",
-        "affectsGlobalScope": true
-      },
-      "../node_modules/@types/mime/index.d.ts": {
-        "version": "be27a64e821a3e5af838650e4aa25805c60f057d0c37a9762c378d19d364b3e6",
-        "signature": "be27a64e821a3e5af838650e4aa25805c60f057d0c37a9762c378d19d364b3e6",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@types/serve-static/index.d.ts": {
-        "version": "a81ca93d000e36f987b91dd5b26a900aeae125bfbeda710b0369d04857c02932",
-        "signature": "a81ca93d000e36f987b91dd5b26a900aeae125bfbeda710b0369d04857c02932",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@types/connect/index.d.ts": {
-        "version": "e6ffa74698f0a1d23e4223242ed7dcdb89d02bbbb063a1930e9f91d0385abe16",
-        "signature": "e6ffa74698f0a1d23e4223242ed7dcdb89d02bbbb063a1930e9f91d0385abe16",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@types/body-parser/index.d.ts": {
-        "version": "ebddbd167c2fabd0151f50e5df94ca6d845149c47521280d8867afe3429dd078",
-        "signature": "ebddbd167c2fabd0151f50e5df94ca6d845149c47521280d8867afe3429dd078",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@types/express/index.d.ts": {
-        "version": "088d420a09a36d241f1ddbdcb553951c02ef0844014727a29712d2ced57edd22",
-        "signature": "088d420a09a36d241f1ddbdcb553951c02ef0844014727a29712d2ced57edd22",
-        "affectsGlobalScope": false
-      },
-      "../src/users/users.controller.ts": {
-        "version": "98b8de41eab1fdcbaecae193a9ecf4176264eeb2dabeb132c6bb6ac074d1b43f",
-        "signature": "03fb26b1d9e5a321f782a4fc8a7e682cdd2bf9209a89ad5410e57373c89a4043",
-        "affectsGlobalScope": false
-      },
-      "../src/users/users.module.ts": {
-        "version": "514f99f20bab0a6fb8fde50972245f2d856558a1210381c7c4f9b5e8006c315b",
-        "signature": "aa1725e38b5a0b4009f6a74f296f173e7926c119a60454dbd2e523861735df69",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/anymatch/index.d.ts": {
@@ -3404,18 +3389,10 @@
       "../node_modules/rxjs/internal/util/pipe.d.ts": [
         "../node_modules/rxjs/internal/types.d.ts"
       ],
-      "../src/app.controller.ts": [
-        "../node_modules/@nestjs/common/index.d.ts",
-        "../src/app.service.ts"
-      ],
       "../src/app.module.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/@nestjs/mongoose/index.d.ts",
-        "../src/app.controller.ts",
-        "../src/app.service.ts"
-      ],
-      "../src/app.service.ts": [
-        "../node_modules/@nestjs/common/index.d.ts"
+        "../src/users/users.module.ts"
       ],
       "../src/main.ts": [
         "../node_modules/@nestjs/core/index.d.ts",
@@ -4791,15 +4768,12 @@
       "../node_modules/rxjs/internal/util/pipe.d.ts": [
         "../node_modules/rxjs/internal/types.d.ts"
       ],
-      "../src/app.controller.ts": [
-        "../src/app.service.ts"
-      ],
       "../src/users/user.model.ts": [
         "../node_modules/mongoose/index.d.ts"
       ],
       "../src/users/users.controller.ts": [
-        "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/@types/express/index.d.ts",
+        "../src/users/user.model.ts",
         "../src/users/users.service.ts"
       ],
       "../src/users/users.service.ts": [
@@ -5207,12 +5181,9 @@
       "../node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "../node_modules/typescript/lib/lib.scripthost.d.ts",
       "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
-      "../src/app.controller.ts",
       "../src/app.module.ts",
-      "../src/app.service.ts",
       "../src/main.ts",
       "../src/users/user.model.ts",
-      "../src/users/user.module.ts",
       "../src/users/users.controller.ts",
       "../src/users/users.module.ts",
       "../src/users/users.service.ts"

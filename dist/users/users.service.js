@@ -20,9 +20,20 @@ let UsersService = class UsersService {
     constructor(userModel) {
         this.userModel = userModel;
     }
+    userHello() {
+        return 'user Hello!';
+    }
     async addUser(id, phoneNum) {
         const newUser = new this.userModel({ id, phoneNum });
         return await newUser.save();
+    }
+    async addUser1(id, phoneNum) {
+        const newUser = new this.userModel({ id, phoneNum });
+        return await newUser.save();
+    }
+    async getUsers() {
+        const users = await this.userModel.find().exec();
+        return users.map(user => ({ id: user.id, phoneNum: user.phoneNum }));
     }
 };
 UsersService = __decorate([
