@@ -27,7 +27,7 @@ class getPhoneActivity: AppCompatActivity() {
         var intent = intent
         var userId = intent.getStringExtra("userId")
         var profileUrl = intent.getStringExtra("profileUrl")
-        val url = "http://192.249.18.245:8080/"
+        val url = "http://192.249.18.238:8080/users"
         var context: Context = this@getPhoneActivity
         var sendInfo = findViewById<Button>(R.id.sendPhoneNum)
         sendInfo.setOnClickListener {
@@ -38,7 +38,12 @@ class getPhoneActivity: AppCompatActivity() {
             userInfo.put("userPhoneNum",userPhoneNum)
             Log.i("aaaaaa",userId.toString())
             Log.i("aaaaa",userPhoneNum)
-            var jsonObjectRequest = JsonObjectRequest(Request.Method.POST, url, userInfo, Response.Listener{ },Response.ErrorListener (){})
+            var jsonObjectRequest = JsonObjectRequest(Request.Method.POST, url, userInfo, Response.Listener{
+                Log.i("aaaaaaaaaaaaa","success")
+            },Response.ErrorListener (){
+                Log.i("aaaaaaaaaaaa","fail")
+            })
+            queue.add(jsonObjectRequest)
             val intent = Intent(this@getPhoneActivity, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(intent)

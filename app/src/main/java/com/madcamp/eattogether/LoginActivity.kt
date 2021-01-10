@@ -42,35 +42,34 @@ class LoginActivity: AppCompatActivity() {
             startActivity(nextIntent)
         }
         else {
-            login.visibility = VISIBLE
-            // Callback registration
-            login.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-                override fun onSuccess(loginResult: LoginResult) {
-                    // App code
-                    val imageUrl: String =
-                        "https://graph.facebook.com/" + loginResult.accessToken.userId + "/picture?return_ssl_resources=1"
-                    Picasso.get().load(imageUrl).into(profile)
-                    val nextIntent = Intent(this@LoginActivity, getPhoneActivity::class.java)
-                    nextIntent.putExtra("userId",loginResult.accessToken.userId.toString())
-                    Log.i("aaaa",loginResult.accessToken.userId.toString())
-                    nextIntent.putExtra("profileUrl",imageUrl)
-                    Log.i("aaaa",imageUrl)
-                    startActivity(nextIntent)
-                }
-
-                override fun onCancel() {
-                    // App code
-                }
-
-                override fun onError(exception: FacebookException) {
-                    // App code
-                }
-            })
         }
     }
     override fun onStart() {
         super.onStart()
         login.visibility = VISIBLE
+        // Callback registration
+        login.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                // App code
+                val imageUrl: String =
+                    "https://graph.facebook.com/" + loginResult.accessToken.userId + "/picture?return_ssl_resources=1"
+                Picasso.get().load(imageUrl).into(profile)
+                val nextIntent = Intent(this@LoginActivity, getPhoneActivity::class.java)
+                nextIntent.putExtra("userId",loginResult.accessToken.userId.toString())
+                Log.i("aaaa",loginResult.accessToken.userId.toString())
+                nextIntent.putExtra("profileUrl",imageUrl)
+                Log.i("aaaa",imageUrl)
+                startActivity(nextIntent)
+            }
+
+            override fun onCancel() {
+                // App code
+            }
+
+            override fun onError(exception: FacebookException) {
+                // App code
+            }
+        })
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager.onActivityResult(requestCode, resultCode, data)
