@@ -3,6 +3,10 @@ package com.madcamp.eattogether
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -26,11 +30,23 @@ class MainActivity : AppCompatActivity() {
             tab.text = (viewPager.adapter as FragmentAdapter).getTitle(position)
         }.attach()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.add_group -> Toast.makeText(this, "Add Group",LENGTH_SHORT).show()
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
 
 class FragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity){
     private val fragmentList = listOf(
-        Pair("People", PeopleFragment()), Pair("Group", GroupFragment()), Pair("Review", ReviewFragment())
+        Pair("연락처", PeopleFragment()), Pair("예정된 약속", GroupFragment()), Pair("이전 약속", ReviewFragment())
     )
     override fun getItemCount(): Int {
         return fragmentList.size
