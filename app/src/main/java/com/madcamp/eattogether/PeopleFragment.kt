@@ -145,7 +145,7 @@ class PeopleFragment : Fragment() {
                     context,
                     "연락처 권한 승인을 하셔야 앱을 사용하실 수 있습니다.",
                     Toast.LENGTH_SHORT
-                )
+                ).show()
             }
         }
     }

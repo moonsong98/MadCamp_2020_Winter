@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints="true"
+        android:padding="18dp"
         android:ems="10"
         android:hint="연락처 검색"
         android:inputType="textPersonName" />
