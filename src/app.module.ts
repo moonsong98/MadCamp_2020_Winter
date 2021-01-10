@@ -4,7 +4,8 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose'
 
 @Module({
-  imports:[MongooseModule.forRoot('mongodb+srv://AtlasAdmin:admin@cluster0.xhpzp.mongodb.net/test?retryWrites=true&w=majority')],
+  // imports:[MongooseModule.forRoot('mongodb+srv://inhwa:inhwa@madcamp.yaarc.mongodb.net/madcamp?retryWrites=true&w=majority')],
+  imports:[MongooseModule.forRoot('mongodb://localhost:27017')],
   controllers: [AppController],
   providers: [AppService],
 })

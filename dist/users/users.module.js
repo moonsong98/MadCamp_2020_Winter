@@ -6,19 +6,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppModule = void 0;
+exports.UsersModule = void 0;
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
+const users_controller_1 = require("./users.controller");
+const users_service_1 = require("./users.service");
 const mongoose_1 = require("@nestjs/mongoose");
-let AppModule = class AppModule {
+const user_model_1 = require("./user.model");
+let UsersModule = class UsersModule {
 };
-AppModule = __decorate([
+UsersModule = __decorate([
     common_1.Module({
-        imports: [mongoose_1.MongooseModule.forRoot('mongodb://localhost:27017')],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        imports: [mongoose_1.MongooseModule.forFeature([{ name: 'User', schema: user_model_1.UserSchema }])],
+        controllers: [users_controller_1.UsersController],
+        providers: [users_service_1.UsersService],
     })
-], AppModule);
-exports.AppModule = AppModule;
-//# sourceMappingURL=app.module.js.map
+], UsersModule);
+exports.UsersModule = UsersModule;
+//# sourceMappingURL=users.module.js.map
