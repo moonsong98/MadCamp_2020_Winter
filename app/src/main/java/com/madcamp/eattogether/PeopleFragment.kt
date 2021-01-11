@@ -18,17 +18,28 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import com.facebook.Profile
+import okhttp3.ResponseBody
+import org.json.JSONArray
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PeopleFragment : Fragment() {
     private lateinit var contactList: RecyclerView
     private lateinit var searchBar: EditText
     private lateinit var phoneAdapter: PhoneAdapter
+    private lateinit var swipeRefreshLayout:SwipeRefreshLayout
     private var contactListData: ArrayList<Phone> = ArrayList()
+    private var friendListData: ArrayList<Phone> = ArrayList() // List of contacts who are using our service
     private var searchText = ""
 
     companion object {
@@ -47,6 +58,13 @@ class PeopleFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_people, container, false)
         contactList = view.findViewById(R.id.contact_list)
         searchBar = view.findViewById(R.id.search_bar)
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout)
+        swipeRefreshLayout.setOnRefreshListener {
+            if(friendListData.size > 0)
+                getFriendList()
+            else
+                swipeRefreshLayout.isRefreshing = false
+        }
         return view
     }
 
@@ -75,10 +93,8 @@ class PeopleFragment : Fragment() {
 
     private fun startProcess() {
         /* Set adapter for recycler view */
-        phoneAdapter = PhoneAdapter(this.requireContext(), getPhoneNumbersFromPhone())
-        contactList.adapter = phoneAdapter
-        contactList.layoutManager = LinearLayoutManager(context)
-
+        getPhoneNumbersFromPhone()
+        getFriendList()
         /* Set search listener */
         searchBar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -89,13 +105,13 @@ class PeopleFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchText = s.toString()
-                val filteredContactListData = contactListData.filter {
+                val filteredFriendListData = friendListData.filter {
                     it.name.contains(
                         searchText,
                         true
                     )
                 } as ArrayList<Phone>
-                phoneAdapter.setData(filteredContactListData)
+                phoneAdapter.setData(filteredFriendListData)
                 phoneAdapter.notifyDataSetChanged()
             }
         })
@@ -118,7 +134,7 @@ class PeopleFragment : Fragment() {
         )
 
         if (cursor != null)
-            while (cursor?.moveToNext() == true) {
+            while (cursor.moveToNext()) {
                 val id = cursor.getString(0)
                 val name = cursor.getString(1)
                 val number = cursor.getString(2)
@@ -126,6 +142,42 @@ class PeopleFragment : Fragment() {
                 contactListData.add(phone)
             }
         return contactListData
+    }
+
+    private fun getFriendList() {
+        val context = this.context
+        val phoneNumbersOfContactListData = contactListData.map{
+            it.phoneNumber
+        } as ArrayList<String>
+        val userId = Profile.getCurrentProfile().id
+        val apiInterface = APIClient.getClient().create(APIInterface::class.java)
+        val serviceUserList = ArrayList<String>()
+        apiInterface.getFriendUsers(userId,phoneNumbersOfContactListData).enqueue(object: Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                response.body()?.let{
+                    Toast.makeText(context, "Succeeded to get Response", LENGTH_SHORT).show()
+                    val jsonArray = JSONArray(it.string())
+                    for(i in 0 until jsonArray.length()) {
+                        val jsonObject = jsonArray.getJSONObject(i)
+                        serviceUserList.add(jsonObject.getString("phoneNum").toString())
+                        Log.d("serviceUserList", jsonObject.getString("phoneNum"))
+                    }
+                }
+                Log.d("serviceUserListSize:", serviceUserList.size.toString())
+                friendListData = contactListData.filter {
+                    it.phoneNumber in serviceUserList
+                } as ArrayList<Phone>
+                phoneAdapter = PhoneAdapter(context!!, friendListData)
+                contactList.adapter = phoneAdapter
+                contactList.layoutManager = LinearLayoutManager(context)
+                Log.d("friendListSize:", friendListData.size.toString())
+                Toast.makeText(context, "Succeeded to get friend list", LENGTH_SHORT).show()
+                swipeRefreshLayout.isRefreshing = false
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "Failed to get friend list", LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onRequestPermissionsResult(
