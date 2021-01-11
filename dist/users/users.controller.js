@@ -30,6 +30,10 @@ let UsersController = class UsersController {
         const users = await this.usersService.getUsers();
         return users;
     }
+    async getUserInfo(id) {
+        const userId = await this.usersService.getUserInfo(id);
+        return userId;
+    }
 };
 __decorate([
     common_1.Post('postman'),
@@ -44,6 +48,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUsers", null);
+__decorate([
+    common_1.Get(':id'),
+    __param(0, common_1.Param('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getUserInfo", null);
 UsersController = __decorate([
     common_1.Controller('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

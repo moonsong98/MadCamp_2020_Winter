@@ -20,14 +20,38 @@ let UsersService = class UsersService {
     constructor(userModel) {
         this.userModel = userModel;
     }
-    userHello() {
-        return 'user Hello!';
+    async findUserbyPhone(phoneNum) {
+        try {
+            const user = await this.userModel.findOne({ "phoneNum": phoneNum }).exec();
+            return user;
+        }
+        catch (error) {
+            throw new common_1.NotFoundException("no user");
+        }
+    }
+    async findUserById(id) {
+        try {
+            return await this.userModel.findById(id).exec();
+        }
+        catch (error) {
+            throw new common_1.NotFoundException('Could not find user.');
+        }
+    }
+    async getUserInfo(phoneNum) {
+        const user = await this.findUserbyPhone(phoneNum);
+        return user.id;
+    }
+    async getFriendsbyPhone(id) {
+        let i = 0;
+        const user = await this.userModel.findById(id);
+        let friends;
+        while (i < user.phoneList.length) {
+            const friend = await this.findUserbyPhone(user.phoneList[i]);
+            friends = friends.concat(friend);
+        }
+        user.friendList = friends;
     }
     async addUser(id, phoneNum) {
-        const newUser = new this.userModel({ id, phoneNum });
-        return await newUser.save();
-    }
-    async addUser1(id, phoneNum) {
         const newUser = new this.userModel({ id, phoneNum });
         return await newUser.save();
     }

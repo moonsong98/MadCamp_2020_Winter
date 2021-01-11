@@ -8,4 +8,5 @@ export declare class UsersController {
         id: string;
         phoneNum: string;
     }[]>;
+    getUserInfo(id: string): Promise<string>;
 }

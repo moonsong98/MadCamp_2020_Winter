@@ -7,32 +7,6 @@ import { ok } from "assert";
 export class UsersController{
     constructor(private readonly usersService: UsersService){}
 
-    // @Get()
-    // async addUser(@Req()req: Request){
-    //     console.log("adduser")
-    //     const id: string = req.body.userId
-    //     const phoneNum : string = req.body.userPhoneNum
-    //     const User = await this.usersService.addUser(id, phoneNum)
-    //     // User.save()
-    //     const users = await this.usersService.getUsers();
-    //     return users
-    // }
-    // @Post('post')
-    // async addUser(@Req()req: Request){
-    //     const id = req.body.userId
-    //     const phoneNum = req.body.userPhoneNum
-    //     const User = await this.usersService.addUser(id, phoneNum)
-    //     await User.save()
-    //     console.log("saved")
-    //     return User
-    //     // const newUser = await this.usersService.addUser(id, phoneNum)
-    //     // return newUser
-    // }
-    // @Post('postman')
-    // async addUser(@Body('userId') id:string, @Body('userPhoneNum') phoneNum:string){
-    //     const User = await this.usersService.addUser(id,phoneNum)
-    //     console.log("saved")
-    // }
     @Post('postman')
     async addUser(@Req()req:Request){
         const id = req.body.userId
@@ -46,5 +20,15 @@ export class UsersController{
         const users = await this.usersService.getUsers();
         return users
     }
-
+    // @Post('friends')//user의 userId로 user member에 접근해서 
+    // async getFriendsbyPhone(@Req()req:Request){
+    //     const id = req.body.userId
+    //     const friendList = await req.body.phoneList.getFriends(id)
+    //     return friendList
+    // }
+    @Get(':id')
+    async getUserInfo(@Param('id') id: string){
+        const userId =  await this.usersService.getUserInfo(id);
+        return userId
+    }
 }

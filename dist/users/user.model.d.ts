@@ -3,4 +3,8 @@ export declare const UserSchema: mongoose.Schema<mongoose.Document<any>, mongoos
 export interface User extends mongoose.Document {
     id: string;
     phoneNum: string;
+    name: string;
+    phoneList: Array<string>;
+    friendList: Array<User>;
+    groupList: Array<number>;
 }
