@@ -21,7 +21,7 @@ class APIClient {
              */
 
             retrofit = Retrofit.Builder()
-                .baseUrl("http://192.249.18.238:3002/")
+                .baseUrl("http://192.249.18.245:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             return retrofit
@@ -32,7 +32,7 @@ class APIClient {
 interface APIInterface {
     @FormUrlEncoded
     @POST("users/postman")
-    fun createUser(@Field("userId") userId:String, @Field("userPhoneNum") userPhoneNum:String): Call<ResponseBody>
+    fun createUser(@Field("userId") userId:String, @Field("phoneNum") userPhoneNum:String): Call<ResponseBody>
 
     @GET("users/{userPhoneNum}")
     fun getUserIdByPhoneNumber(@Path("userPhoneNum")userPhoneNum:String): Call<ResponseBody>

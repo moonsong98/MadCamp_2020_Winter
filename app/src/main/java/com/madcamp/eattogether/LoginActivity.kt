@@ -37,6 +37,7 @@ class LoginActivity: AppCompatActivity() {
             startActivity(nextIntent)
         }
     }
+
     override fun onStart() {
         super.onStart()
         login.visibility = VISIBLE
@@ -56,7 +57,7 @@ class LoginActivity: AppCompatActivity() {
                         val error = -1
                         if(response.body() != null && response.body()!!.string() != error.toString()) {
                             /* User Has Signed In Before */
-                            Toast.makeText(this@LoginActivity, "Succeeded to Find User",
+                            Toast.makeText(this@LoginActivity, response.body()!!.string(),
                                 Toast.LENGTH_SHORT
                             ).show()
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
