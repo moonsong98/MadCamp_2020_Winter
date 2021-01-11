@@ -21,9 +21,8 @@ let UsersController = class UsersController {
     }
     async addUser(req) {
         const userId = req.body.userId;
-        const name = req.body.name;
         const phoneNum = req.body.phoneNum;
-        const User = await this.usersService.addUser(userId, name, phoneNum);
+        const User = await this.usersService.addUser(userId, phoneNum);
         return User;
     }
     async getUsers() {
@@ -36,8 +35,9 @@ let UsersController = class UsersController {
         const me = await this.usersService.getFriends(userId, phoneList);
         return me.friendList;
     }
-    async getUserInfo(phoneNum) {
-        const userId = await this.usersService.getUserInfobyPhone(phoneNum);
+    async getUserInfo(Id) {
+        const userId = await this.usersService.getUserInfobyId(Id);
+        console.log(userId);
         return userId;
     }
 };
@@ -62,8 +62,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getFriends", null);
 __decorate([
-    common_1.Get(':phoneNum'),
-    __param(0, common_1.Param('phoneNum')),
+    common_1.Get(':Id'),
+    __param(0, common_1.Param('Id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

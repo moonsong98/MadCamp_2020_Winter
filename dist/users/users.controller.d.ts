@@ -10,5 +10,5 @@ export declare class UsersController {
         phoneNum: string;
     }[]>;
     getFriends(req: Request): Promise<import("./user.model").User[]>;
-    getUserInfo(phoneNum: string): Promise<import("./user.model").User>;
+    getUserInfo(Id: string): Promise<string>;
 }

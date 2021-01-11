@@ -14,7 +14,7 @@ export class UsersService{
     
     async getUserInfobyId(userId:string){
         const user = await this.findUserById(userId)
-        return user === null ? -1 as unknown as string : user.id
+        return user === null ? -1 as unknown as string : user.userId
     }
 
     async getFriends(userId:string, phoneList:Array<string>){
@@ -30,8 +30,8 @@ export class UsersService{
         return user
     }
 
-    async addUser(userId:string, name:string, phoneNum: string){
-        const newUser = await new this.userModel({userId, name ,phoneNum})
+    async addUser(userId:string,  phoneNum: string){
+        const newUser = await new this.userModel({userId ,phoneNum})
         return await newUser.save();
     }
     

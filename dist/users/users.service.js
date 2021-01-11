@@ -26,7 +26,7 @@ let UsersService = class UsersService {
     }
     async getUserInfobyId(userId) {
         const user = await this.findUserById(userId);
-        return user === null ? -1 : user.id;
+        return user === null ? -1 : user.userId;
     }
     async getFriends(userId, phoneList) {
         let i = 0;
@@ -41,8 +41,8 @@ let UsersService = class UsersService {
         user.friendList = friends;
         return user;
     }
-    async addUser(userId, name, phoneNum) {
-        const newUser = await new this.userModel({ userId, name, phoneNum });
+    async addUser(userId, phoneNum) {
+        const newUser = await new this.userModel({ userId, phoneNum });
         return await newUser.save();
     }
     async getUsers() {

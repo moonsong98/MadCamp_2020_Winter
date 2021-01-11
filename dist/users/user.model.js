@@ -4,7 +4,7 @@ exports.UserSchema = void 0;
 const mongoose = require("mongoose");
 exports.UserSchema = new mongoose.Schema({
     userId: { type: String, required: true },
-    name: { type: String, required: true },
+    name: { type: String },
     phoneNum: { type: String, required: true },
     friendList: { type: Array },
     groupList: { type: Array }
