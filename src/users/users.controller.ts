@@ -9,26 +9,28 @@ export class UsersController{
 
     @Post('postman')
     async addUser(@Req()req:Request){
-        const id = req.body.userId
-        const phoneNum = req.body.userPhoneNum
-        const User = await this.usersService.addUser(id,phoneNum)
-        console.log("saved")
+        const userId = req.body.userId
+        const name = req.body.name
+        const phoneNum = req.body.phoneNum
+        const User = await this.usersService.addUser(userId, name, phoneNum)
         return User
     }
+
     @Get('all')
     async getUsers(){
         const users = await this.usersService.getUsers();
         return users
     }
-    // @Post('friends')//user의 userId로 user member에 접근해서 
-    // async getFriendsbyPhone(@Req()req:Request){
-    //     const id = req.body.userId
-    //     const friendList = await req.body.phoneList.getFriends(id)
-    //     return friendList
-    // }
-    @Get(':id')
-    async getUserInfo(@Param('id') id: string){
-        const userId =  await this.usersService.getUserInfo(id);
+    @Post('friends')
+    async getFriends(@Req()req:Request){
+        const userId = req.body.userId
+        const phoneList = req.body.phoneList
+        const me = await this.usersService.getFriends(userId, phoneList)
+        return me.friendList
+    }
+    @Get(':phoneNum')
+    async getUserInfo(@Param('phoneNum') phoneNum: string){
+        const userId =  await this.usersService.getUserInfobyPhone(phoneNum);
         return userId
     }
 }

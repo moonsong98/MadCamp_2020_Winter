@@ -20,18 +20,24 @@ let UsersController = class UsersController {
         this.usersService = usersService;
     }
     async addUser(req) {
-        const id = req.body.userId;
-        const phoneNum = req.body.userPhoneNum;
-        const User = await this.usersService.addUser(id, phoneNum);
-        console.log("saved");
+        const userId = req.body.userId;
+        const name = req.body.name;
+        const phoneNum = req.body.phoneNum;
+        const User = await this.usersService.addUser(userId, name, phoneNum);
         return User;
     }
     async getUsers() {
         const users = await this.usersService.getUsers();
         return users;
     }
-    async getUserInfo(id) {
-        const userId = await this.usersService.getUserInfo(id);
+    async getFriends(req) {
+        const userId = req.body.userId;
+        const phoneList = req.body.phoneList;
+        const me = await this.usersService.getFriends(userId, phoneList);
+        return me.friendList;
+    }
+    async getUserInfo(phoneNum) {
+        const userId = await this.usersService.getUserInfobyPhone(phoneNum);
         return userId;
     }
 };
@@ -49,8 +55,15 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUsers", null);
 __decorate([
-    common_1.Get(':id'),
-    __param(0, common_1.Param('id')),
+    common_1.Post('friends'),
+    __param(0, common_1.Req()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getFriends", null);
+__decorate([
+    common_1.Get(':phoneNum'),
+    __param(0, common_1.Param('phoneNum')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

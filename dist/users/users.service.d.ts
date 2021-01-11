@@ -3,13 +3,15 @@ import { Model } from 'mongoose';
 export declare class UsersService {
     private readonly userModel;
     constructor(userModel: Model<User>);
-    private findUserbyPhone;
-    private findUserById;
-    getUserInfo(phoneNum: string): Promise<string>;
-    getFriendsbyPhone(id: string): Promise<void>;
-    addUser(id: string, phoneNum: string): Promise<User>;
+    getUserInfobyPhone(phoneNum: string): Promise<User>;
+    getUserInfobyId(userId: string): Promise<any>;
+    getFriends(userId: string, phoneList: Array<string>): Promise<User>;
+    addUser(userId: string, name: string, phoneNum: string): Promise<User>;
     getUsers(): Promise<{
         id: string;
+        name: string;
         phoneNum: string;
     }[]>;
+    private findUserbyPhone;
+    private findUserById;
 }

@@ -6,7 +6,9 @@ export declare class UsersController {
     addUser(req: Request): Promise<import("./user.model").User>;
     getUsers(): Promise<{
         id: string;
+        name: string;
         phoneNum: string;
     }[]>;
-    getUserInfo(id: string): Promise<string>;
+    getFriends(req: Request): Promise<import("./user.model").User[]>;
+    getUserInfo(phoneNum: string): Promise<import("./user.model").User>;
 }
