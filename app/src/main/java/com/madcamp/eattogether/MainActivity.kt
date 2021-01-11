@@ -1,19 +1,22 @@
 package com.madcamp.eattogether
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.facebook.AccessToken
+import com.facebook.GraphRequest
+import com.facebook.HttpMethod
 import com.facebook.login.LoginManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
@@ -42,6 +45,12 @@ class MainActivity : AppCompatActivity() {
             R.id.add_group -> Toast.makeText(this, "Add Group",LENGTH_SHORT).show()
             R.id.logout -> {
                 LoginManager.getInstance().logOut()
+                GraphRequest(
+                    AccessToken.getCurrentAccessToken(),
+                    "/me/permissions/",
+                    null,
+                    HttpMethod.DELETE,
+                    GraphRequest.Callback { LoginManager.getInstance().logOut() }).executeAsync()
                 this.finish()
             }
         }

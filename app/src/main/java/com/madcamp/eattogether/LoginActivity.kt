@@ -2,24 +2,18 @@ package com.madcamp.eattogether
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View.VISIBLE
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.facebook.*
-import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 import com.squareup.picasso.Picasso
-import okhttp3.HttpUrl
-import okhttp3.HttpUrl.Companion.toHttpUrl
-import org.json.JSONObject
-import java.lang.Exception
-import java.net.HttpURLConnection
-import java.net.URL
-import java.util.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class LoginActivity: AppCompatActivity() {
@@ -35,31 +29,54 @@ class LoginActivity: AppCompatActivity() {
         /* Check Whether Login Session is still alive */
         val accessToken = AccessToken.getCurrentAccessToken()
         val isLoggedIn = accessToken != null && !accessToken.isExpired
+
         /* If login session is still alive, move to next main activity */
         if(isLoggedIn){
             Toast.makeText(this@LoginActivity,"로그인에 성공하셨습니다.",Toast.LENGTH_SHORT).show()
             val nextIntent = Intent(this@LoginActivity, MainActivity::class.java)
             startActivity(nextIntent)
         }
-        else {
-        }
     }
     override fun onStart() {
         super.onStart()
         login.visibility = VISIBLE
-        // Callback registration
         login.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
-                // App code
+                val accessToken = loginResult.accessToken
+                /* Get image url */
                 val imageUrl: String =
-                    "https://graph.facebook.com/" + loginResult.accessToken.userId + "/picture?return_ssl_resources=1"
+                    "https://graph.facebook.com/" + accessToken.userId + "/picture?return_ssl_resources=1"
                 Picasso.get().load(imageUrl).into(profile)
-                val nextIntent = Intent(this@LoginActivity, getPhoneActivity::class.java)
-                nextIntent.putExtra("userId",loginResult.accessToken.userId.toString())
-                Log.i("aaaa",loginResult.accessToken.userId.toString())
-                nextIntent.putExtra("profileUrl",imageUrl)
-                Log.i("aaaa",imageUrl)
-                startActivity(nextIntent)
+
+                /* Check Whether User Signed In */
+                val userId = accessToken.userId
+                val apiInterface = APIClient.getClient().create(APIInterface::class.java)
+                apiInterface.getUserIdByPhoneNumber(userId).enqueue(object: Callback<ResponseBody> {
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                        val error = -1
+                        if(response.body() != null && response.body()!!.string() != error.toString()) {
+                            /* User Has Signed In Before */
+                            Toast.makeText(this@LoginActivity, "Succeeded to Find User",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        } else {
+                            /* User Hasn't Signed In Before - Move to Sign In Page  */
+                            Toast.makeText(this@LoginActivity, userId.toString() + "Failed to Find User",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val nextIntent = Intent(this@LoginActivity, getPhoneActivity::class.java)
+                            nextIntent.putExtra("profileUrl",imageUrl)
+                            startActivity(nextIntent)
+                        }
+                    }
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        t.printStackTrace()
+                        Toast.makeText(this@LoginActivity, "Error to Find User",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
             }
 
             override fun onCancel() {

@@ -7,47 +7,50 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.facebook.Profile
+import okhttp3.ResponseBody
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
 import java.io.BufferedOutputStream
 import java.io.OutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executor
 
-class getPhoneActivity: AppCompatActivity() {
+class getPhoneActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_getphone)
-        var intent = intent
-        var userId = intent.getStringExtra("userId")
-        var profileUrl = intent.getStringExtra("profileUrl")
-        val url = "http://192.249.18.238:8080/users"
-        var context: Context = this@getPhoneActivity
-        var sendInfo = findViewById<Button>(R.id.sendPhoneNum)
+        val context = this@getPhoneActivity
+        val sendInfo:Button = findViewById(R.id.sendPhoneNum)
+        val userId = Profile.getCurrentProfile().id
+        val profileUrl = intent.getStringExtra("profileUrl")
         sendInfo.setOnClickListener {
-            var userPhoneNum = findViewById<EditText>(R.id.userPhoneNum).text.toString()
-            val queue = Volley.newRequestQueue(context)
-            var userInfo = JSONObject()
-            userInfo.put("userId",userId.toString())
-            userInfo.put("userPhoneNum",userPhoneNum)
-            Log.i("aaaaaa",userId.toString())
-            Log.i("aaaaa",userPhoneNum)
-            var jsonObjectRequest = JsonObjectRequest(Request.Method.POST, url, userInfo, Response.Listener{
-                Log.i("aaaaaaaaaaaaa","success")
-            },Response.ErrorListener (){
-                Log.i("aaaaaaaaaaaa","fail")
+            val userPhoneNum = findViewById<EditText>(R.id.userPhoneNum).text.toString()
+            val apiInterface = APIClient.getClient().create(APIInterface::class.java)
+            val call:Call<ResponseBody> = apiInterface.createUser(userId, userPhoneNum)
+            call.enqueue(object: Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
+                    Toast.makeText(this@getPhoneActivity, "Succeeded to Create User", LENGTH_SHORT).show()
+                    val intent = Intent(this@getPhoneActivity, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    startActivity(intent)
+                    context.finish()
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(this@getPhoneActivity, "Fail to Create User", LENGTH_SHORT).show()
+                }
             })
-            queue.add(jsonObjectRequest)
-            val intent = Intent(this@getPhoneActivity, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-            startActivity(intent)
-            this.finish()
         }
     }
 }
