@@ -30,14 +30,20 @@ class getPhoneActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_getphone)
+
         val context = this@getPhoneActivity
         val sendInfo:Button = findViewById(R.id.sendPhoneNum)
-        val userId = Profile.getCurrentProfile().id
-        val profileUrl = intent.getStringExtra("profileUrl")
+//        val name = intent.getStringExtra("name")
+//        Toast.makeText(this,"Hello"+name, LENGTH_SHORT)
         sendInfo.setOnClickListener {
             val userPhoneNum = findViewById<EditText>(R.id.userPhoneNum).text.toString()
+            val userId = Profile.getCurrentProfile().id
+            val name = Profile.getCurrentProfile().name
+            Log.i("aaaaa",name)
+            Log.i("aaaaaa",name)
+            val profile = Profile.getCurrentProfile().getProfilePictureUri(100,100)
             val apiInterface = APIClient.getClient().create(APIInterface::class.java)
-            val call:Call<ResponseBody> = apiInterface.createUser(userId, userPhoneNum)
+            val call:Call<ResponseBody> = apiInterface.createUser(userId, name, userPhoneNum)
             call.enqueue(object: Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
                     Toast.makeText(this@getPhoneActivity, "Succeeded to Create User", LENGTH_SHORT).show()
