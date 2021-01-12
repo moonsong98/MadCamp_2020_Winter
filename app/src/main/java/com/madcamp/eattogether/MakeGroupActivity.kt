@@ -53,19 +53,19 @@ class MakeGroupActivity: AppCompatActivity() {
                 i=i+1
                 Log.i("aaaaaa",groupPeople.toString())
             }
-            val phoneNumbsersOfparticipants = groupPeople.map{
-                it.phoneNumber
+            val namesOfparticipants = groupPeople.map{
+                it.name
             } as ArrayList<String>
             val groupId = Profile.getCurrentProfile().id+"group1"
             Log.i("aaaaaa",groupId)
             val apiInterface = APIClient.getClient().create(APIInterface::class.java)
-            val call:Call<ResponseBody> = apiInterface.createGroup(groupNameText,groupId, phoneNumbsersOfparticipants)
+            val call:Call<ResponseBody> = apiInterface.createGroup(groupNameText,groupId, namesOfparticipants)
             call.enqueue(object: Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     Toast.makeText(this@MakeGroupActivity, "Succeeded to Create Group",
                         Toast.LENGTH_SHORT
                     ).show()
-                    apiInterface.updateUsersGroup(groupName.text.toString(), phoneNumbsersOfparticipants).enqueue(object: Callback<ResponseBody> {
+                    apiInterface.updateUsersGroup(groupName.text.toString(), namesOfparticipants).enqueue(object: Callback<ResponseBody> {
                         override fun onResponse(
                             call: Call<ResponseBody>,
                             response: Response<ResponseBody>

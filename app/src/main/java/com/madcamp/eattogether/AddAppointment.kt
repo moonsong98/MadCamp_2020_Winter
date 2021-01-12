@@ -17,8 +17,14 @@ import android.widget.Toast.LENGTH_SHORT
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import okhttp3.ResponseBody
+import org.json.JSONArray
 import org.w3c.dom.Text
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
+import kotlin.collections.ArrayList
 
 class AddAppointment : AppCompatActivity() {
     lateinit var appointmentName: EditText
@@ -26,16 +32,42 @@ class AddAppointment : AppCompatActivity() {
     lateinit var selectTime: TextView
     lateinit var participants: RecyclerView
     lateinit var createButton: Button
+    private var participationList: ArrayList<String> = ArrayList()
+    fun getGroupList(){
+        val groupName = intent.getStringExtra("groupName")
+        val apiInterface = APIClient.getClient().create(APIInterface::class.java)
+        apiInterface.getMembersByName(groupName!!).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Toast.makeText(this@AddAppointment, "Got Participants", LENGTH_SHORT).show()
+                Log.i("aaaresponse",response.body().toString())
+                response.body()?.let {
+                    var participantsJSON = JSONArray(it.string())
+                    for(e in 0 until participantsJSON.length()){
+                        participationList.add(participantsJSON[e].toString())
+                    }
+                    participants.adapter = ParticipantsAdapter(this@AddAppointment, participationList)
+                    participants.layoutManager = LinearLayoutManager(this@AddAppointment, LinearLayoutManager.HORIZONTAL, false)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(this@AddAppointment, "Failed to get participants", LENGTH_SHORT).show()
+            }
+        })
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_appointment)
-
         appointmentName = findViewById(R.id.appointment_name)
         selectDate = findViewById(R.id.select_date)
         selectTime = findViewById(R.id.select_time)
         participants = findViewById(R.id.participants)
+        Log.i("aaaaaaaaaaa","beforegrouplist")
+        getGroupList()
+        Log.i("aaaaaa","aftergrouplist")
 
-        val groupName = intent.getStringExtra("groupName")
+//        val groupName = intent.getStringExtra("groupName")
         val calendar = Calendar.getInstance()
         val mYear = calendar.get(Calendar.YEAR)
         val mMonth = calendar.get(Calendar.MONTH)
@@ -55,7 +87,6 @@ class AddAppointment : AppCompatActivity() {
             )
             datePickerDialog.show()
         }
-
         selectTime.isClickable = true
         selectTime.setOnClickListener {
             val timePickerDialog = TimePickerDialog(
@@ -69,9 +100,8 @@ class AddAppointment : AppCompatActivity() {
             )
             timePickerDialog.show()
         }
-        participants.adapter = ParticipantsAdapter(this, listOf("James", "Anna"))
-        participants.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
+//        participants.adapter = ParticipantsAdapter(this, participationList)
+//        participants.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         createButton = findViewById(R.id.create_button)
         createButton.setOnClickListener {
             this.finish()
