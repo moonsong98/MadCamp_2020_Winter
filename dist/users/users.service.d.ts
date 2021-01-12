@@ -1,7 +1,7 @@
 import { User } from "./user.model";
 import { Model } from 'mongoose';
 export declare class UsersService {
-    private readonly userModel;
+    readonly userModel: Model<User>;
     constructor(userModel: Model<User>);
     getUserInfobyPhone(phoneNum: string): Promise<User>;
     getUserInfobyId(userId: string): Promise<string>;
@@ -9,7 +9,6 @@ export declare class UsersService {
     addUser(userId: string, phoneNum: string): Promise<User>;
     getUsers(): Promise<{
         id: string;
-        name: string;
         phoneNum: string;
     }[]>;
     private findUserbyPhone;

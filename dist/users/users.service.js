@@ -47,7 +47,7 @@ let UsersService = class UsersService {
     }
     async getUsers() {
         const users = await this.userModel.find().exec();
-        return users.map(user => ({ id: user.userId, name: user.name, phoneNum: user.phoneNum }));
+        return users.map(user => ({ id: user.userId, phoneNum: user.phoneNum }));
     }
     async findUserbyPhone(phoneNum) {
         try {

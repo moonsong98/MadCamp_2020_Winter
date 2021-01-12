@@ -26,6 +26,7 @@ export class UsersController{
         const userId = req.body.userId
         const phoneList = req.body.phoneList
         const me = await this.usersService.getFriends(userId, phoneList)
+        console.log(req.body)
         return me.friendList
     }
     @Get(':Id')
@@ -35,3 +36,4 @@ export class UsersController{
         return userId
     }
 }
+

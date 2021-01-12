@@ -5,7 +5,7 @@ export const UserSchema = new mongoose.Schema({
     name:{type:String},
     phoneNum: {type: String, required: true},
     friendList:{type:Array},
-    groupList:{type:Array}
+    groupList:{type:Array, default:['0']} 
 })
 
 export interface User extends mongoose.Document {
@@ -13,5 +13,10 @@ export interface User extends mongoose.Document {
     name: string;
     phoneNum : string;
     friendList: Array<User>
-    groupList: Array<number>;
+    groupList: Array<string>;
 }
+
+export const User = mongoose.model('User',UserSchema)
+
+
+

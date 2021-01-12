@@ -5,7 +5,7 @@ import {Collection, Model} from 'mongoose'
 
 @Injectable()
 export class UsersService{
-    constructor(@InjectModel('User') private readonly userModel:Model<User>){}
+    constructor(@InjectModel('User') readonly userModel:Model<User>){}
 
     async getUserInfobyPhone(phoneNum:string){
         const user = await this.findUserbyPhone(phoneNum)
@@ -23,6 +23,7 @@ export class UsersService{
         let friends : Array<User> = user.friendList
         while(i < phoneList.length){
             const friend = await this.findUserbyPhone(phoneList[i])
+            // console.log("friend: " + friend)
             if(friend) friends = friends.concat(friend)   
             i = i+1
         }
@@ -37,7 +38,7 @@ export class UsersService{
     
     async getUsers(){
         const users = await this.userModel.find().exec()
-        return users.map(user =>({id:user.userId, name:user.name, phoneNum: user.phoneNum}))
+        return users.map(user =>({id:user.userId, phoneNum: user.phoneNum}))
     }
 
     private async findUserbyPhone(phoneNum: string){   
@@ -56,4 +57,6 @@ export class UsersService{
            return null
         } 
     }
+
+
 }

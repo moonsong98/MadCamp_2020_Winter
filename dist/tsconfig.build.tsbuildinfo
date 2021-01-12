@@ -1527,13 +1527,13 @@
         "affectsGlobalScope": false
       },
       "../src/users/user.model.ts": {
-        "version": "0d8deb907b67aff5acf94d1542491c7c7a39131104e31c8d35b6ecf5cebc7328",
-        "signature": "2c3c4d829e03628046de4232a47891068064a6696fc0a89fd0cd5e4cac1c4052",
+        "version": "5898425f5910d468759c02d5a0ea4ebacf196958e37b93c98fcdef01ecf0c4ae",
+        "signature": "2ee8b980309cccddf6c8062f176b09fc4cb9d750043521b13d11573ef8531751",
         "affectsGlobalScope": false
       },
       "../src/users/users.service.ts": {
-        "version": "ce8de78aac3d04c1f524fa23bc2f50827dd356b3cc54d60f4a9287b4b96d8f81",
-        "signature": "244975be3a1757a65a6f229a1c2ce50f00088d2c0dbb9949e95fcd61708f7bdc",
+        "version": "c147ca560fecc4f3443324f2e065c1512a53b436ce93838d3e1f2d4de236be5a",
+        "signature": "6e166f4b23aca9ab09d05f9925394bcc5734e083c35ce10a2cf8d2ef5367e740",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/range-parser/index.d.ts": {
@@ -1577,17 +1577,37 @@
         "affectsGlobalScope": false
       },
       "../src/users/users.controller.ts": {
-        "version": "23eceaf21b94af9684b190b1f656ae722fd7da1c342dcc97d583060953819f1e",
-        "signature": "a5c4d2e7c0afe4a9c59eee19c9f31cf9a131d0beff15013a189ca569de14dce5",
+        "version": "9cb025b642e92c4510ba18f6660606b549e7543fbb7270d6ecac0a4b09031b9b",
+        "signature": "53443a0f44e6de329d444392df2906095fdeadb9957884fe1e91cddd57498803",
         "affectsGlobalScope": false
       },
       "../src/users/users.module.ts": {
-        "version": "514f99f20bab0a6fb8fde50972245f2d856558a1210381c7c4f9b5e8006c315b",
+        "version": "3bc2147d3525dd19f2de7b309cb984994c5764382537742e33120113cb479592",
         "signature": "aa1725e38b5a0b4009f6a74f296f173e7926c119a60454dbd2e523861735df69",
         "affectsGlobalScope": false
       },
+      "../src/groups/group.model.ts": {
+        "version": "a6cb822c8e9af940b0ac447011d71a75d40839ea14a89e6656fc5dc9bcaaf903",
+        "signature": "2434119602b789743dad2629987bdec1e584597cc995fe47231da8d41ca0ace2",
+        "affectsGlobalScope": false
+      },
+      "../src/groups/groups.service.ts": {
+        "version": "4814d436ce6809d074916fad5c0b533f0f908c78af0ae5d4f11486710f273819",
+        "signature": "77372933d8e0cafee82212a80ad8c9333bfbab9620b0b03a87e9fed4faa5f89e",
+        "affectsGlobalScope": false
+      },
+      "../src/groups/groups.controller.ts": {
+        "version": "025b300066b118034c4c15691b1cf18c307ec23b4d61177d28cd2e5c96bdfe6e",
+        "signature": "5c81b57abe337588f90f6879e5cb3cec708877a1fee4031cd0db522a82095cbb",
+        "affectsGlobalScope": false
+      },
+      "../src/groups/groups.module.ts": {
+        "version": "d4f736faa938a9bbcf9abccaa0bf0b574a7f6ad2897b8534126360116c68cc1d",
+        "signature": "8fce9425fd2729dce757aab4a9fe072196176daace4b53e894ea7b9fc83429ca",
+        "affectsGlobalScope": false
+      },
       "../src/app.module.ts": {
-        "version": "4595e2d09a2855dc27a0d7be35748640ce3dafcb89ddc0fe64378590f3d349e7",
+        "version": "6d68a955a55da01f21830fafefbd94eb4daaf69b83b960408da2990f4b616fbf",
         "signature": "b82491e2990291580288c5602d4c017238977749d52b17391f0e45d9a29be644",
         "affectsGlobalScope": false
       },
@@ -3392,7 +3412,33 @@
       "../src/app.module.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/@nestjs/mongoose/index.d.ts",
+        "../src/groups/groups.module.ts",
         "../src/users/users.module.ts"
+      ],
+      "../src/groups/group.model.ts": [
+        "../node_modules/mongoose/index.d.ts",
+        "../src/users/user.model.ts"
+      ],
+      "../src/groups/groups.controller.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/assert.d.ts",
+        "../src/groups/groups.service.ts"
+      ],
+      "../src/groups/groups.module.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/@nestjs/mongoose/index.d.ts",
+        "../src/groups/group.model.ts",
+        "../src/groups/groups.controller.ts",
+        "../src/groups/groups.service.ts",
+        "../src/users/users.module.ts"
+      ],
+      "../src/groups/groups.service.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/@nestjs/mongoose/index.d.ts",
+        "../node_modules/mongoose/index.d.ts",
+        "../src/groups/group.model.ts",
+        "../src/users/user.model.ts"
       ],
       "../src/main.ts": [
         "../node_modules/@nestjs/core/index.d.ts",
@@ -4768,6 +4814,21 @@
       "../node_modules/rxjs/internal/util/pipe.d.ts": [
         "../node_modules/rxjs/internal/types.d.ts"
       ],
+      "../src/groups/group.model.ts": [
+        "../node_modules/mongoose/index.d.ts",
+        "../src/users/user.model.ts"
+      ],
+      "../src/groups/groups.controller.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../src/groups/group.model.ts",
+        "../src/groups/groups.service.ts",
+        "../src/users/user.model.ts"
+      ],
+      "../src/groups/groups.service.ts": [
+        "../node_modules/mongoose/index.d.ts",
+        "../src/groups/group.model.ts",
+        "../src/users/user.model.ts"
+      ],
       "../src/users/user.model.ts": [
         "../node_modules/mongoose/index.d.ts"
       ],
@@ -5182,6 +5243,10 @@
       "../node_modules/typescript/lib/lib.scripthost.d.ts",
       "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
       "../src/app.module.ts",
+      "../src/groups/group.model.ts",
+      "../src/groups/groups.controller.ts",
+      "../src/groups/groups.module.ts",
+      "../src/groups/groups.service.ts",
       "../src/main.ts",
       "../src/users/user.model.ts",
       "../src/users/users.controller.ts",
