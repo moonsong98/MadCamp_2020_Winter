@@ -2,6 +2,7 @@ package com.madcamp.eattogether
 
 import android.Manifest
 import android.app.Activity
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -190,7 +191,8 @@ class PeopleFragment : Fragment() {
         Log.i("aaaaaaaa",name)
         Log.i("aaaaaaa",profile.toString())
         val apiInterface = APIClient.getClient().create(APIInterface::class.java)
-        val serviceUserList = ArrayList<String>()
+        val serviceUserList = ArrayList<ServiceUser>()
+        val serviceUserListPhone = ArrayList<String>()
         apiInterface.getFriendUsers(userId, phoneNumbersOfContactListData)
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
@@ -202,14 +204,25 @@ class PeopleFragment : Fragment() {
                         val jsonArray = JSONArray(it.string())
                         for (i in 0 until jsonArray.length()) {
                             val jsonObject = jsonArray.getJSONObject(i)
-                            serviceUserList.add(jsonObject.getString("phoneNum").toString())
+
+                            val tmp = ServiceUser(jsonObject.getString("name").toString(), jsonObject.getString("phoneNum").toString())
+                            serviceUserList.add(tmp)
+                            serviceUserListPhone.add(jsonObject.getString("phoneNum").toString())
                             Log.d("serviceUserList", jsonObject.getString("phoneNum"))
                         }
                     }
                     Log.d("serviceUserListSize:", serviceUserList.size.toString())
                     friendListData = contactListData.filter {
-                        it.phoneNumber in serviceUserList
+                        it.phoneNumber in serviceUserListPhone
                     } as ArrayList<Phone>
+
+                    friendListData.map{ it ->
+                        var phoneNumber = it.phoneNumber
+                        it.name = (serviceUserList.find{e ->
+                            e.phoneNumber == phoneNumber
+                        })!!.name
+                        Log.d("@@@@@@@@@@@@@@@@@", it.name)
+                    }
 
                     phoneAdapter = PhoneAdapter(context!!, friendListData)
                     contactList.adapter = phoneAdapter
@@ -354,5 +367,5 @@ class PeopleFragment : Fragment() {
             }
         }
     }
-
+    data class ServiceUser(val name: String, val phoneNumber:String)
 }
