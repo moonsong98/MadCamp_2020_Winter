@@ -6,5 +6,6 @@ export interface User extends mongoose.Document {
     phoneNum: string;
     friendList: Array<User>;
     groupList: Array<string>;
+    eventList: Array<string>;
 }
 export declare const User: mongoose.Model<mongoose.Document<any>>;

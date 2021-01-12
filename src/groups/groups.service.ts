@@ -8,8 +8,7 @@ import {UserSchema, User}  from '../users/user.model';
 @Injectable()
 export class GroupsService{
     constructor(
-        @InjectModel('Group') readonly groupModel:Model<Group>,
-        @InjectModel('User') readonly userModel:Model<User>
+        @InjectModel('Group') readonly groupModel:Model<Group>
     ){}
 
     async createGroup(groupName:string, groupId:string, participants:Array<string>){

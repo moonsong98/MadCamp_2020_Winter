@@ -21,8 +21,9 @@ let UsersController = class UsersController {
     }
     async addUser(req) {
         const userId = req.body.userId;
+        const name = req.body.name;
         const phoneNum = req.body.phoneNum;
-        const User = await this.usersService.addUser(userId, phoneNum);
+        const User = await this.usersService.addUser(userId, name, phoneNum);
         return User;
     }
     async getUsers() {
@@ -44,9 +45,18 @@ let UsersController = class UsersController {
         const groupName = req.body.groupName;
         await this.usersService.updateUsersGroupId(usersPhoneNumbers, groupName);
     }
+    async updateEvent(req) {
+        const usersPhoneNumbers = req.body.usersPhoneNumbers;
+        const eventName = req.body.eventName;
+        await this.usersService.updateUsersEvent(usersPhoneNumbers, eventName);
+    }
     async getGroupList(Id) {
         const groupList = await this.usersService.getGroupListbyId(Id);
         return groupList;
+    }
+    async getEventList(Id) {
+        const eventList = await this.usersService.getEventListbyId(Id);
+        return eventList;
     }
 };
 __decorate([
@@ -84,12 +94,26 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateGroup", null);
 __decorate([
+    common_1.Post('updateEvent'),
+    __param(0, common_1.Req()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "updateEvent", null);
+__decorate([
     common_1.Get('getgrouplist/:Id'),
     __param(0, common_1.Param('Id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getGroupList", null);
+__decorate([
+    common_1.Get('geteventlist/:Id'),
+    __param(0, common_1.Param('Id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getEventList", null);
 UsersController = __decorate([
     common_1.Controller('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

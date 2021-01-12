@@ -1527,13 +1527,13 @@
         "affectsGlobalScope": false
       },
       "../src/users/user.model.ts": {
-        "version": "5898425f5910d468759c02d5a0ea4ebacf196958e37b93c98fcdef01ecf0c4ae",
-        "signature": "2ee8b980309cccddf6c8062f176b09fc4cb9d750043521b13d11573ef8531751",
+        "version": "b4d02604767293f6a5455e355ca3dc6191923db27413991e8940dbe208a9658f",
+        "signature": "8e136a07b1cc4ecbee815930fa3215fbce5a90fe69a806d0243c1c595f4a7357",
         "affectsGlobalScope": false
       },
       "../src/users/users.service.ts": {
-        "version": "97b39f6db9e78d267cfd9076b8e9bcf4eeecabe3e4172c07f0ae037b05155a94",
-        "signature": "315c5792acd093c434583e93f24dff9e7401b4223287b1ada0ac2508972c0f20",
+        "version": "507f51ddd503c08d7bd098f7395062d90b0728e1ce09533e69fdc6ab7248d951",
+        "signature": "07dc556a047c45d7c3aed7b36cdf8709895dc26d6fbd616a33ed4317252cf1ca",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/range-parser/index.d.ts": {
@@ -1577,12 +1577,12 @@
         "affectsGlobalScope": false
       },
       "../src/users/users.controller.ts": {
-        "version": "7c2123761f9843f7ecf1647a35b31aa74cc91dd5d715df5728cc313ef08e718f",
-        "signature": "1615c25a1f3bbd5a2f61863d38388ed0ae43f6588532ebfd534b2a49bb31d9cc",
+        "version": "0dfb178050464ecb2ca8e74a7d80a410416a0e53290f7d6ca1fc78a4a642b41a",
+        "signature": "d537784b05e94abf20f45e5257ce434f8def42788d57bd0f71cf32e4c0e8784c",
         "affectsGlobalScope": false
       },
       "../src/users/users.module.ts": {
-        "version": "3bc2147d3525dd19f2de7b309cb984994c5764382537742e33120113cb479592",
+        "version": "410513499ee23c5ac7d7e9deaeb66a0289be56bd6473c7d7738ae425d78536a5",
         "signature": "aa1725e38b5a0b4009f6a74f296f173e7926c119a60454dbd2e523861735df69",
         "affectsGlobalScope": false
       },
@@ -1592,8 +1592,8 @@
         "affectsGlobalScope": false
       },
       "../src/groups/groups.service.ts": {
-        "version": "b3e7edb35148fee8e83ccbef2a44d9adebb32bbc3cbdefa825d4c983c2a51ef8",
-        "signature": "ea96259abd498a154fe16827c888102d9748bca37cdf05b7b1e15327884fd5bc",
+        "version": "8241a09655fbebfd4a0b25ccc223ed1a9b5104ff86af9320742e15e9a12af646",
+        "signature": "68a239de241e4c16aed98a9016bee5c105874464153165b583605a750cd3fe94",
         "affectsGlobalScope": false
       },
       "../src/groups/groups.controller.ts": {
@@ -1606,8 +1606,28 @@
         "signature": "8fce9425fd2729dce757aab4a9fe072196176daace4b53e894ea7b9fc83429ca",
         "affectsGlobalScope": false
       },
+      "../src/events/event.model.ts": {
+        "version": "db73a002a740981c42dccbba9e86c5dbb6b254cafd6085497d54c9db3f2c7ee2",
+        "signature": "ba76e657dba79659979931c04f3b736e11d340de26c443f4cce76b5de43c9530",
+        "affectsGlobalScope": false
+      },
+      "../src/events/events.service.ts": {
+        "version": "668f3a5691ffaf42f6e5ecf89968c2ac0ada6f18cf4c9604380aae0ea110b760",
+        "signature": "98d7d7ac03565c6eb3f6c26d52a770fff75fbd2acef3d50b8c4eb81e46c1f2c1",
+        "affectsGlobalScope": false
+      },
+      "../src/events/events.controller.ts": {
+        "version": "b94d40f98288e42825d5dd25407a05aa15478adbc9ce76cfc9bb733ec19546bc",
+        "signature": "9ec30939e9f5d76c6c2bf1e2b1fe5b640a67e3c1c2f7795dc01850a2e32d5381",
+        "affectsGlobalScope": false
+      },
+      "../src/events/events.module.ts": {
+        "version": "bb99fd3c49246882d865fdcda6646aa401b813019f7f880d2c576c7f0739c7b4",
+        "signature": "354b5fa59b2bfccc0758d0835f41034bc595b84e693080e112a292ba0556edbd",
+        "affectsGlobalScope": false
+      },
       "../src/app.module.ts": {
-        "version": "7af18c131fe51df67751a10916a74cb78ff1745823d5704b3e82e3eff5d70cb7",
+        "version": "63e6e3fc526065abded6a629b783fe64979f47aaa1517deacc9fb4d0f9b9a7cf",
         "signature": "b82491e2990291580288c5602d4c017238977749d52b17391f0e45d9a29be644",
         "affectsGlobalScope": false
       },
@@ -1836,6 +1856,11 @@
         "signature": "8d48b8f8a377ade8dd1f000625bc276eea067f2529cc9cafdf082d17142107d6",
         "affectsGlobalScope": false
       },
+      "../node_modules/@types/engine.io/index.d.ts": {
+        "version": "854089953b8bdf60437d229c41544eb8fd374206b49f99647298ff7824f4932e",
+        "signature": "854089953b8bdf60437d229c41544eb8fd374206b49f99647298ff7824f4932e",
+        "affectsGlobalScope": false
+      },
       "../node_modules/@types/graceful-fs/index.d.ts": {
         "version": "cb6cf0480ee1aa9f706db1f6f5add596a1aa10e8c4beb1817f2318384ba684dc",
         "signature": "cb6cf0480ee1aa9f706db1f6f5add596a1aa10e8c4beb1817f2318384ba684dc",
@@ -1919,6 +1944,16 @@
       "../node_modules/@types/prettier/index.d.ts": {
         "version": "7403a1397d48771d58d55c603d0c51aa3d4cd6467bca03140f085fdc432eb912",
         "signature": "7403a1397d48771d58d55c603d0c51aa3d4cd6467bca03140f085fdc432eb912",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/socket.io-parser/index.d.ts": {
+        "version": "8487571622eefb9421499874014fa1cc0898bd15724565002a27b67d8e285072",
+        "signature": "8487571622eefb9421499874014fa1cc0898bd15724565002a27b67d8e285072",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/socket.io/index.d.ts": {
+        "version": "589a23e38353a6ba3a66b339c81cee68aa7604776f9322b4c50564165d9fa0f6",
+        "signature": "589a23e38353a6ba3a66b339c81cee68aa7604776f9322b4c50564165d9fa0f6",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/source-list-map/index.d.ts": {
@@ -2785,6 +2820,12 @@
         "../node_modules/@types/node/http.d.ts",
         "../node_modules/@types/node/index.d.ts"
       ],
+      "../node_modules/@types/engine.io/index.d.ts": [
+        "../node_modules/@types/node/events.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/index.d.ts",
+        "../node_modules/@types/node/net.d.ts"
+      ],
       "../node_modules/@types/express-serve-static-core/index.d.ts": [
         "../node_modules/@types/node/events.d.ts",
         "../node_modules/@types/node/http.d.ts",
@@ -2990,6 +3031,16 @@
         "../node_modules/@types/mime/index.d.ts",
         "../node_modules/@types/node/http.d.ts",
         "../node_modules/@types/node/index.d.ts"
+      ],
+      "../node_modules/@types/socket.io-parser/index.d.ts": [
+        "../node_modules/@types/node/index.d.ts"
+      ],
+      "../node_modules/@types/socket.io/index.d.ts": [
+        "../node_modules/@types/engine.io/index.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/https.d.ts",
+        "../node_modules/@types/node/index.d.ts",
+        "../node_modules/@types/socket.io-parser/index.d.ts"
       ],
       "../node_modules/@types/superagent/index.d.ts": [
         "../node_modules/@types/cookiejar/index.d.ts",
@@ -3412,8 +3463,36 @@
       "../src/app.module.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/@nestjs/mongoose/index.d.ts",
+        "../src/events/events.module.ts",
         "../src/groups/groups.module.ts",
         "../src/users/users.module.ts"
+      ],
+      "../src/events/event.model.ts": [
+        "../node_modules/@types/node/inspector.d.ts",
+        "../node_modules/@types/node/url.d.ts",
+        "../node_modules/mongoose/index.d.ts",
+        "../src/users/user.model.ts"
+      ],
+      "../src/events/events.controller.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/@types/express/index.d.ts",
+        "../node_modules/@types/node/assert.d.ts",
+        "../src/events/events.service.ts"
+      ],
+      "../src/events/events.module.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/@nestjs/mongoose/index.d.ts",
+        "../src/events/event.model.ts",
+        "../src/events/events.controller.ts",
+        "../src/events/events.service.ts",
+        "../src/users/users.module.ts"
+      ],
+      "../src/events/events.service.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/@nestjs/mongoose/index.d.ts",
+        "../node_modules/mongoose/index.d.ts",
+        "../src/events/event.model.ts",
+        "../src/users/user.model.ts"
       ],
       "../src/groups/group.model.ts": [
         "../node_modules/mongoose/index.d.ts",
@@ -3451,6 +3530,7 @@
         "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/@types/express/index.d.ts",
         "../node_modules/@types/node/assert.d.ts",
+        "../node_modules/@types/node/process.d.ts",
         "../src/users/users.service.ts"
       ],
       "../src/users/users.module.ts": [
@@ -4190,6 +4270,12 @@
         "../node_modules/@types/node/http.d.ts",
         "../node_modules/@types/node/index.d.ts"
       ],
+      "../node_modules/@types/engine.io/index.d.ts": [
+        "../node_modules/@types/node/events.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/index.d.ts",
+        "../node_modules/@types/node/net.d.ts"
+      ],
       "../node_modules/@types/express-serve-static-core/index.d.ts": [
         "../node_modules/@types/node/events.d.ts",
         "../node_modules/@types/node/http.d.ts",
@@ -4395,6 +4481,16 @@
         "../node_modules/@types/mime/index.d.ts",
         "../node_modules/@types/node/http.d.ts",
         "../node_modules/@types/node/index.d.ts"
+      ],
+      "../node_modules/@types/socket.io-parser/index.d.ts": [
+        "../node_modules/@types/node/index.d.ts"
+      ],
+      "../node_modules/@types/socket.io/index.d.ts": [
+        "../node_modules/@types/engine.io/index.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/https.d.ts",
+        "../node_modules/@types/node/index.d.ts",
+        "../node_modules/@types/socket.io-parser/index.d.ts"
       ],
       "../node_modules/@types/superagent/index.d.ts": [
         "../node_modules/@types/cookiejar/index.d.ts",
@@ -4814,6 +4910,19 @@
       "../node_modules/rxjs/internal/util/pipe.d.ts": [
         "../node_modules/rxjs/internal/types.d.ts"
       ],
+      "../src/events/event.model.ts": [
+        "../node_modules/mongoose/index.d.ts",
+        "../src/users/user.model.ts"
+      ],
+      "../src/events/events.controller.ts": [
+        "../node_modules/@types/express/index.d.ts",
+        "../src/events/event.model.ts",
+        "../src/events/events.service.ts"
+      ],
+      "../src/events/events.service.ts": [
+        "../node_modules/mongoose/index.d.ts",
+        "../src/events/event.model.ts"
+      ],
       "../src/groups/group.model.ts": [
         "../node_modules/mongoose/index.d.ts",
         "../src/users/user.model.ts"
@@ -4825,8 +4934,7 @@
       ],
       "../src/groups/groups.service.ts": [
         "../node_modules/mongoose/index.d.ts",
-        "../src/groups/group.model.ts",
-        "../src/users/user.model.ts"
+        "../src/groups/group.model.ts"
       ],
       "../src/users/user.model.ts": [
         "../node_modules/mongoose/index.d.ts"
@@ -5046,6 +5154,7 @@
       "../node_modules/@types/bson/index.d.ts",
       "../node_modules/@types/connect/index.d.ts",
       "../node_modules/@types/cookiejar/index.d.ts",
+      "../node_modules/@types/engine.io/index.d.ts",
       "../node_modules/@types/express-serve-static-core/index.d.ts",
       "../node_modules/@types/express/index.d.ts",
       "../node_modules/@types/graceful-fs/index.d.ts",
@@ -5110,6 +5219,8 @@
       "../node_modules/@types/qs/index.d.ts",
       "../node_modules/@types/range-parser/index.d.ts",
       "../node_modules/@types/serve-static/index.d.ts",
+      "../node_modules/@types/socket.io-parser/index.d.ts",
+      "../node_modules/@types/socket.io/index.d.ts",
       "../node_modules/@types/source-list-map/index.d.ts",
       "../node_modules/@types/stack-utils/index.d.ts",
       "../node_modules/@types/superagent/index.d.ts",
@@ -5242,6 +5353,10 @@
       "../node_modules/typescript/lib/lib.scripthost.d.ts",
       "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
       "../src/app.module.ts",
+      "../src/events/event.model.ts",
+      "../src/events/events.controller.ts",
+      "../src/events/events.module.ts",
+      "../src/events/events.service.ts",
       "../src/groups/group.model.ts",
       "../src/groups/groups.controller.ts",
       "../src/groups/groups.module.ts",

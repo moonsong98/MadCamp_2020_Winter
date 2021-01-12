@@ -1,0 +1,9 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MessageBody = void 0;
+const ws_paramtype_enum_1 = require("../enums/ws-paramtype.enum");
+const param_utils_1 = require("../utils/param.utils");
+function MessageBody(...pipes) {
+    return param_utils_1.createPipesWsParamDecorator(ws_paramtype_enum_1.WsParamtype.PAYLOAD)(...pipes);
+}
+exports.MessageBody = MessageBody;

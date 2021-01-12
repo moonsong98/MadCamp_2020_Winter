@@ -11,11 +11,12 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const users_module_1 = require("./users/users.module");
 const groups_module_1 = require("./groups/groups.module");
+const events_module_1 = require("./events/events.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     common_1.Module({
-        imports: [mongoose_1.MongooseModule.forRoot('mongodb+srv://AtlasAdmin:admin@cluster0.xhpzp.mongodb.net/user?retryWrites=true&w=majority'), users_module_1.UsersModule, groups_module_1.GroupsModule],
+        imports: [mongoose_1.MongooseModule.forRoot('mongodb+srv://AtlasAdmin:admin@cluster0.xhpzp.mongodb.net/user?retryWrites=true&w=majority'), users_module_1.UsersModule, groups_module_1.GroupsModule, events_module_1.EventsModule],
         controllers: [],
         providers: [],
     })

@@ -2,6 +2,7 @@ import { UsersService } from "./users.service";
 import { Controller, Get, Post, Put, Delete, Body, Param, Req ,Res, HttpStatus } from '@nestjs/common';
 import { Request } from 'express'
 import { ok } from "assert";
+import { eventNames } from "process";
 
 @Controller('users')  
 export class UsersController{
@@ -10,9 +11,9 @@ export class UsersController{
     @Post('postman')
     async addUser(@Req()req:Request){
         const userId = req.body.userId
-        // const name = req.body.name
+        const name = req.body.name
         const phoneNum = req.body.phoneNum
-        const User = await this.usersService.addUser(userId, phoneNum)
+        const User = await this.usersService.addUser(userId, name, phoneNum)
         return User
     }
 
@@ -41,10 +42,23 @@ export class UsersController{
         await this.usersService.updateUsersGroupId(usersPhoneNumbers, groupName)
     }
 
+    @Post('updateEvent')
+    async updateEvent(@Req()req:Request) {
+        const usersPhoneNumbers:Array<string> = req.body.usersPhoneNumbers
+        const eventName = req.body.eventName
+        await this.usersService.updateUsersEvent(usersPhoneNumbers, eventName)
+    }
+
     @Get('getgrouplist/:Id')
     async getGroupList(@Param('Id') Id:string) {
         const groupList = await this.usersService.getGroupListbyId(Id)
         return groupList
+    }
+
+    @Get('geteventlist/:Id')
+    async getEventList(@Param('Id') Id:string) {
+        const eventList = await this.usersService.getEventListbyId(Id)
+        return eventList
     }
 }
 

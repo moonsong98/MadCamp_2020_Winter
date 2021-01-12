@@ -7,7 +7,8 @@ exports.UserSchema = new mongoose.Schema({
     name: { type: String },
     phoneNum: { type: String, required: true },
     friendList: { type: Array },
-    groupList: { type: Array, default: ['0'] }
+    groupList: { type: Array },
+    eventList: { type: Array }
 });
 exports.User = mongoose.model('User', exports.UserSchema);
 //# sourceMappingURL=user.model.js.map

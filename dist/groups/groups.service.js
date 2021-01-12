@@ -17,9 +17,8 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 let GroupsService = class GroupsService {
-    constructor(groupModel, userModel) {
+    constructor(groupModel) {
         this.groupModel = groupModel;
-        this.userModel = userModel;
     }
     async createGroup(groupName, groupId, participants) {
         const newGroup = await new this.groupModel({ groupName, groupId, participants });
@@ -33,9 +32,7 @@ let GroupsService = class GroupsService {
 GroupsService = __decorate([
     common_1.Injectable(),
     __param(0, mongoose_1.InjectModel('Group')),
-    __param(1, mongoose_1.InjectModel('User')),
-    __metadata("design:paramtypes", [mongoose_2.Model,
-        mongoose_2.Model])
+    __metadata("design:paramtypes", [mongoose_2.Model])
 ], GroupsService);
 exports.GroupsService = GroupsService;
 //# sourceMappingURL=groups.service.js.map

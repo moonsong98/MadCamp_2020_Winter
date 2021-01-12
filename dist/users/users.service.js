@@ -41,13 +41,29 @@ let UsersService = class UsersService {
         user.friendList = friends;
         return user;
     }
-    async addUser(userId, phoneNum) {
-        const newUser = await new this.userModel({ userId, phoneNum });
+    async addUser(userId, name, phoneNum) {
+        const newUser = await new this.userModel({ userId, name, phoneNum });
+        console.log(newUser);
         return await newUser.save();
     }
     async getUsers() {
         const users = await this.userModel.find().exec();
-        return users.map(user => ({ id: user.userId, phoneNum: user.phoneNum, groupList: user.groupList, friendList: user.friendList }));
+        return users.map(user => ({ id: user.userId, name: user.name, phoneNum: user.phoneNum, groupList: user.groupList, friendList: user.friendList, eventList: user.eventList }));
+    }
+    async updateUsersEvent(usersPhoneNumbers, eventName) {
+        var i = 0;
+        while (i < usersPhoneNumbers.length) {
+            console.log(usersPhoneNumbers);
+            let user = await this.findUserbyPhone(usersPhoneNumbers[i]);
+            if (user.eventList.length == 0) {
+                user.eventList = [eventName];
+            }
+            else {
+                user.groupList.push(eventName);
+            }
+            user.save();
+            i++;
+        }
     }
     async updateUsersGroupId(usersPhoneNumbers, groupName) {
         var i = 0;
@@ -68,6 +84,11 @@ let UsersService = class UsersService {
         const user = await this.findUserById(Id);
         console.log(user.groupList);
         return user.groupList;
+    }
+    async getEventListbyId(Id) {
+        const user = await this.findUserById(Id);
+        console.log(user.eventList);
+        return user.eventList;
     }
     async findUserbyPhone(phoneNum) {
         try {
