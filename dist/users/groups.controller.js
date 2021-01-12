@@ -20,7 +20,6 @@ let GroupsController = class GroupsController {
         this.groupsService = groupsService;
     }
     async createGroup(req) {
-        console.log(req.body);
         const groupId = req.body.groupId;
         const participants = req.body.participants;
         const Group = await this.groupsService.createGroup(groupId, participants);

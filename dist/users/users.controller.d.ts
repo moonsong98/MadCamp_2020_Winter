@@ -7,7 +7,11 @@ export declare class UsersController {
     getUsers(): Promise<{
         id: string;
         phoneNum: string;
+        groupList: string[];
+        friendList: import("./user.model").User[];
     }[]>;
     getFriends(req: Request): Promise<import("./user.model").User[]>;
     getUserInfo(Id: string): Promise<string>;
+    updateGroup(req: Request): Promise<void>;
+    getGroupList(Id: string): Promise<string[]>;
 }

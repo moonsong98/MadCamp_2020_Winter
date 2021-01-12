@@ -5,7 +5,7 @@ import { GroupsModule } from './groups/groups.module'
 
 
 @Module({
-  imports:[MongooseModule.forRoot('mongodb+srv://inhwa:inhwa@madcamp.yaarc.mongodb.net/users?retryWrites=true&w=majority'), UsersModule, GroupsModule],
+  imports:[MongooseModule.forRoot('mongodb+srv://AtlasAdmin:admin@cluster0.xhpzp.mongodb.net/user?retryWrites=true&w=majority'), UsersModule, GroupsModule],
   controllers: [],
   providers: [],
 })

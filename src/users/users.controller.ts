@@ -26,14 +26,25 @@ export class UsersController{
         const userId = req.body.userId
         const phoneList = req.body.phoneList
         const me = await this.usersService.getFriends(userId, phoneList)
-        console.log(req.body)
         return me.friendList
     }
     @Get(':Id')
     async getUserInfo(@Param('Id') Id: string){
         const userId =  await this.usersService.getUserInfobyId(Id);
-        console.log(userId)
         return userId
+    }
+
+    @Post('updategroup')
+    async updateGroup(@Req()req:Request) {
+        const usersPhoneNumbers:Array<string> = req.body.usersPhoneNumbers
+        const groupName = req.body.groupName
+        await this.usersService.updateUsersGroupId(usersPhoneNumbers, groupName)
+    }
+
+    @Get('getgrouplist/:Id')
+    async getGroupList(@Param('Id') Id:string) {
+        const groupList = await this.usersService.getGroupListbyId(Id)
+        return groupList
     }
 }
 

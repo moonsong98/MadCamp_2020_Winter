@@ -21,17 +21,13 @@ let GroupsService = class GroupsService {
         this.groupModel = groupModel;
         this.userModel = userModel;
     }
-    async createGroup(groupId, participants) {
-        const newGroup = await new this.groupModel({ groupId, participants });
-        var i = 0;
-        while (i < participants.length) {
-            i = i + 1;
-        }
+    async createGroup(groupName, groupId, participants) {
+        const newGroup = await new this.groupModel({ groupName, groupId, participants });
         return await newGroup.save();
     }
     async getGroups() {
         const groups = await this.groupModel.find().exec();
-        return groups.map(group => ({ id: group.groupId, participants: group.participants }));
+        return groups;
     }
 };
 GroupsService = __decorate([

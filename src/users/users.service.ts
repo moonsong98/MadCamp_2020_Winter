@@ -23,7 +23,6 @@ export class UsersService{
         let friends : Array<User> = user.friendList
         while(i < phoneList.length){
             const friend = await this.findUserbyPhone(phoneList[i])
-            // console.log("friend: " + friend)
             if(friend) friends = friends.concat(friend)   
             i = i+1
         }
@@ -38,7 +37,28 @@ export class UsersService{
     
     async getUsers(){
         const users = await this.userModel.find().exec()
-        return users.map(user =>({id:user.userId, phoneNum: user.phoneNum}))
+        return users.map(user =>({id:user.userId, phoneNum: user.phoneNum, groupList: user.groupList, friendList: user.friendList}))
+    }
+
+    async updateUsersGroupId(usersPhoneNumbers: Array<string>, groupName: string){
+        var i = 0
+        while(i < usersPhoneNumbers.length){
+            console.log(usersPhoneNumbers)
+            let user = await this.findUserbyPhone(usersPhoneNumbers[i])
+            if(user.groupList.length == 0) {
+                user.groupList = [groupName]
+            } else {
+                user.groupList.push(groupName)
+            }
+            user.save()
+            i++
+        }
+    }
+
+    async getGroupListbyId(Id: string) {
+        const user = await this.findUserById(Id)
+        console.log(user.groupList)
+        return user.groupList
     }
 
     private async findUserbyPhone(phoneNum: string){   
@@ -57,6 +77,4 @@ export class UsersService{
            return null
         } 
     }
-
-
 }

@@ -35,7 +35,6 @@ let GroupsService = class GroupsService {
                 user.groupList = [groupId];
             }
         }
-        console.log(newGroup);
         return await newGroup.save();
     }
     async getGroups() {

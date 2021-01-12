@@ -8,10 +8,11 @@ export class GroupsController{
     constructor(private readonly groupsService: GroupsService){}
     @Post('postman')
     async createGroup(@Req()req:Request){
-        console.log(req.body)
+        (req.body)
+        const groupName = req.body.groupName
         const groupId = req.body.groupId
         const participants = req.body.participants
-        const Group = await this.groupsService.createGroup(groupId, participants)
+        const Group = await this.groupsService.createGroup(groupName, groupId, participants)
         return Group
     }
     @Get('all')

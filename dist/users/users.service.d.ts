@@ -10,7 +10,11 @@ export declare class UsersService {
     getUsers(): Promise<{
         id: string;
         phoneNum: string;
+        groupList: string[];
+        friendList: User[];
     }[]>;
+    updateUsersGroupId(usersPhoneNumbers: Array<string>, groupName: string): Promise<void>;
+    getGroupListbyId(Id: string): Promise<string[]>;
     private findUserbyPhone;
     private findUserById;
 }

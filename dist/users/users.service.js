@@ -47,7 +47,27 @@ let UsersService = class UsersService {
     }
     async getUsers() {
         const users = await this.userModel.find().exec();
-        return users.map(user => ({ id: user.userId, phoneNum: user.phoneNum }));
+        return users.map(user => ({ id: user.userId, phoneNum: user.phoneNum, groupList: user.groupList, friendList: user.friendList }));
+    }
+    async updateUsersGroupId(usersPhoneNumbers, groupName) {
+        var i = 0;
+        while (i < usersPhoneNumbers.length) {
+            console.log(usersPhoneNumbers);
+            let user = await this.findUserbyPhone(usersPhoneNumbers[i]);
+            if (user.groupList.length == 0) {
+                user.groupList = [groupName];
+            }
+            else {
+                user.groupList.push(groupName);
+            }
+            user.save();
+            i++;
+        }
+    }
+    async getGroupListbyId(Id) {
+        const user = await this.findUserById(Id);
+        console.log(user.groupList);
+        return user.groupList;
     }
     async findUserbyPhone(phoneNum) {
         try {
