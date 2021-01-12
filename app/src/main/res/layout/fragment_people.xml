@@ -14,14 +14,21 @@
         android:ems="10"
         android:hint="연락처 검색"
         android:inputType="textPersonName" />
+    <Button
+        android:id="@+id/create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GROUP" />
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id = '@+id/swipe_refresh_layout'
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="500dp">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/contact_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 </LinearLayout>

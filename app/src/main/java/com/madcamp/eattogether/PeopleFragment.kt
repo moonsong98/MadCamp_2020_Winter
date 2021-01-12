@@ -1,6 +1,7 @@
 package com.madcamp.eattogether
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,10 +15,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.ViewModel
@@ -27,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.facebook.Profile
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import retrofit2.Call
@@ -39,6 +38,7 @@ class PeopleFragment : Fragment() {
     private lateinit var phoneAdapter: PhoneAdapter
     private lateinit var swipeRefreshLayout:SwipeRefreshLayout
     private var contactListData: ArrayList<Phone> = ArrayList()
+    private lateinit var createGroup : Button
     private var friendListData: ArrayList<Phone> = ArrayList() // List of contacts who are using our service
     private var searchText = ""
 
@@ -56,6 +56,7 @@ class PeopleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_people, container, false)
+        createGroup = view.findViewById(R.id.create)
         contactList = view.findViewById(R.id.contact_list)
         searchBar = view.findViewById(R.id.search_bar)
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout)
@@ -64,6 +65,11 @@ class PeopleFragment : Fragment() {
                 getFriendList()
             else
                 swipeRefreshLayout.isRefreshing = false
+        }
+        createGroup.setOnClickListener {
+            var intent: Intent = Intent(context, MakeGroupActivity::class.java)
+            intent.putExtra("friendList",friendListData)
+            startActivity(intent)
         }
         return view
     }
