@@ -1,5 +1,6 @@
 package com.madcamp.eattogether
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -52,6 +53,10 @@ class MainActivity : AppCompatActivity() {
                     HttpMethod.DELETE,
                     GraphRequest.Callback { LoginManager.getInstance().logOut() }).executeAsync()
                 this.finish()
+            }
+            R.id.test -> {
+                val testIntent = Intent(this@MainActivity, AddAppointment::class.java)
+                startActivity(testIntent)
             }
         }
         return super.onOptionsItemSelected(item)

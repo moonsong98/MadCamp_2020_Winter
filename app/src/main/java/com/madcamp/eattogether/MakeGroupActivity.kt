@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MakeGroupActivity: AppCompatActivity() {
+    private lateinit var groupName: EditText
     private lateinit var peopleList: RecyclerView
     private lateinit var groupPeopleAdapter: GroupPeopleAdapter
     private lateinit var createBtn : Button
@@ -35,11 +37,13 @@ class MakeGroupActivity: AppCompatActivity() {
         var intent: Intent = intent
         var friendList : ArrayList<Phone> = intent.getSerializableExtra("friendList") as ArrayList<Phone>
         Log.i("aaaaaaa",friendList.size.toString())
+        groupName = findViewById(R.id.group_name)
         groupPeopleAdapter = GroupPeopleAdapter(this, friendList)
         peopleList.adapter = groupPeopleAdapter
         peopleList.layoutManager = LinearLayoutManager(this)
         createBtn = findViewById(R.id.create)
         createBtn.setOnClickListener {
+            val groupNameText = groupName.text.toString()
             var i : Int = 0
             while(i<friendList.size){
                 if(friendList[i].ifadded){
@@ -55,16 +59,31 @@ class MakeGroupActivity: AppCompatActivity() {
             val groupId = Profile.getCurrentProfile().id+"group1"
             Log.i("aaaaaa",groupId)
             val apiInterface = APIClient.getClient().create(APIInterface::class.java)
-            val call:Call<ResponseBody> = apiInterface.createGroup(groupId, phoneNumbsersOfparticipants)
+            val call:Call<ResponseBody> = apiInterface.createGroup(groupNameText,groupId, phoneNumbsersOfparticipants)
             call.enqueue(object: Callback<ResponseBody> {
-                override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>) {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     Toast.makeText(this@MakeGroupActivity, "Succeeded to Create Group",
                         Toast.LENGTH_SHORT
                     ).show()
-                    val intent = Intent(this@MakeGroupActivity, MainActivity::class.java)
+                    apiInterface.updateUsersGroup(groupName.text.toString(), phoneNumbsersOfparticipants).enqueue(object: Callback<ResponseBody> {
+                        override fun onResponse(
+                            call: Call<ResponseBody>,
+                            response: Response<ResponseBody>
+                        ) {
+                            Toast.makeText(this@MakeGroupActivity, "Succeeded to Update Users' GroupList",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val intent = Intent(this@MakeGroupActivity, MainActivity::class.java)
 //                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                    startActivity(intent)
-                    this@MakeGroupActivity.finish()
+                            startActivity(intent)
+                            this@MakeGroupActivity.finish()
+                        }
+                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                            Toast.makeText(this@MakeGroupActivity, "Failed to Update Users' GroupList",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
                 }
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Toast.makeText(this@MakeGroupActivity, "Fail to Create Group", Toast.LENGTH_SHORT).show()

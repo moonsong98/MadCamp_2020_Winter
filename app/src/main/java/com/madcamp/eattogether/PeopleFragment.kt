@@ -5,10 +5,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.text.Editable
+import android.text.Layout
 import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,6 +20,7 @@ import android.view.ViewGroup
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,18 +31,22 @@ import com.facebook.Profile
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import okhttp3.ResponseBody
 import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class PeopleFragment : Fragment() {
     private lateinit var contactList: RecyclerView
+    private lateinit var groupList: RecyclerView
     private lateinit var searchBar: EditText
     private lateinit var phoneAdapter: PhoneAdapter
-    private lateinit var swipeRefreshLayout:SwipeRefreshLayout
+    private lateinit var groupAdapter: GroupAdapter
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var contactListData: ArrayList<Phone> = ArrayList()
-    private lateinit var createGroup : Button
+    private lateinit var createGroup: Button
     private var friendListData: ArrayList<Phone> = ArrayList() // List of contacts who are using our service
+    private var groupListData: ArrayList<String> = ArrayList() // List of users' group
     private var searchText = ""
 
     companion object {
@@ -58,17 +65,20 @@ class PeopleFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_people, container, false)
         createGroup = view.findViewById(R.id.create)
         contactList = view.findViewById(R.id.contact_list)
+        groupList = view.findViewById(R.id.group_list)
         searchBar = view.findViewById(R.id.search_bar)
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout)
         swipeRefreshLayout.setOnRefreshListener {
-            if(friendListData.size > 0)
+            if (friendListData.size > 0) {
                 getFriendList()
+                getGroupList()
+            }
             else
                 swipeRefreshLayout.isRefreshing = false
         }
         createGroup.setOnClickListener {
             var intent: Intent = Intent(context, MakeGroupActivity::class.java)
-            intent.putExtra("friendList",friendListData)
+            intent.putExtra("friendList", friendListData)
             startActivity(intent)
         }
         return view
@@ -101,6 +111,7 @@ class PeopleFragment : Fragment() {
         /* Set adapter for recycler view */
         getPhoneNumbersFromPhone()
         getFriendList()
+        getGroupList()
         /* Set search listener */
         searchBar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -119,6 +130,14 @@ class PeopleFragment : Fragment() {
                 } as ArrayList<Phone>
                 phoneAdapter.setData(filteredFriendListData)
                 phoneAdapter.notifyDataSetChanged()
+                val filteredGroupListData = groupListData.filter {
+                    it.contains(
+                        searchText,
+                        true
+                    )
+                }
+                groupAdapter.setData(filteredGroupListData)
+                groupAdapter.notifyDataSetChanged()
             }
         })
     }
@@ -152,36 +171,68 @@ class PeopleFragment : Fragment() {
 
     private fun getFriendList() {
         val context = this.context
-        val phoneNumbersOfContactListData = contactListData.map{
+        val phoneNumbersOfContactListData = contactListData.map {
             it.phoneNumber
         } as ArrayList<String>
         val userId = Profile.getCurrentProfile().id
         val apiInterface = APIClient.getClient().create(APIInterface::class.java)
         val serviceUserList = ArrayList<String>()
-        apiInterface.getFriendUsers(userId,phoneNumbersOfContactListData).enqueue(object: Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                response.body()?.let{
-                    Toast.makeText(context, "Succeeded to get Response", LENGTH_SHORT).show()
-                    val jsonArray = JSONArray(it.string())
-                    for(i in 0 until jsonArray.length()) {
-                        val jsonObject = jsonArray.getJSONObject(i)
-                        serviceUserList.add(jsonObject.getString("phoneNum").toString())
-                        Log.d("serviceUserList", jsonObject.getString("phoneNum"))
+        apiInterface.getFriendUsers(userId, phoneNumbersOfContactListData)
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    response.body()?.let {
+                        Toast.makeText(context, "Succeeded to get Response", LENGTH_SHORT).show()
+                        val jsonArray = JSONArray(it.string())
+                        for (i in 0 until jsonArray.length()) {
+                            val jsonObject = jsonArray.getJSONObject(i)
+                            serviceUserList.add(jsonObject.getString("phoneNum").toString())
+                            Log.d("serviceUserList", jsonObject.getString("phoneNum"))
+                        }
                     }
+                    Log.d("serviceUserListSize:", serviceUserList.size.toString())
+                    friendListData = contactListData.filter {
+                        it.phoneNumber in serviceUserList
+                    } as ArrayList<Phone>
+
+                    phoneAdapter = PhoneAdapter(context!!, friendListData)
+                    contactList.adapter = phoneAdapter
+                    contactList.layoutManager = LinearLayoutManager(context)
+                    Log.d("friendListSize:", friendListData.size.toString())
+                    Toast.makeText(context, "Succeeded to get friend list", LENGTH_SHORT).show()
+                    swipeRefreshLayout.isRefreshing = false
                 }
-                Log.d("serviceUserListSize:", serviceUserList.size.toString())
-                friendListData = contactListData.filter {
-                    it.phoneNumber in serviceUserList
-                } as ArrayList<Phone>
-                phoneAdapter = PhoneAdapter(context!!, friendListData)
-                contactList.adapter = phoneAdapter
-                contactList.layoutManager = LinearLayoutManager(context)
-                Log.d("friendListSize:", friendListData.size.toString())
-                Toast.makeText(context, "Succeeded to get friend list", LENGTH_SHORT).show()
-                swipeRefreshLayout.isRefreshing = false
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(context, "Failed to get friend list", LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun getGroupList() {
+        val context = this.context // Debug
+        val userId = Profile.getCurrentProfile().id
+        val apiInterface = APIClient.getClient().create(APIInterface::class.java)
+        Toast.makeText(context, "ReachedHere", LENGTH_SHORT).show()
+        apiInterface.getGroupListById(userId).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Toast.makeText(context, "Succeeded to get GroupList", LENGTH_SHORT).show()
+                response.body()?.let {
+                    groupListData = ArrayList()
+                        val groupListFromJSON = JSONArray(it.string())
+                        for (e in 0 until groupListFromJSON.length()) {
+                            groupListData.add(groupListFromJSON[e].toString())
+                        }
+                    groupAdapter = GroupAdapter(context!!, groupListData)
+                    groupList.adapter = groupAdapter
+                    groupList.layoutManager = LinearLayoutManager(context)
+                }
             }
+
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "Failed to get friend list", LENGTH_SHORT).show()
+                Toast.makeText(context, "Failed to get group list", LENGTH_SHORT).show()
             }
         })
     }
@@ -225,7 +276,7 @@ class PeopleFragment : Fragment() {
             holder.setView(list[position])
         }
 
-        fun setData(newList:List<Phone>) {
+        fun setData(newList: List<Phone>) {
             list = newList
         }
 
@@ -253,4 +304,41 @@ class PeopleFragment : Fragment() {
             }
         }
     }
+    class GroupAdapter(private val context: Context, private var list: List<String>) :
+        RecyclerView.Adapter<GroupAdapter.ViewHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            return ViewHolder(
+                context,
+                LayoutInflater.from(context)
+                    .inflate(R.layout.group_list_item, parent, false)
+            )
+        }
+
+        override fun getItemCount(): Int {
+            return list.size
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.setView(list[position])
+        }
+
+        fun setData(newList: List<String>) {
+            list = newList
+        }
+
+        class ViewHolder(val context: Context, itemView: View) : RecyclerView.ViewHolder(itemView) {
+            fun setView(groupName:String) {
+                val groupNameView:TextView = itemView.findViewById(R.id.group_name)
+                val addAppointmentButton:ImageView = itemView.findViewById(R.id.add_appointment_button)
+                groupNameView.text = groupName
+                addAppointmentButton.isClickable = true
+                addAppointmentButton.setOnClickListener{
+                    val newActivity = Intent(context, AddAppointment::class.java)
+                    newActivity.putExtra("groupName",groupName)
+                    startActivity(context, newActivity, null)
+                }
+            }
+        }
+    }
+
 }

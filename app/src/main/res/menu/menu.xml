@@ -9,5 +9,9 @@
         android:id="@+id/logout"
         android:title="로그아웃"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/test"
+        android:title="약속 만들기 테스트"
+        app:showAsAction="never" />
 
 </menu>
