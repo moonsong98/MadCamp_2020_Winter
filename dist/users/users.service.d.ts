@@ -15,10 +15,11 @@ export declare class UsersService {
         friendList: User[];
         eventList: string[];
     }[]>;
-    updateUsersEvent(usersPhoneNumbers: Array<string>, eventName: string): Promise<void>;
-    updateUsersGroupId(usersPhoneNumbers: Array<string>, groupName: string): Promise<void>;
+    updateUsersEvent(usersNames: Array<string>, eventName: string): Promise<void>;
+    updateUsersGroupId(usersNames: Array<string>, groupName: string): Promise<void>;
     getGroupListbyId(Id: string): Promise<string[]>;
     getEventListbyId(Id: string): Promise<string[]>;
     private findUserbyPhone;
+    private findUserbyName;
     private findUserById;
 }

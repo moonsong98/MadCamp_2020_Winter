@@ -5,4 +5,5 @@ export declare class GroupsController {
     constructor(groupsService: GroupsService);
     createGroup(req: Request): Promise<import("./group.model").Group>;
     getGroups(): Promise<import("./group.model").Group[]>;
+    getGroupbyName(groupName: string): Promise<import("../users/user.model").User[]>;
 }

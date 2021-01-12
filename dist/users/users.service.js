@@ -50,11 +50,11 @@ let UsersService = class UsersService {
         const users = await this.userModel.find().exec();
         return users.map(user => ({ id: user.userId, name: user.name, phoneNum: user.phoneNum, groupList: user.groupList, friendList: user.friendList, eventList: user.eventList }));
     }
-    async updateUsersEvent(usersPhoneNumbers, eventName) {
+    async updateUsersEvent(usersNames, eventName) {
         var i = 0;
-        while (i < usersPhoneNumbers.length) {
-            console.log(usersPhoneNumbers);
-            let user = await this.findUserbyPhone(usersPhoneNumbers[i]);
+        while (i < usersNames.length) {
+            console.log(usersNames);
+            let user = await this.findUserbyName(usersNames[i]);
             if (user.eventList.length == 0) {
                 user.eventList = [eventName];
             }
@@ -65,17 +65,13 @@ let UsersService = class UsersService {
             i++;
         }
     }
-    async updateUsersGroupId(usersPhoneNumbers, groupName) {
+    async updateUsersGroupId(usersNames, groupName) {
         var i = 0;
-        while (i < usersPhoneNumbers.length) {
-            console.log(usersPhoneNumbers);
-            let user = await this.findUserbyPhone(usersPhoneNumbers[i]);
-            if (user.groupList.length == 0) {
-                user.groupList = [groupName];
-            }
-            else {
-                user.groupList.push(groupName);
-            }
+        while (i < usersNames.length) {
+            console.log(usersNames);
+            let user = await this.findUserbyName(usersNames[i]);
+            console.log(usersNames[i]);
+            user.groupList.push(groupName);
             user.save();
             i++;
         }
@@ -93,6 +89,15 @@ let UsersService = class UsersService {
     async findUserbyPhone(phoneNum) {
         try {
             const user = await this.userModel.findOne({ "phoneNum": phoneNum }).exec();
+            return user;
+        }
+        catch (error) {
+            throw new common_1.NotFoundException("no user");
+        }
+    }
+    async findUserbyName(name) {
+        try {
+            const user = await this.userModel.findOne({ "name": name }).exec();
             return user;
         }
         catch (error) {

@@ -6,7 +6,7 @@ import { EventsModule } from './events/events.module'
 
 
 @Module({
-  imports:[MongooseModule.forRoot('mongodb+srv://AtlasAdmin:admin@cluster0.xhpzp.mongodb.net/user?retryWrites=true&w=majority'), UsersModule, GroupsModule, EventsModule],
+  imports:[MongooseModule.forRoot('mongodb+srv://inhwa:inhwa@madcamp.yaarc.mongodb.net/madcamp?retryWrites=true&w=majority'), UsersModule, GroupsModule, EventsModule],
   controllers: [],
   providers: [],
 })

@@ -19,4 +19,8 @@ export class GroupsService{
         const groups = await this.groupModel.find().exec()
         return groups
     }
+    async getGroupbyName(name:string){
+        const group = await this.groupModel.findOne({"groupName":name})
+        return group
+    }
 }

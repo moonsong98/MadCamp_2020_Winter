@@ -34,6 +34,11 @@ export class UsersController{
         const userId =  await this.usersService.getUserInfobyId(Id);
         return userId
     }
+    @Get(':phoneNum')
+    async getUserName(@Param('phoneNum') phoneNum:string){
+        const username = await this.usersService.getUserInfobyPhone(phoneNum)
+        return username
+    }
 
     @Post('updategroup')
     async updateGroup(@Req()req:Request) {

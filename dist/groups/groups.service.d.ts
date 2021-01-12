@@ -5,4 +5,5 @@ export declare class GroupsService {
     constructor(groupModel: Model<Group>);
     createGroup(groupName: string, groupId: string, participants: Array<string>): Promise<Group>;
     getGroups(): Promise<Group[]>;
+    getGroupbyName(name: string): Promise<Group>;
 }

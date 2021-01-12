@@ -14,6 +14,7 @@ export declare class UsersController {
     }[]>;
     getFriends(req: Request): Promise<import("./user.model").User[]>;
     getUserInfo(Id: string): Promise<string>;
+    getUserName(phoneNum: string): Promise<import("./user.model").User>;
     updateGroup(req: Request): Promise<void>;
     updateEvent(req: Request): Promise<void>;
     getGroupList(Id: string): Promise<string[]>;

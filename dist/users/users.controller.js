@@ -40,6 +40,10 @@ let UsersController = class UsersController {
         const userId = await this.usersService.getUserInfobyId(Id);
         return userId;
     }
+    async getUserName(phoneNum) {
+        const username = await this.usersService.getUserInfobyPhone(phoneNum);
+        return username;
+    }
     async updateGroup(req) {
         const usersPhoneNumbers = req.body.usersPhoneNumbers;
         const groupName = req.body.groupName;
@@ -86,6 +90,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserInfo", null);
+__decorate([
+    common_1.Get(':phoneNum'),
+    __param(0, common_1.Param('phoneNum')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getUserName", null);
 __decorate([
     common_1.Post('updategroup'),
     __param(0, common_1.Req()),
