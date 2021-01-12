@@ -32,7 +32,7 @@ class APIClient {
 interface APIInterface {
     @FormUrlEncoded
     @POST("users/postman")
-    fun createUser(@Field("userId") userId:String, @Field("phoneNum") userPhoneNum:String): Call<ResponseBody>
+    fun createUser(@Field("userId") userId:String,@Field("name") name:String, @Field("phoneNum") userPhoneNum:String): Call<ResponseBody>
 
     @GET("users/{userPhoneNum}")
     fun getUserIdByPhoneNumber(@Path("userPhoneNum")userPhoneNum:String): Call<ResponseBody>

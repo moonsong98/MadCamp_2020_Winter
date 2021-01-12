@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -41,8 +42,12 @@ class PeopleFragment : Fragment() {
     private lateinit var createGroup : Button
     private var friendListData: ArrayList<Phone> = ArrayList() // List of contacts who are using our service
     private var searchText = ""
+    private lateinit var noti : Button
+    private lateinit var myProfile : ImageView
 
     companion object {
+//        val name = Profile.getCurrentProfile().name
+//        val profile = Profile.getCurrentProfile().getProfilePictureUri(100,100)
         private const val checkRequestCode = 1
         private val permissions = arrayOf(
             Manifest.permission.READ_CONTACTS,
@@ -56,9 +61,15 @@ class PeopleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_people, container, false)
+        noti = view.findViewById(R.id.noti)
+        noti.setOnClickListener {
+
+        }
         createGroup = view.findViewById(R.id.create)
         contactList = view.findViewById(R.id.contact_list)
         searchBar = view.findViewById(R.id.search_bar)
+        myProfile = view.findViewById(R.id.myProfile)
+       
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout)
         swipeRefreshLayout.setOnRefreshListener {
             if(friendListData.size > 0)
@@ -156,6 +167,10 @@ class PeopleFragment : Fragment() {
             it.phoneNumber
         } as ArrayList<String>
         val userId = Profile.getCurrentProfile().id
+        val name = Profile.getCurrentProfile().name
+        val profile = Profile.getCurrentProfile().getProfilePictureUri(100,100)
+        Log.i("aaaaaaaa",name)
+        Log.i("aaaaaaa",profile.toString())
         val apiInterface = APIClient.getClient().create(APIInterface::class.java)
         val serviceUserList = ArrayList<String>()
         apiInterface.getFriendUsers(userId,phoneNumbersOfContactListData).enqueue(object: Callback<ResponseBody> {
