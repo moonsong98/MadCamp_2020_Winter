@@ -1,6 +1,8 @@
 package com.madcamp.eattogether
 
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -51,4 +53,12 @@ interface APIInterface {
 
     @GET("users/getgrouplist/{Id}")
     fun getGroupListById(@Path("Id")userId:String):Call<ResponseBody>
+
+    @Multipart
+    @POST("post/upload")
+    fun uploadImage(@Part image: MultipartBody.Part) : Call<ResponseBody>
+
+    @GET("post/{filename}")
+    fun getImage(@Path("filename")fileName:String): Call<ResponseBody>
+
 }

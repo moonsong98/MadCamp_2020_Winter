@@ -12,7 +12,6 @@ import com.facebook.AccessToken
 import com.facebook.login.Login
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
-import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback

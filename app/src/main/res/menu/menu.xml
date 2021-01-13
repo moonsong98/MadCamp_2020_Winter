@@ -13,5 +13,9 @@
         android:id="@+id/test"
         android:title="약속 만들기 테스트"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/test_image"
+        android:title="이미지 테스트"
+        app:showAsAction="never" />
 
 </menu>

@@ -58,6 +58,10 @@ class MainActivity : AppCompatActivity() {
                 val testIntent = Intent(this@MainActivity, AddAppointment::class.java)
                 startActivity(testIntent)
             }
+            R.id.test_image -> {
+                val testIntent = Intent(this@MainActivity, ImageTestActivity::class.java)
+                startActivity(testIntent)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
