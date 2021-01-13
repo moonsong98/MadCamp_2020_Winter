@@ -31,6 +31,9 @@ let GroupsController = class GroupsController {
         const groups = await this.groupsService.getGroups();
         return groups;
     }
+    async getGroupbyName(groupName) {
+        return await (await this.groupsService.getGroupbyName(groupName)).participants;
+    }
 };
 __decorate([
     common_1.Post('postman'),
@@ -45,6 +48,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], GroupsController.prototype, "getGroups", null);
+__decorate([
+    common_1.Get('members/:groupName'),
+    __param(0, common_1.Param('groupName')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], GroupsController.prototype, "getGroupbyName", null);
 GroupsController = __decorate([
     common_1.Controller('groups'),
     __metadata("design:paramtypes", [groups_service_1.GroupsService])

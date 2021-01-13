@@ -28,6 +28,10 @@ let GroupsService = class GroupsService {
         const groups = await this.groupModel.find().exec();
         return groups;
     }
+    async getGroupbyName(name) {
+        const group = await this.groupModel.findOne({ "groupName": name });
+        return group;
+    }
 };
 GroupsService = __decorate([
     common_1.Injectable(),

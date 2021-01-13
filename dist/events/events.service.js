@@ -28,7 +28,10 @@ let EventsService = class EventsService {
         const events = await this.eventModel.find().exec();
         return events;
     }
-    async getEvents(userId) {
+    async getEventByName(name) {
+        const event = await this.eventModel.findOne({ "name": name });
+        console.dir(event);
+        return event;
     }
 };
 EventsService = __decorate([

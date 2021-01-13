@@ -32,6 +32,10 @@ let EventsController = class EventsController {
         const events = await this.eventsService.getAllEvents();
         return events;
     }
+    async getOneEvent(name) {
+        const event = await this.eventsService.getEventByName(name);
+        return event;
+    }
 };
 __decorate([
     common_1.Post('postman'),
@@ -46,6 +50,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "getAllEvents", null);
+__decorate([
+    common_1.Get('oneEvent/:name'),
+    __param(0, common_1.Param('name')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], EventsController.prototype, "getOneEvent", null);
 EventsController = __decorate([
     common_1.Controller('events'),
     __metadata("design:paramtypes", [events_service_1.EventsService])

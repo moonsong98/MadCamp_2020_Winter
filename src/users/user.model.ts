@@ -5,7 +5,7 @@ export const UserSchema = new mongoose.Schema({
     name:{type:String},
     phoneNum: {type: String, required: true},
     friendList:{type:Array},
-    groupList:{type:Array},
+    groupList:{type:Array, default:['group1']},
     eventList:{type:Array}
 })
 

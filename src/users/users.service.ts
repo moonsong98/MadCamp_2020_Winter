@@ -32,7 +32,6 @@ export class UsersService{
 
     async addUser(userId:string,  name:string, phoneNum: string){
         const newUser = await new this.userModel({userId ,name, phoneNum})
-        console.log(newUser)
         return await newUser.save();
     }
     
@@ -41,15 +40,14 @@ export class UsersService{
         return users.map(user =>({id:user.userId, name:user.name, phoneNum: user.phoneNum, groupList: user.groupList, friendList: user.friendList, eventList:user.eventList}))
     }
 
-    async updateUsersEvent(usersPhoneNumbers: Array<string>, eventName: string){
+    async updateUsersEvent(usersNames: Array<string>, eventName: string){
         var i = 0
-        while(i < usersPhoneNumbers.length){
-            console.log(usersPhoneNumbers)
-            let user = await this.findUserbyPhone(usersPhoneNumbers[i])
+        while(i < usersNames.length){
+            let user = await this.findUserbyName(usersNames[i])
             if(user.eventList.length == 0) {
                 user.eventList = [eventName]
             } else {
-                user.groupList.push(eventName)
+                user.eventList.push(eventName)
             }
             user.save()
             i++
@@ -57,36 +55,39 @@ export class UsersService{
     }
 
 
-    async updateUsersGroupId(usersPhoneNumbers: Array<string>, groupName: string){
+    async updateUsersGroupId(usersNames: Array<string>, groupName: string){
         var i = 0
-        while(i < usersPhoneNumbers.length){
-            console.log(usersPhoneNumbers)
-            let user = await this.findUserbyPhone(usersPhoneNumbers[i])
-            if(user.groupList.length == 0) {
-                user.groupList = [groupName]
-            } else {
-                user.groupList.push(groupName)
-            }
+        while(i < usersNames.length){
+            let user = await this.findUserbyName(usersNames[i])
+            user.groupList.push(groupName)
             user.save()
             i++
         }
     }
+    
 
     async getGroupListbyId(Id: string) {
         const user = await this.findUserById(Id)
-        console.log(user.groupList)
         return user.groupList
     }
 
+
     async getEventListbyId(Id: string) {
-        const user = await this.findUserById(Id)
-        console.log(user.eventList)
+        const user = await this.userModel.findOne({"userId":Id})
         return user.eventList
     }
 
     private async findUserbyPhone(phoneNum: string){   
         try{
             const user = await this.userModel.findOne({"phoneNum":phoneNum}).exec()
+            return user
+        } catch(error){
+            throw new NotFoundException("no user")
+        }
+    }
+    private async findUserbyName(name: string){   
+        try{
+            const user = await this.userModel.findOne({"name":name}).exec()
             return user
         } catch(error){
             throw new NotFoundException("no user")

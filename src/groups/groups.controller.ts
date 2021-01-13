@@ -20,4 +20,8 @@ export class GroupsController{
         const groups = await this.groupsService.getGroups()
         return groups
     }
+    @Get('members/:groupName')
+    async getGroupbyName(@Param('groupName') groupName:string){
+        return await (await this.groupsService.getGroupbyName(groupName)).participants
+    }
 }

@@ -19,8 +19,11 @@ export class EventsService{
         const events = await this.eventModel.find().exec()
         return events
     }
-    async getEvents(userId:string){
-        
+    async getEventByName(name:string){
+        // console.dir()
+        const event = await this.eventModel.findOne({"name":name})
+        console.dir(event)
+        return event
     }
 
 }
