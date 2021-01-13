@@ -32,6 +32,7 @@ class AddAppointment : AppCompatActivity() {
     lateinit var selectTime: TextView
     lateinit var participants: RecyclerView
     lateinit var createButton: Button
+    lateinit var description : EditText
     private var participationList: ArrayList<String> = ArrayList()
     fun getGroupList(){
         val groupName = intent.getStringExtra("groupName")
@@ -63,17 +64,17 @@ class AddAppointment : AppCompatActivity() {
         selectDate = findViewById(R.id.select_date)
         selectTime = findViewById(R.id.select_time)
         participants = findViewById(R.id.participants)
-        Log.i("aaaaaaaaaaa","beforegrouplist")
+        description = findViewById(R.id.appointment_body)
         getGroupList()
-        Log.i("aaaaaa","aftergrouplist")
 
-//        val groupName = intent.getStringExtra("groupName")
         val calendar = Calendar.getInstance()
         val mYear = calendar.get(Calendar.YEAR)
         val mMonth = calendar.get(Calendar.MONTH)
         val mDay = calendar.get(Calendar.DAY_OF_MONTH)
         val mHour = calendar.get(Calendar.HOUR_OF_DAY)
         val mMinute = calendar.get(Calendar.MINUTE)
+        var date = mYear.toString()+mMonth.toString()+mDay.toString()
+        var time = mHour.toString()+":"+mMinute.toString()
         selectDate.isClickable = true
         selectDate.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
@@ -100,11 +101,39 @@ class AddAppointment : AppCompatActivity() {
             )
             timePickerDialog.show()
         }
-//        participants.adapter = ParticipantsAdapter(this, participationList)
-//        participants.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
         createButton = findViewById(R.id.create_button)
         createButton.setOnClickListener {
-            this.finish()
+            val apiInterface = APIClient.getClient().create(APIInterface::class.java)
+            val call:Call<ResponseBody> = apiInterface.createEvent(appointmentName.text.toString(),date.toString()+" "+time.toString(), participationList,description.toString())
+            call.enqueue(object: Callback<ResponseBody>{
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    Toast.makeText(this@AddAppointment, "Succeeded to Create Event",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    apiInterface.updateUsersEvent(appointmentName.text.toString(), participationList).enqueue(object: Callback<ResponseBody> {
+                        override fun onResponse(
+                            call: Call<ResponseBody>,
+                            response: Response<ResponseBody>
+                        ) {
+                            Toast.makeText(this@AddAppointment, "Succeeded to Update Users' EventList",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val intent = Intent(this@AddAppointment, MainActivity::class.java)
+                            Log.i("aaaaaaa","startactivity")
+                            startActivity(intent)
+                        }
+                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                            Toast.makeText(this@AddAppointment, "Failed to Update Users' EventList",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
+                }
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(this@AddAppointment, "Fail to Create Event", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
 
         /* Test
