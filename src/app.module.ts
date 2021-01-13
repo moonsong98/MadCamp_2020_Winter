@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { UsersModule } from './users/users.module'
 import { GroupsModule } from './groups/groups.module'
 import { EventsModule } from './events/events.module'
+import { PostModule } from './post/post.module'
 
 
 @Module({
