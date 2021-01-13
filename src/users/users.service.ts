@@ -32,7 +32,6 @@ export class UsersService{
 
     async addUser(userId:string,  name:string, phoneNum: string){
         const newUser = await new this.userModel({userId ,name, phoneNum})
-        console.log(newUser)
         return await newUser.save();
     }
     
@@ -44,12 +43,11 @@ export class UsersService{
     async updateUsersEvent(usersNames: Array<string>, eventName: string){
         var i = 0
         while(i < usersNames.length){
-            console.log(usersNames)
             let user = await this.findUserbyName(usersNames[i])
             if(user.eventList.length == 0) {
                 user.eventList = [eventName]
             } else {
-                user.groupList.push(eventName)
+                user.eventList.push(eventName)
             }
             user.save()
             i++
@@ -60,9 +58,7 @@ export class UsersService{
     async updateUsersGroupId(usersNames: Array<string>, groupName: string){
         var i = 0
         while(i < usersNames.length){
-            console.log(usersNames)
             let user = await this.findUserbyName(usersNames[i])
-            console.log(usersNames[i])
             user.groupList.push(groupName)
             user.save()
             i++
@@ -72,14 +68,12 @@ export class UsersService{
 
     async getGroupListbyId(Id: string) {
         const user = await this.findUserById(Id)
-        console.log(user.groupList)
         return user.groupList
     }
 
 
     async getEventListbyId(Id: string) {
-        const user = await this.findUserById(Id)
-        console.log(user.eventList)
+        const user = await this.userModel.findOne({"userId":Id})
         return user.eventList
     }
 

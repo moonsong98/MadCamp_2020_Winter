@@ -21,4 +21,9 @@ export class EventsController{
         const events = await this.eventsService.getAllEvents()
         return events
     }
+    @Get('oneEvent/:name')
+    async getOneEvent(@Param('name')name:string){
+        const event = await this.eventsService.getEventByName(name)
+        return event
+    }
 }

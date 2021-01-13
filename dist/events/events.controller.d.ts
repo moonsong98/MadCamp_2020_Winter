@@ -5,4 +5,5 @@ export declare class EventsController {
     constructor(eventsService: EventsService);
     createEvent(req: Request): Promise<import("./event.model").Event>;
     getAllEvents(): Promise<import("./event.model").Event[]>;
+    getOneEvent(name: string): Promise<import("./event.model").Event>;
 }

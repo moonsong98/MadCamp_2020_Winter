@@ -45,14 +45,14 @@ let UsersController = class UsersController {
         return username;
     }
     async updateGroup(req) {
-        const usersPhoneNumbers = req.body.usersPhoneNumbers;
+        const usersNames = req.body.usersNames;
         const groupName = req.body.groupName;
-        await this.usersService.updateUsersGroupId(usersPhoneNumbers, groupName);
+        await this.usersService.updateUsersGroupId(usersNames, groupName);
     }
     async updateEvent(req) {
-        const usersPhoneNumbers = req.body.usersPhoneNumbers;
+        const usersNames = req.body.usersNames;
         const eventName = req.body.eventName;
-        await this.usersService.updateUsersEvent(usersPhoneNumbers, eventName);
+        await this.usersService.updateUsersEvent(usersNames, eventName);
     }
     async getGroupList(Id) {
         const groupList = await this.usersService.getGroupListbyId(Id);

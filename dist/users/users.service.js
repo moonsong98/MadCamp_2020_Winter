@@ -43,7 +43,6 @@ let UsersService = class UsersService {
     }
     async addUser(userId, name, phoneNum) {
         const newUser = await new this.userModel({ userId, name, phoneNum });
-        console.log(newUser);
         return await newUser.save();
     }
     async getUsers() {
@@ -53,13 +52,12 @@ let UsersService = class UsersService {
     async updateUsersEvent(usersNames, eventName) {
         var i = 0;
         while (i < usersNames.length) {
-            console.log(usersNames);
             let user = await this.findUserbyName(usersNames[i]);
             if (user.eventList.length == 0) {
                 user.eventList = [eventName];
             }
             else {
-                user.groupList.push(eventName);
+                user.eventList.push(eventName);
             }
             user.save();
             i++;
@@ -68,9 +66,7 @@ let UsersService = class UsersService {
     async updateUsersGroupId(usersNames, groupName) {
         var i = 0;
         while (i < usersNames.length) {
-            console.log(usersNames);
             let user = await this.findUserbyName(usersNames[i]);
-            console.log(usersNames[i]);
             user.groupList.push(groupName);
             user.save();
             i++;
@@ -78,12 +74,10 @@ let UsersService = class UsersService {
     }
     async getGroupListbyId(Id) {
         const user = await this.findUserById(Id);
-        console.log(user.groupList);
         return user.groupList;
     }
     async getEventListbyId(Id) {
-        const user = await this.findUserById(Id);
-        console.log(user.eventList);
+        const user = await this.userModel.findOne({ "userId": Id });
         return user.eventList;
     }
     async findUserbyPhone(phoneNum) {

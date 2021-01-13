@@ -22,6 +22,7 @@ export class UsersController{
         const users = await this.usersService.getUsers();
         return users
     }
+
     @Post('friends')
     async getFriends(@Req()req:Request){
         const userId = req.body.userId
@@ -29,11 +30,13 @@ export class UsersController{
         const me = await this.usersService.getFriends(userId, phoneList)
         return me.friendList
     }
+
     @Get(':Id')
     async getUserInfo(@Param('Id') Id: string){
         const userId =  await this.usersService.getUserInfobyId(Id);
         return userId
     }
+
     @Get(':phoneNum')
     async getUserName(@Param('phoneNum') phoneNum:string){
         const username = await this.usersService.getUserInfobyPhone(phoneNum)
@@ -42,16 +45,16 @@ export class UsersController{
 
     @Post('updategroup')
     async updateGroup(@Req()req:Request) {
-        const usersPhoneNumbers:Array<string> = req.body.usersPhoneNumbers
+        const usersNames:Array<string> = req.body.usersNames
         const groupName = req.body.groupName
-        await this.usersService.updateUsersGroupId(usersPhoneNumbers, groupName)
+        await this.usersService.updateUsersGroupId(usersNames, groupName)
     }
 
     @Post('updateEvent')
     async updateEvent(@Req()req:Request) {
-        const usersPhoneNumbers:Array<string> = req.body.usersPhoneNumbers
+        const usersNames:Array<string> = req.body.usersNames
         const eventName = req.body.eventName
-        await this.usersService.updateUsersEvent(usersPhoneNumbers, eventName)
+        await this.usersService.updateUsersEvent(usersNames, eventName)
     }
 
     @Get('getgrouplist/:Id')
