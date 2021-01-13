@@ -23,7 +23,7 @@ class APIClient {
              */
 
             retrofit = Retrofit.Builder()
-                .baseUrl("http://192.249.18.238:8080/")
+                .baseUrl("http://192.249.18.245:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             return retrofit
@@ -49,10 +49,11 @@ interface APIInterface {
 
     @FormUrlEncoded
     @POST("users/updategroup")
-    fun updateUsersGroup(@Field("groupName")groupId:String, @Field("usersPhoneNumbers")participants:ArrayList<String>):Call<ResponseBody>
+    fun updateUsersGroup(@Field("groupName")groupId:String, @Field("usersNames")participants:ArrayList<String>):Call<ResponseBody>
 
     @GET("users/getgrouplist/{Id}")
     fun getGroupListById(@Path("Id")userId:String):Call<ResponseBody>
+
 
     @Multipart
     @POST("post/upload")
@@ -60,5 +61,26 @@ interface APIInterface {
 
     @GET("post/{filename}")
     fun getImage(@Path("filename")fileName:String): Call<ResponseBody>
+
+
+    @GET("groups/members/{groupName}")
+    fun getMembersByName(@Path("groupName") groupName:String):Call<ResponseBody>
+
+    @GET("users/{phoneNum}")
+    fun getNameByPH(@Path("phoneNum")phoneNum:String):Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("events/postman")
+    fun createEvent(@Field("name")name:String, @Field("date")date:String, @Field("members")members:ArrayList<String>, @Field("description")description:String):Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("users/updateEvent")
+    fun updateUsersEvent(@Field("eventName")groupId:String, @Field("usersNames")participants:ArrayList<String>):Call<ResponseBody>
+
+    @GET("users/geteventlist/{id}")
+    fun getEventList(@Path("id")id:String):Call<ResponseBody>
+
+    @GET("events/oneEvent/{name}")
+    fun getOneEvent(@Path("name")name:String):Call<ResponseBody>
 
 }

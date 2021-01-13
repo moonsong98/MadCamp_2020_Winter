@@ -53,10 +53,27 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id = "@+id/description_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below = "@+id/time_group">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="내용" />
+                <TextView
+                    android:id = "@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "https://baemin.me/jQI0iMOL1"
+                     />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/attendent_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/time_group"
+                android:layout_below="@+id/description_group"
                 android:orientation="vertical">
 
                 <TextView
@@ -70,23 +87,6 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/waitResponseGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/attendent_group"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="응답 대기 명단" />
-
-                <ListView
-                    android:id="@+id/wait_response_list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
 
         </RelativeLayout>
 

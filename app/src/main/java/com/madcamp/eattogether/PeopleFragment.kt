@@ -6,6 +6,8 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.number.NumberFormatter.with
+import android.icu.number.NumberRangeFormatter.with
 import android.media.Image
 import android.net.Uri
 import android.os.Bundle
@@ -30,6 +32,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.facebook.Profile
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
@@ -68,15 +71,13 @@ class PeopleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_people, container, false)
-        noti = view.findViewById(R.id.noti)
-        noti.setOnClickListener {
-
-        }
         createGroup = view.findViewById(R.id.create)
         contactList = view.findViewById(R.id.contact_list)
         groupList = view.findViewById(R.id.group_list)
         searchBar = view.findViewById(R.id.search_bar)
         myProfile = view.findViewById(R.id.myProfile)
+        var profileUrl = Profile.getCurrentProfile().getProfilePictureUri(100,100)
+        Picasso.get().load(profileUrl).into(myProfile)
        
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout)
         swipeRefreshLayout.setOnRefreshListener {
@@ -173,7 +174,12 @@ class PeopleFragment : Fragment() {
             while (cursor.moveToNext()) {
                 val id = cursor.getString(0)
                 val name = cursor.getString(1)
-                val number = cursor.getString(2)
+                var number = cursor.getString(2)
+                if(number[3]=='-'){
+                    Log.i("aaaaaaa",number)
+                    number = number.substring(0,3)+number.substring(4,8)+number.substring(9)
+                    Log.i("aaaaa",number)
+                }
                 val phone = Phone(id, name, number)
                 contactListData.add(phone)
             }
