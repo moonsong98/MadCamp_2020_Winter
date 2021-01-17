@@ -32,7 +32,11 @@ export class UsersService {
 
 	async login(loginInput: LoginInput): Promise<boolean> {
 		return (
-			(await this.userModel.find({ username: loginInput.username, password: loginInput.password }).exec()).length == 1
+			(
+				await this.userModel
+					.find({ username: loginInput.username, password: loginInput.password, confirmed: true })
+					.exec()
+			).length == 1
 		);
 	}
 
