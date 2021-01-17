@@ -38,7 +38,14 @@ export class UsersService {
 
 	/* Update */
 	async confirmUser(redisId: string) {
-		getUserIdFromRedis(redisId);
+		const userId = await getUserIdFromRedis(redisId);
+		if (userId == null) {
+			return false;
+		} else {
+			console.log(`userId: ${userId}`);
+			await this.userModel.updateOne({ _id: userId }, { $set: { confirmed: true } });
+			return true;
+		}
 	}
 	/* Delete */
 	async deleteUser(_id: string): Promise<boolean> {

@@ -25,7 +25,7 @@ export class UsersResolver {
 
 	/* Update */
 	@Mutation(() => Boolean)
-	async confrimUser(@Args('redisId') redisId: string) {
+	async confirmUser(@Args('redisId') redisId: string) {
 		return await this.usersService.confirmUser(redisId);
 	}
 	/* Delete */

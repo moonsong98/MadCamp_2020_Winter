@@ -30,7 +30,7 @@ input LoginInput {
 
 type Mutation {
   createUser(input: CreateUserInput!): UserType!
-  confrimUser(redisId: String!): Boolean!
+  confirmUser(redisId: String!): Boolean!
   deleteUser(id: String!): Boolean!
   deleteAllUsers: Boolean!
   createPost(input: CreatePostInput!): PostType!
