@@ -35,6 +35,7 @@ type Mutation {
   deleteAllUsers: Boolean!
   createPost(input: CreatePostInput!): PostType!
   deleteAllPosts: Boolean!
+  uploadFile(file: Upload!): Boolean!
 }
 
 input CreateUserInput {
@@ -48,3 +49,6 @@ input CreatePostInput {
   title: String!
   body: String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload

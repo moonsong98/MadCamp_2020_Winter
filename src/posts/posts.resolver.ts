@@ -5,6 +5,10 @@ import { PostsService } from './posts.service';
 import { CreatePostInput } from './inputs/post.input';
 import { UseGuards } from '@nestjs/common';
 
+/* Test */
+import { GraphQLUpload } from 'apollo-server-express';
+import { createWriteStream } from 'fs';
+
 @Resolver(() => PostType)
 export class PostsResolver {
 	constructor(private readonly postsService: PostsService) {}
@@ -29,5 +33,19 @@ export class PostsResolver {
 	@Mutation(() => Boolean)
 	async deleteAllPosts() {
 		return await this.postsService.deleteAllPosts();
+	}
+
+	@Mutation(() => Boolean)
+	async uploadFile(
+		@Args({ name: 'file', type: () => GraphQLUpload })
+		{ createReadStream, filename }
+	): Promise<boolean> {
+		console.log(filename);
+		const a = new Promise(async (resolve, reject) =>
+			createReadStream().pipe(createWriteStream(`/home/ubuntu/images/${filename}`))
+		)
+			.then((data) => console.log(data))
+			.catch((err) => console.error(`error is ${err}`));
+		return true;
 	}
 }

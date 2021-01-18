@@ -39,6 +39,7 @@
     "dotenv": "^8.2.0",
     "graphql": "^15.4.0",
     "graphql-tools": "^7.0.2",
+    "graphql-upload": "^11.0.0",
     "ioredis": "^4.19.4",
     "mongoose": "^5.11.12",
     "nodemailer": "^6.4.17",
