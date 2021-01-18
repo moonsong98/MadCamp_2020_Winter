@@ -9,10 +9,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 	constructor(private usersService: UsersService) {
 		super({
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+			ignoreExpiration: false,
 			secretOrKey: 'MAD-CAMP-123-3',
 		});
 	}
-	async validate(payload: { userId: string; ita: string }) {
+	async validate(payload: { userId: string; iat: string }) {
 		const user = await this.usersService.validateUser(payload.userId);
 
 		if (!user) {
