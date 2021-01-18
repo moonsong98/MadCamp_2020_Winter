@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserInput, LoginInput } from './inputs/user.input';
 import { sendEmail } from 'src/utils/sendEmail';
@@ -13,9 +14,14 @@ export class UsersService {
 
 	/* Create */
 	async createUser(createUserInput: CreateUserInput): Promise<User> {
+		let cryptedPassword: string;
+		await bcrypt.hash(createUserInput.password, 10).then(function (hash) {
+			cryptedPassword = hash;
+		});
+
 		const createdUser = new this.userModel({
 			username: createUserInput.username,
-			password: createUserInput.password,
+			password: cryptedPassword,
 			name: createUserInput.name,
 			email: createUserInput.email,
 			confirmed: false,
@@ -31,13 +37,16 @@ export class UsersService {
 	}
 
 	async login(loginInput: LoginInput): Promise<boolean> {
-		return (
-			(
-				await this.userModel
-					.find({ username: loginInput.username, password: loginInput.password, confirmed: true })
-					.exec()
-			).length == 1
-		);
+		const user = await this.userModel.find({ username: loginInput.username, confirmed: true }).exec();
+		if (user.length != 1) {
+			return false;
+		}
+		let ret: boolean;
+		await bcrypt.compare(loginInput.password, user[0].password).then((result) => {
+			ret = result;
+			console.log(ret);
+		});
+		return ret;
 	}
 
 	/* Update */

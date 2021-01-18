@@ -20,7 +20,14 @@ export class UsersResolver {
 
 	@Query(() => Boolean)
 	async login(@Args('input') input: LoginInput) {
-		return await this.usersService.login(input);
+		// new Promise((res, rej) => {
+		// 	res(this.usersService.login(input));
+		// }).then((data) => {
+		// 	console.log(data);
+		// });
+		const a = await this.usersService.login(input);
+		console.log(a);
+		return a;
 	}
 
 	/* Update */

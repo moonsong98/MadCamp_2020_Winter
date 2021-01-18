@@ -2,6 +2,7 @@ import { redis } from '../redis';
 
 export const getUserIdFromRedis = async (redisId: string): Promise<string> => {
 	let userId = '';
+	console.log(redisId);
 	await redis.get(
 		redisId,
 		await function (err, result) {
