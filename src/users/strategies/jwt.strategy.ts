@@ -12,8 +12,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 			secretOrKey: 'MAD-CAMP-123-3',
 		});
 	}
-	async validate(payload: { jwtDTo: JwtDto }) {
-		const user = await this.usersService.validateUser(payload.jwtDTo.userId);
+	async validate(payload: { userId: string; ita: string }) {
+		const user = await this.usersService.validateUser(payload.userId);
 
 		if (!user) {
 			throw new UnauthorizedException();

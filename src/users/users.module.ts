@@ -1,3 +1,4 @@
+import { GqlAuthGuard } from './guards/gql-auth.guard';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersResolver } from './users.resolver';
@@ -13,6 +14,6 @@ import { JwtModule } from '@nestjs/jwt';
 			secret: 'MAD-CAMP-123-3',
 		}),
 	],
-	providers: [UsersResolver, UsersService, JwtStrategy],
+	providers: [UsersResolver, UsersService, JwtStrategy, GqlAuthGuard],
 })
 export class UsersModule {}
