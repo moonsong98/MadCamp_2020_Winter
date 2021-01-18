@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, gql } from '@apollo/client';
+import { useCookies } from 'react-cookie';
 import AuthForm from './Auth.components';
 
 const LOGIN = gql`
@@ -14,26 +15,28 @@ function LoginPage(): React.ReactElement {
 		password: '',
 	});
 
+	const [cookies, setCookie] = useCookies(['token']);
+
 	const [loginError, setLoginError] = useState('');
 
 	const [loggedIn, setLoggedIn] = useState(false);
 
 	const [checkLogin, { loading, data }] = useLazyQuery(LOGIN);
 
-	console.log(data);
-	console.log(loggedIn);
-
 	useEffect(() => {
+		console.log(data);
 		if (!data) {
 			setLoginError('');
-		} else if (data && data.login === true) {
-			setLoggedIn(true);
-			setLoginError('');
-		} else {
+		} else if (data && data.login === '') {
 			setLoggedIn(false);
 			setLoginError('Login Information Is Wrong');
+		} else {
+			setLoggedIn(true);
+			setLoginError('');
+			setCookie('token', data.login);
+			console.log(cookies);
 		}
-	}, [data]);
+	}, [cookies, data, setCookie]);
 
 	const login = async (event: React.FormEvent) => {
 		event.preventDefault();

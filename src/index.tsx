@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './design/index.css';
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client';
+import { CookiesProvider } from 'react-cookie';
 import Root from './Root';
 
 const client = new ApolloClient({
@@ -13,9 +14,11 @@ const client = new ApolloClient({
 
 ReactDOM.render(
 	<React.StrictMode>
-		<ApolloProvider client={client}>
-			<Root />
-		</ApolloProvider>
+		<CookiesProvider>
+			<ApolloProvider client={client}>
+				<Root />
+			</ApolloProvider>
+		</CookiesProvider>
 	</React.StrictMode>,
 	document.getElementById('root')
 );
