@@ -1,5 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserType } from './dto/user.dto';
+import { UserToken } from './dto/token.dto';
 import { UsersService } from './users.service';
 import { CreateUserInput, LoginInput } from './inputs/user.input';
 
@@ -18,16 +19,9 @@ export class UsersResolver {
 		return await this.usersService.readAllUsers();
 	}
 
-	@Query(() => Boolean)
+	@Query(() => String)
 	async login(@Args('input') input: LoginInput) {
-		// new Promise((res, rej) => {
-		// 	res(this.usersService.login(input));
-		// }).then((data) => {
-		// 	console.log(data);
-		// });
-		const a = await this.usersService.login(input);
-		console.log(a);
-		return a;
+		return await this.usersService.login(input);
 	}
 
 	/* Update */

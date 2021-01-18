@@ -7,10 +7,12 @@ import { CreateUserInput, LoginInput } from './inputs/user.input';
 import { sendEmail } from 'src/utils/sendEmail';
 import { confirmEmailLink } from 'src/utils/confirmEmailLink';
 import { getUserIdFromRedis } from '../utils/getUserIdFromRedis';
+import { JwtService } from '@nestjs/jwt';
+import { JwtDto } from './dto/jwt.dto';
 
 @Injectable()
 export class UsersService {
-	constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+	constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, private readonly jwt: JwtService) {}
 
 	/* Create */
 	async createUser(createUserInput: CreateUserInput): Promise<User> {
@@ -36,15 +38,17 @@ export class UsersService {
 		return this.userModel.find().exec();
 	}
 
-	async login(loginInput: LoginInput): Promise<boolean> {
+	async login(loginInput: LoginInput): Promise<string> {
 		const user = await this.userModel.find({ username: loginInput.username, confirmed: true }).exec();
+		let ret = '';
 		if (user.length != 1) {
-			return false;
+			return ret;
 		}
-		let ret: boolean;
 		await bcrypt.compare(loginInput.password, user[0].password).then((result) => {
-			ret = result;
-			console.log(ret);
+			const payload: JwtDto = { userId: user[0].id };
+			if (result) {
+				ret = this.jwt.sign(payload);
+			}
 		});
 		return ret;
 	}
@@ -67,5 +71,10 @@ export class UsersService {
 
 	async deleteAllUser(): Promise<boolean> {
 		return null != (await this.userModel.deleteMany({}));
+	}
+
+	/* JWT */
+	async validateUser(userId: string) {
+		return this.userModel.findById(userId);
 	}
 }
