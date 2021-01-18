@@ -20,6 +20,9 @@ function LoginPage(): React.ReactElement {
 
 	const [checkLogin, { loading, data }] = useLazyQuery(LOGIN);
 
+	console.log(data);
+	console.log(loggedIn);
+
 	useEffect(() => {
 		if (!data) {
 			setLoginError('');
