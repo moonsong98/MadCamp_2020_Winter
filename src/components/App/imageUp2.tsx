@@ -12,8 +12,16 @@ function DropzoneAreaExample() {
 			files,
 		});
 	}
-
-	return <DropzoneArea onChange={handleChange} />;
+	console.log(state);
+	return (
+		<DropzoneArea
+			onChange={handleChange}
+			showPreviews
+			maxFileSize={5000000000}
+			filesLimit={10}
+			showPreviewsInDropzone={false}
+		/>
+	);
 }
 
 export default DropzoneAreaExample;
