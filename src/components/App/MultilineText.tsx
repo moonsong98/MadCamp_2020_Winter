@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 interface multLineTxtProps {
 	labelTxt: string;
 	rowNum: number;
+	callBackFunc: (titleOrContent: string) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,18 +20,19 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function MultilineTextFields(props: multLineTxtProps) {
-	const { labelTxt, rowNum } = props;
+	const { labelTxt, rowNum, callBackFunc } = props;
 	const classes = useStyles();
 	const [value, setValue] = React.useState('Controlled');
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setValue(event.target.value);
+		callBackFunc(event.target.value);
 	};
 
 	return (
 		<form className={classes.root} noValidate autoComplete="off">
 			<div>
-				<TextField id="standard-multiline-static" label={labelTxt} multiline rows={rowNum} />
+				<TextField id="standard-multiline-static" label={labelTxt} multiline rows={rowNum} onChange={handleChange} />
 			</div>
 		</form>
 	);
