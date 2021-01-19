@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { fade, makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -16,6 +16,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { Link, useHistory } from 'react-router-dom';
+import useAuthToken from '../../config/auth';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -84,6 +85,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function PrimarySearchAppBar() {
+	const [loggedIn, setLoggedIn] = useState(false);
+	const [authToken, _, removeAuthToken] = useAuthToken();
+	useEffect(() => {
+		if (authToken !== undefined) {
+			setLoggedIn(true);
+		} else {
+			setLoggedIn(false);
+		}
+	}, [authToken]);
 	const history = useHistory();
 	const classes = useStyles();
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -105,6 +115,11 @@ export default function PrimarySearchAppBar() {
 		handleMobileMenuClose();
 	};
 
+	const handleLogout = () => {
+		handleMenuClose();
+		removeAuthToken();
+	};
+
 	const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setMobileMoreAnchorEl(event.currentTarget);
 	};
@@ -124,7 +139,13 @@ export default function PrimarySearchAppBar() {
 				<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
 			</Link>
 			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
-			<MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+			{loggedIn ? (
+				<MenuItem onClick={handleLogout}>Logout</MenuItem>
+			) : (
+				<Link to="/login">
+					<MenuItem onClick={handleMenuClose}>Login</MenuItem>
+				</Link>
+			)}
 		</Menu>
 	);
 
