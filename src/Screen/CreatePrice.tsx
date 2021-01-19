@@ -7,12 +7,16 @@ import UploadButton from '../components/App/UploadButton';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
+		root: {
+			width: '50%',
+			float: 'left',
+		},
 		root1: {
 			display: 'flex',
 			flexWrap: 'wrap',
 			'& > *': {
 				margin: theme.spacing(1),
-				width: theme.spacing(100),
+				width: '100%',
 				height: theme.spacing(10),
 			},
 		},
@@ -21,9 +25,14 @@ const useStyles = makeStyles((theme: Theme) =>
 			flexWrap: 'wrap',
 			'& > *': {
 				margin: theme.spacing(1),
-				width: theme.spacing(100),
+				width: '100%',
 				height: theme.spacing(50),
 			},
+		},
+		root3: {
+			width: '50%',
+			float: 'right',
+			marginTop: '6%',
 		},
 	})
 );
@@ -54,18 +63,24 @@ export default function SimplePaper() {
 
 	return (
 		<div>
-			<div className={classes.root1}>
-				<Paper elevation={3}>
-					<MultilineTextFields labelTxt="상품명" rowNum={1} callBackFunc={setTitleCallback} />
-				</Paper>
+			<div className={classes.root}>
+				<div className={classes.root1}>
+					<Paper elevation={3}>
+						<MultilineTextFields labelTxt="상품명" rowNum={1} callBackFunc={setTitleCallback} />
+					</Paper>
+				</div>
+				<div className={classes.root2}>
+					<Paper elevation={3}>
+						<MultilineTextFields labelTxt="상품설명" rowNum={17} callBackFunc={setContentCallback} />
+					</Paper>
+				</div>
 			</div>
-			<div className={classes.root2}>
-				<Paper elevation={3}>
-					<MultilineTextFields labelTxt="상품설명" rowNum={17} callBackFunc={setContentCallback} />
-				</Paper>
+			<div className={classes.root3}>
+				<DropzoneAreaExample callbackFunc={setFileCallback} />
 			</div>
-			<DropzoneAreaExample callbackFunc={setFileCallback} />
-			<UploadButton />
+			<div>
+				<UploadButton />
+			</div>
 		</div>
 	);
 }
