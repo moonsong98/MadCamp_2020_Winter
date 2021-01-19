@@ -38,7 +38,6 @@ function RegisterPage() {
 			setPasswordError('password and repeat password should match');
 		}
 	};
-
 	return (
 		<AuthForm onSubmit={register}>
 			<label htmlFor="username">
