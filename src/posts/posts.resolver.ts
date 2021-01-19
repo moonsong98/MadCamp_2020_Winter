@@ -40,7 +40,8 @@ export class PostsResolver {
 		@Args({ name: 'file', type: () => GraphQLUpload })
 		{ createReadStream, filename }
 	): Promise<boolean> {
-		console.log(filename);
+		console.log(`filename: ${filename}`);
+		console.log(`createReadStream: ${createReadStream}`);
 		const a = new Promise(async (resolve, reject) =>
 			createReadStream().pipe(createWriteStream(`/home/ubuntu/images/${filename}`))
 		)
