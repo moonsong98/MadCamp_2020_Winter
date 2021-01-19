@@ -2,21 +2,24 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 // import YouTube from 'react-youtube';
 import '../../design/Row.css';
+import MediaCard from './Card';
 
 interface RowProps {
 	title: string;
-	isLargeRow?: boolean;
-	rowMovies: Movie[];
+	rowMovies: Event[];
+	directTo: string;
 	// seeDetail:boolean
 }
 
 type Movie = { originalName: string; name: string; posterPath: string };
 
+type Event = { title: string; content: string; image: string };
+
 const imgDir = './images';
 
 function Row(props: RowProps) {
-	const { title, isLargeRow, rowMovies } = props;
-	const [movies, setMovies] = useState<Movie[]>(rowMovies);
+	const { title, rowMovies, directTo } = props;
+	const [movies, setMovies] = useState<Event[]>(rowMovies);
 
 	// useEffect(() => {
 	//     // if [], run once when the row loads, and dont run again
@@ -43,15 +46,6 @@ function Row(props: RowProps) {
     }, [])
     */
 
-	const opts = {
-		height: '390',
-		width: '640',
-		playerVars: {
-			// https://developers.google.com/youtube/player_parameters
-			autoplay: 1,
-		},
-	};
-
 	// 최적화를 위해 나중에 img에 key 속성 줘야 됨
 	return (
 		<div className="row">
@@ -62,14 +56,9 @@ function Row(props: RowProps) {
 				{movies.map((movie) => (
 					<div>
 						<div>
-							<Link to="/details">
-								<img
-									className={`row__poster ${props.isLargeRow && 'row__posterLarge'}`}
-									src={movie.posterPath}
-									alt={movie.name}
-								/>
+							<Link to={`${directTo}?imgPath=${movie.image}`}>
+								<MediaCard title={movie.title} content={movie.content} imgPath={movie.image} />
 							</Link>
-							<h3> {movie.name} </h3>
 						</div>
 					</div>
 				))}
@@ -78,9 +67,5 @@ function Row(props: RowProps) {
 		</div>
 	);
 }
-
-Row.defaultProps = {
-	isLargeRow: false,
-};
 
 export default Row;
