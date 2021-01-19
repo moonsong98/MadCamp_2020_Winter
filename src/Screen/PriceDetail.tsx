@@ -16,11 +16,26 @@ const imgs = [
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		paperCase: {
+			display: 'flex',
 			margin: '0 auto',
 			width: '70%',
+			height: theme.spacing(80),
 		},
 		slider: {
+			marginTop: '1%',
 			marginLeft: '3%',
+			float: 'left',
+		},
+		priceContent: {
+			width: '40%',
+			height: '95%',
+			float: 'left',
+			marginTop: '1%',
+			marginLeft: '50%',
+		},
+		comments: {
+			margin: '0 auto',
+			width: '70%',
 		},
 	})
 );
@@ -29,13 +44,15 @@ function PriceDetail() {
 	const classes = useStyles();
 	return (
 		<div>
-			<div className={classes.paperCase}>
-				<Paper>
-					<div className={classes.slider}>
-						<SimpleImageSlider width="30%" height={600} images={imgs} showBullets showNavs />
-					</div>
-					<Comments />
-				</Paper>
+			<Paper className={classes.paperCase} elevation={3} color="black">
+				<div> asdf </div>
+				<div className={classes.slider}>
+					<SimpleImageSlider width="30%" height={600} images={imgs} showBullets showNavs />
+				</div>
+				<Paper className={classes.priceContent}>asdasdfsdfsfsadfsad</Paper>
+			</Paper>
+			<div className={classes.comments}>
+				<Comments />
 			</div>
 		</div>
 	);

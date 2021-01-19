@@ -1,4 +1,16 @@
 import React, { useState } from 'react';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import { red } from '@material-ui/core/colors';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
+import SendIcon from '@material-ui/icons/Send';
 import { Link } from 'react-router-dom';
 
 // interface commentsProps {
@@ -14,7 +26,44 @@ const dummyComments: Comment[] = [
 	{ authName: 'd', content: 'd' },
 ];
 
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		root: {
+			marginTop: '1%',
+			maxWidth: 345,
+		},
+		media: {
+			height: 0,
+			paddingTop: '56.25%', // 16:9
+		},
+		expand: {
+			transform: 'rotate(0deg)',
+			marginLeft: 'auto',
+			transition: theme.transitions.create('transform', {
+				duration: theme.transitions.duration.shortest,
+			}),
+		},
+		expandOpen: {
+			transform: 'rotate(180deg)',
+		},
+		avatar: {
+			backgroundColor: red[500],
+		},
+		titleInput: {
+			width: '500px',
+			height: '40px',
+			margin: '10px',
+		},
+		inputLine: {
+			margintTop: '1%',
+			marginBottom: '1%',
+		},
+		button: {},
+	})
+);
+
 function Comments() {
+	const classes = useStyles();
 	const [comments, setComments] = useState(dummyComments);
 	const [commentCont, setCommentCont] = useState({
 		content: '',
@@ -32,12 +81,35 @@ function Comments() {
 		<div>
 			{comments.map((com) => (
 				<div>
-					{com.authName}
-					{com.content}
+					<Card className={classes.root}>
+						<CardHeader
+							avatar={
+								<Avatar aria-label="recipe" className={classes.avatar}>
+									{com.authName[0]}
+								</Avatar>
+							}
+							title={com.authName}
+							subheader="September 14, 2016"
+						/>
+						<CardContent>
+							<Typography variant="body2" color="textSecondary" component="p">
+								{com.content}
+							</Typography>
+						</CardContent>
+					</Card>
 				</div>
 			))}
-			<div className="form-wrapper">
-				<input className="title-input" type="text" placeholder="리뷰 입력" onChange={getValue} name="content" />
+			<div className={classes.inputLine}>
+				<Input
+					id="input-with-icon-adornment"
+					startAdornment={
+						<InputAdornment position="start">
+							<AccountCircle />
+						</InputAdornment>
+					}
+					fullWidth
+				/>
+				<Button variant="contained" color="primary" className={classes.button} endIcon={<SendIcon />} />
 			</div>
 		</div>
 	);
