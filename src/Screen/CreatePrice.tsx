@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Button from '@material-ui/core/Button';
+import * as axios from 'axios';
 import MultilineTextFields from '../components/App/MultilineText';
 import DropzoneAreaExample from '../components/App/imageUp2';
-import UploadButton from '../components/App/UploadButton';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -33,6 +35,9 @@ const useStyles = makeStyles((theme: Theme) =>
 			width: '50%',
 			float: 'right',
 			marginTop: '6%',
+		},
+		button: {
+			margin: theme.spacing(1),
 		},
 	})
 );
@@ -78,9 +83,10 @@ export default function SimplePaper() {
 			<div className={classes.root3}>
 				<DropzoneAreaExample callbackFunc={setFileCallback} />
 			</div>
-			<div>
-				<UploadButton />
-			</div>
+			<DropzoneAreaExample callbackFunc={setFileCallback} />
+			<Button variant="contained" color="default" className={classes.button} startIcon={<CloudUploadIcon />}>
+				Upload
+			</Button>
 		</div>
 	);
 }

@@ -8,6 +8,11 @@ import PrimarySearchAppBar from '../components/App/AppBar';
 import PostPrices from './PostPrices';
 import PriceDetail from './PriceDetail';
 import CreatePrice from './CreatePrice';
+import LoginPage from '../components/Auth/LoginPage';
+import RegisterPage from '../components/Auth/RegisterPage';
+import ConfirmPage from '../components/Auth/ConfirmPage';
+import Upload from './TestPage';
+import useAuthToken from '../config/auth';
 
 const preparedMovie: Movie[] = [
 	{
@@ -156,28 +161,36 @@ function App() {
 		<div className="App">
 			<BrowserRouter>
 				<PrimarySearchAppBar />
-				<Route exact path="/">
-					<Link to="/write">
-						<button type="button">글쓰기</button>
-					</Link>
-					<Row title="기획전" rowMovies={events} directTo="/prices" />
-					<Row title="Start-UP Homes" rowMovies={homes} directTo="/details" />
-				</Route>
-				<Route path="/details">
-					<PostDetail />
-				</Route>
-				<Route path="/write">
-					<WritePage movieList={movies} callBackfunc={callBackFunction} />
-				</Route>
-				<Route path="/prices">
-					<PostPrices />
-				</Route>
-				<Route path="/pricedetail">
-					<PriceDetail />
-				</Route>
-				<Route path="/createprice">
-					<CreatePrice />
-				</Route>
+				<switch>
+					<Route exact path="/">
+						<Link to="/write">
+							<button type="button">글쓰기</button>
+						</Link>
+						<Row title="기획전" rowMovies={events} directTo="/prices" />
+						<Row title="Start-UP Homes" rowMovies={homes} directTo="/details" />
+					</Route>
+					<Route path="/details">
+						<PostDetail />
+					</Route>
+					<Route path="/write">
+						<WritePage movieList={movies} callBackfunc={callBackFunction} />
+					</Route>
+					<Route path="/prices">
+						<PostPrices />
+					</Route>
+					<Route path="/pricedetail">
+						<PriceDetail />
+					</Route>
+					<Route path="/createprice">
+						<CreatePrice />
+					</Route>
+					<Route exact path="/login">
+						<LoginPage />
+					</Route>
+					<Route path="/register" component={RegisterPage} />
+					<Route path="/signup/confirm/:redisId" component={ConfirmPage} />
+					<Route path="/test" component={Upload} />
+				</switch>
 			</BrowserRouter>
 		</div>
 	);
