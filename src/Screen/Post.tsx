@@ -1,4 +1,6 @@
 import React from 'react';
+import Banner from '../components/App/Banner';
+import RowInPost from '../components/App/RowInPost';
 
 // interface PostProps{
 //     title: string,
@@ -11,7 +13,8 @@ import React from 'react';
 function PostDetail() {
 	return (
 		<div>
-			<p>This is post</p>
+			<Banner />
+			<RowInPost title="About Us" />
 		</div>
 	);
 }
