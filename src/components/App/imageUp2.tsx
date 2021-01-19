@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DropzoneArea } from 'material-ui-dropzone';
 
 interface dropzoneAreaExampleProps {
-	callbackFunc: (files: []) => void;
+	callbackFunc: (files: Blob[]) => void;
 }
 
 function DropzoneAreaExample(props: dropzoneAreaExampleProps) {

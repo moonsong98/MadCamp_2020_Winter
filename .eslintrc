@@ -24,6 +24,7 @@
           "tsx": "never"
         }
       ],
+        "camelcase": ["error", {"properties": "never"}],
       "react/jsx-filename-extension" :[2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }]
     },
     "settings": {
