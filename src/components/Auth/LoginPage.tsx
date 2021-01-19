@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useLazyQuery, gql } from '@apollo/client';
-import { useCookies } from 'react-cookie';
+import useAuthToken from '../../config/auth';
 import AuthForm from './Auth.components';
 
 const LOGIN = gql`
@@ -9,39 +12,69 @@ const LOGIN = gql`
 	}
 `;
 
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		root: {
+			'& .MuiTextField-root': {
+				width: '25ch',
+				marginBottom: '2ch',
+			},
+			button: {
+				width: '25ch',
+				padding: '5ch',
+			},
+			justifyContent: 'space-around',
+			alignItems: 'center',
+			position: 'fixed',
+			top: '45%',
+			left: '45%',
+		},
+	})
+);
+
 function LoginPage(): React.ReactElement {
 	const [{ username, password }, setCredentials] = useState({
 		username: '',
 		password: '',
 	});
 
-	const [cookies, setCookie] = useCookies(['token']);
+	// const [cookies, setCookie] = useCookies(['token']);
+	const [_, setAuthToken] = useAuthToken();
 
 	const [loginError, setLoginError] = useState('');
 
 	const [loggedIn, setLoggedIn] = useState(false);
 
-	const [checkLogin, { loading, data }] = useLazyQuery(LOGIN);
+	const [checkLogin, { loading, data }] = useLazyQuery(LOGIN, {
+		onCompleted: (_data) => {
+			if (_data && _data.login !== '') {
+				setAuthToken(_data.login);
+				setLoggedIn(true);
+			} else {
+				setLoginError('입력하신 계정 혹은 비밀번호가 잘못되었습니다.');
+			}
+		},
+	});
 
-	useEffect(() => {
-		console.log(data);
-		if (!data) {
-			setLoginError('');
-		} else if (data && data.login === '') {
-			setLoggedIn(false);
-			setLoginError('Login Information Is Wrong');
-		} else {
-			setLoggedIn(true);
-			setLoginError('');
-			setCookie('token', data.login);
-			console.log(cookies);
-		}
-	}, [cookies, data, setCookie]);
+	// useEffect(() => {
+	// 	if (!data) {
+	// 		setLoginError('');
+	// 	} else if (data && data.login === '') {
+	// 		setLoggedIn(false);
+	// 		setLoginError('Login Information Is Wrong');
+	// 	} else {
+	// 		setLoggedIn(true);
+	// 		setLoginError('');
+	// 		setCookie('token', data.login);
+	// 		console.log(cookies);
+	// 	}
+	// }, [cookies, data, setCookie]);
 
 	const login = async (event: React.FormEvent) => {
 		event.preventDefault();
 		checkLogin({ variables: { username, password } });
 	};
+	const classes = useStyles();
 	if (loggedIn) {
 		return (
 			<div>
@@ -57,37 +90,42 @@ function LoginPage(): React.ReactElement {
 			</div>
 		);
 	return (
-		<AuthForm onSubmit={login}>
-			<label htmlFor="username">
-				Username
-				<input
-					placeholder="Username"
-					value={username}
-					onChange={(event) =>
-						setCredentials({
-							username: event.target.value,
-							password,
-						})
-					}
-				/>
-			</label>
-			<label htmlFor="password">
-				Password
-				<input
-					placeholder="Password"
-					type="password"
-					value={password}
-					onChange={(event) =>
-						setCredentials({
-							username,
-							password: event.target.value,
-						})
-					}
-				/>
-			</label>
-			<button type="submit">Login</button>
-			{loginError.length > 0 && <p>{loginError}</p>}
-		</AuthForm>
+		<div className={classes.root}>
+			<form onSubmit={login}>
+				<div>
+					<TextField
+						id="standard-required"
+						label="Username"
+						value={username}
+						onChange={(event) =>
+							setCredentials({
+								username: event.target.value,
+								password,
+							})
+						}
+						placeholder="Username"
+					/>
+				</div>
+				<div>
+					<TextField
+						id="standard-required"
+						label="Password"
+						value={password}
+						onChange={(event) =>
+							setCredentials({
+								username,
+								password: event.target.value,
+							})
+						}
+						placeholder="Password"
+					/>
+				</div>
+				<Button className="button" variant="outlined" type="submit">
+					Login
+				</Button>
+			</form>
+			{loginError.length > 0 && <p className="error">{loginError}</p>}
+		</div>
 	);
 }
 

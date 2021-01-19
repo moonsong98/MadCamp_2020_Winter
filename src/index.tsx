@@ -4,7 +4,7 @@ import './design/index.css';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import { CookiesProvider } from 'react-cookie';
-import Root from './Root';
+import App from './Screen/App';
 
 const client = new ApolloClient({
 	cache: new InMemoryCache(),
@@ -17,7 +17,7 @@ ReactDOM.render(
 	<React.StrictMode>
 		<CookiesProvider>
 			<ApolloProvider client={client}>
-				<Root />
+				<App />
 			</ApolloProvider>
 		</CookiesProvider>
 	</React.StrictMode>,
