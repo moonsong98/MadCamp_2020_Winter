@@ -55,7 +55,6 @@ export default function NestedGrid() {
 							</Link>
 						</div>
 						<div>{itemList[rowIndex * 3].itemName}</div>
-						<div>{itemList[rowIndex * 3].itemPrice}</div>
 					</Paper>
 				</Grid>
 
@@ -68,7 +67,6 @@ export default function NestedGrid() {
 								</Link>
 							</div>
 							<div>{itemList[rowIndex * 3 + 1].itemName}</div>
-							<div>{itemList[rowIndex * 3 + 1].itemPrice}</div>
 						</Paper>
 					</Grid>
 				)}
@@ -81,7 +79,6 @@ export default function NestedGrid() {
 								</Link>
 							</div>
 							<div>{itemList[rowIndex * 3 + 2].itemName}</div>
-							<div>{itemList[rowIndex * 3 + 2].itemPrice}</div>
 						</Paper>
 					</Grid>
 				)}
