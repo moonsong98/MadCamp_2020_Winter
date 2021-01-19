@@ -67,14 +67,16 @@ export class PostsController {
 	async createPost(@Body() createPostDTO: CreatePostDTO, @UploadedFiles() files) {
 		const response = [];
 		const fileNames = [];
-		files.forEach((file) => {
-			const fileReponse = {
-				originalname: file.originalname,
-				filename: file.filename,
-			};
-			fileNames.push(file.filename);
-			response.push(fileReponse);
-		});
+		console.log(`files: ${files}`);
+		files &&
+			files.forEach((file) => {
+				const fileReponse = {
+					originalname: file.originalname,
+					filename: file.filename,
+				};
+				fileNames.push(file.filename);
+				response.push(fileReponse);
+			});
 		return await this.postsService.createPost(createPostDTO, fileNames);
 	}
 
