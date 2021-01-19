@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import '../design/WritePage.css';
+import { render } from '@testing-library/react';
 
 const CREATE_POST = gql`
 	mutation CreatePost($title: String!, $body: String!) {
@@ -13,6 +14,12 @@ const CREATE_POST = gql`
 	}
 `;
 
+const UPLOAD_FILE = gql`
+	mutation($file: Upload!) {
+		uploadFile(file: $file)
+	}
+`;
+
 interface WriteProps {
 	movieList: Movie[];
 	callBackfunc: (cbMoviesList: Movie[]) => void;
@@ -21,6 +28,7 @@ interface WriteProps {
 type Movie = { originalName: string; name: string; posterPath: string };
 
 function WritePage(props: WriteProps) {
+	const [uploadFile] = useMutation(UPLOAD_FILE);
 	const [createPost, { data }] = useMutation(CREATE_POST);
 	const [postDetail, setPostDetail] = useState({
 		title: '',
@@ -46,7 +54,9 @@ function WritePage(props: WriteProps) {
 		console.log(postDetail);
 	};
 	const addMovie = () => {
-		createPost({ variables: { title: postDetail.title, body: postDetail.content } });
+		console.log(`previewImage: ${previewImage}`);
+		uploadFile({ variables: { previewImage } });
+		// createPost({ variables: { title: postDetail.title, body: postDetail.content } });
 		const newMovie = {
 			originalName: 'Nully',
 			name: 'Nully',
@@ -56,18 +66,22 @@ function WritePage(props: WriteProps) {
 	};
 	const handleFileOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const reader = new FileReader();
-		console.log(e.target);
-		console.log(e.target.files);
+		// console.log(e.target);
+		// console.log(e.target.files);
 		const tmpFiles: FileList | null = e.target.files;
 		const file = tmpFiles?.item(0);
-		console.log(file);
+		uploadFile({ variables: { file } });
+
+		// console.log(file);
 		reader.onloadend = () => {
-			console.log(reader.result);
 			if (reader.result != null) {
 				const toString = reader.result.toString();
 				const source = {
 					imgSrc: toString,
 				};
+				console.log(reader.result);
+
+				// uploadFile({ variables: { reader.result } });
 				setPreviewImage(source);
 			}
 		};
