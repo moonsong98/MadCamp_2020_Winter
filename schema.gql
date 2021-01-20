@@ -20,6 +20,7 @@ type PostType {
 type Query {
   readAllUsers: [UserType!]!
   login(input: LoginInput!): String!
+  getUser(id: String!): UserType!
   readAllPosts: [PostType!]!
 }
 

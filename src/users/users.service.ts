@@ -53,6 +53,10 @@ export class UsersService {
 		return ret;
 	}
 
+	async getUser(id): Promise<User> {
+		return await this.userModel.findById(id);
+	}
+
 	/* Update */
 	async confirmUser(redisId: string) {
 		const userId = await getUserIdFromRedis(redisId);

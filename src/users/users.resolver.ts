@@ -23,6 +23,11 @@ export class UsersResolver {
 		return await this.usersService.login(input);
 	}
 
+	@Query(() => UserType)
+	async getUser(@Args('id') id: string) {
+		return await this.usersService.getUser(id);
+	}
+
 	/* Update */
 	@Mutation(() => Boolean)
 	async confirmUser(@Args('redisId') redisId: string) {
