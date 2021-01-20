@@ -107,19 +107,19 @@ export default function SimplePaper() {
 						<MultilineTextFields labelTxt="상품설명" rowNum={17} callBackFunc={setContentCallback} />
 					</Paper>
 				</div>
+				<Button
+					variant="contained"
+					color="default"
+					className={classes.button}
+					startIcon={<CloudUploadIcon />}
+					onClick={createPost}
+				>
+					Upload
+				</Button>
 			</div>
 			<div className={classes.root3}>
 				<DropzoneAreaExample callbackFunc={setFileCallback} />
 			</div>
-			<Button
-				variant="contained"
-				color="default"
-				className={classes.button}
-				startIcon={<CloudUploadIcon />}
-				onClick={createPost}
-			>
-				Upload
-			</Button>
 		</div>
 	);
 }

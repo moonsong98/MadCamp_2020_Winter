@@ -1,17 +1,12 @@
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route } from 'react-router-dom';
+import axios from 'axios';
 import SimpleImageSlider from 'react-simple-image-slider';
 import Paper from '@material-ui/core/Paper';
 import Comments from '../components/App/Comments';
 
-const imgs = [
-	{
-		url:
-			'https://mobiinsidecontent.s3.ap-northeast-2.amazonaws.com/kr/wp-content/uploads/2020/02/10160353/GettyImages-1131776334-scaled.jpg',
-	},
-	{ url: 'https://www.lcinternational.it/wp-content/uploads/Start_up.jpg' },
-];
+const imgs = [];
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -41,15 +36,57 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function PriceDetail() {
+	const [images, setImages] = useState([{ url: '' }]);
+	const url = 'http://192.249.18.238:5000';
+	// useEffect(() => {
+	// 	async function fetchData() {
+	// 		axios.get(`${url}/post/all`).then((response) => {
+	// 			console.log(response);
+	// 			console.log(images.length);
+	// 			if (images.length < 1) {
+	// 				response.data[0].imageName.forEach((e) => {
+	// 					console.log(`e: ${e}`);
+	// 					setImages([
+	// 						...images,
+	// 						{
+	// 							url: `${url}/post/getPostImage/${e}`,
+	// 						},
+	// 					]);
+	// 					console.log([...images]);
+	// 				});
+	// 			}
+	// 		});
+	// 	}
+	// 	fetchData();
+	// }, [images]);
+	const fetchPostUrl = 'http://192.249.18.238:5000/post/all';
+	const [title, setTitle] = useState('');
+	const [body, setBody] = useState('');
+	async function fetchData() {
+		const response = await axios.get(fetchPostUrl);
+		setTitle(response.data[0].title);
+		setBody(response.data[0].body);
+		setImages(
+			response.data[0].imageName.map((e) => {
+				return {
+					url: `${url}/post/getPostImage/${e}`,
+				};
+			})
+		);
+	}
+	useEffect(() => {
+		fetchData();
+	}, [fetchPostUrl]);
+
 	const classes = useStyles();
 	return (
 		<div>
 			<Paper className={classes.paperCase} elevation={3} color="black">
-				<div> asdf </div>
+				<div> {title} </div>
 				<div className={classes.slider}>
-					<SimpleImageSlider width="30%" height={600} images={imgs} showBullets showNavs />
+					{images.length > 1 && <SimpleImageSlider width="30%" height={600} images={images} showBullets showNavs />}
 				</div>
-				<Paper className={classes.priceContent}>asdasdfsdfsfsadfsad</Paper>
+				<Paper className={classes.priceContent}>{body}</Paper>
 			</Paper>
 			<div className={classes.comments}>
 				<Comments />
@@ -57,5 +94,7 @@ function PriceDetail() {
 		</div>
 	);
 }
+/*
+ */
 
 export default PriceDetail;

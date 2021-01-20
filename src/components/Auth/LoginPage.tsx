@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -32,13 +33,14 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-function LoginPage(): React.ReactElement {
+function LoginPage(props): React.ReactElement {
 	const [{ username, password }, setCredentials] = useState({
 		username: '',
 		password: '',
 	});
 
 	// const [cookies, setCookie] = useCookies(['token']);
+	const history = useHistory();
 	const [_, setAuthToken] = useAuthToken();
 
 	const [loginError, setLoginError] = useState('');
@@ -76,6 +78,7 @@ function LoginPage(): React.ReactElement {
 	};
 	const classes = useStyles();
 	if (loggedIn) {
+		history.push('/');
 		return (
 			<div>
 				<p>Logged IN!!</p>
@@ -83,12 +86,13 @@ function LoginPage(): React.ReactElement {
 		);
 	}
 
-	if (loading)
+	if (loading) {
 		return (
 			<div>
 				<p>Loading...</p>
 			</div>
 		);
+	}
 	return (
 		<div className={classes.root}>
 			<form onSubmit={login}>

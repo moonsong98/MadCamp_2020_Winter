@@ -81,6 +81,10 @@ const useStyles = makeStyles((theme: Theme) =>
 				display: 'none',
 			},
 		},
+		writepost: {
+			color: 'inherit',
+			textDecoration: 'none',
+		},
 	})
 );
 
@@ -135,12 +139,12 @@ export default function PrimarySearchAppBar() {
 			open={isMenuOpen}
 			onClose={handleMenuClose}
 		>
-			<Link to="/createprice">
-				<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-			</Link>
-			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
 			{loggedIn ? (
-				<MenuItem onClick={handleLogout}>Logout</MenuItem>
+				<div>
+					<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+					<MenuItem onClick={handleMenuClose}>My account</MenuItem>
+					<MenuItem onClick={handleLogout}>Logout</MenuItem>
+				</div>
 			) : (
 				<Link to="/login">
 					<MenuItem onClick={handleMenuClose}>Login</MenuItem>
@@ -231,9 +235,13 @@ export default function PrimarySearchAppBar() {
 								<NotificationsIcon />
 							</Badge>
 						</IconButton> */}
-						<IconButton aria-label="show 17 new notifications" color="inherit">
-							<CreateIcon />
-						</IconButton>
+						{loggedIn && (
+							<Link to="/createprice" className={classes.writepost}>
+								<IconButton aria-label="show 17 new notifications" color="inherit">
+									<CreateIcon />
+								</IconButton>
+							</Link>
+						)}
 						<IconButton
 							edge="end"
 							aria-label="account of current user"

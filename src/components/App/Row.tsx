@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 // import YouTube from 'react-youtube';
 import '../../design/Row.css';
@@ -17,9 +18,18 @@ type Event = { title: string; content: string; image: string };
 
 const imgDir = './images';
 
+const useStyles = makeStyles((theme: Theme) =>
+	createStyles({
+		root: {
+			textDecoration: 'none',
+		},
+	})
+);
+
 function Row(props: RowProps) {
 	const { title, rowMovies, directTo } = props;
 	const [movies, setMovies] = useState<Event[]>(rowMovies);
+	const classes = useStyles();
 
 	// useEffect(() => {
 	//     // if [], run once when the row loads, and dont run again
@@ -45,6 +55,9 @@ function Row(props: RowProps) {
         fetchData();
     }, [])
     */
+	/*
+   
+   */
 
 	// 최적화를 위해 나중에 img에 key 속성 줘야 됨
 	return (
@@ -56,7 +69,7 @@ function Row(props: RowProps) {
 				{movies.map((movie) => (
 					<div>
 						<div>
-							<Link to={`${directTo}?imgPath=${movie.image}`}>
+							<Link className={classes.root} to={`${directTo}?imgPath=${movie.image}`} textDecoration="none">
 								<MediaCard title={movie.title} content={movie.content} imgPath={movie.image} />
 							</Link>
 						</div>

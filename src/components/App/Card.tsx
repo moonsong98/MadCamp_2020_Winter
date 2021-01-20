@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 		width: 345,
 	},
 	media: {
-		height: 140,
+		height: 180,
 	},
 });
 
@@ -40,11 +40,6 @@ export default function MediaCard(props: cardProps) {
 					</Typography>
 				</CardContent>
 			</CardActionArea>
-			<CardActions>
-				<Button size="small" color="primary">
-					Learn More
-				</Button>
-			</CardActions>
 		</Card>
 	);
 }
