@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -12,6 +12,10 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import SendIcon from '@material-ui/icons/Send';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useQuery, gql } from '@apollo/client';
+import UserName from '../../config/getUserName';
+import UserId from '../../config/getUserId';
 
 // interface commentsProps {
 // 	commentList: Comment[];
@@ -62,10 +66,57 @@ const useStyles = makeStyles((theme: Theme) =>
 		button: {},
 	})
 );
+const GET_USER_NAME = gql`
+	query GetUser($id: String!) {
+		getUser(id: $id) {
+			name
+		}
+	}
+`;
 
 function Comments() {
+	const fetchPostUrl = 'http://192.249.18.238:5000/post/all';
+	const [postId, setPostId] = useState('');
+	const [comments, setComments] = useState([{ authName: '', content: '' }]);
+	const [writer, setWriter] = useState('');
+	const userId = UserId();
+	const { loading, error, data } = useQuery(GET_USER_NAME, {
+		variables: { id: userId },
+	});
+	const [, updateState] = React.useState({});
+	const forceUpdate = React.useCallback(() => updateState({}), []);
+	async function fetchData() {
+		const response = await axios.get(fetchPostUrl);
+		// eslint-disable-next-line no-underscore-dangle
+		setPostId(response.data[0]._id);
+		setComments(
+			response.data[0].comments.map((e) => {
+				return {
+					authName: e.name,
+					content: e.body,
+				};
+			})
+		);
+
+		// setImages(
+		// 	response.data[0].imageName.map((e) => {
+		// 		return {
+		// 			url: `${url}/post/getPostImage/${e}`,
+		// 		};
+		// 	})
+		// );
+	}
+	useEffect(() => {
+		if (!loading) {
+			setWriter(data.getUser.name);
+		}
+	}, [loading, data]);
+	useEffect(() => {
+		fetchData();
+		// setWriter(UserName(UserId()));
+	}, [fetchPostUrl]);
+
 	const classes = useStyles();
-	const [comments, setComments] = useState(dummyComments);
 	const [commentCont, setCommentCont] = useState({
 		content: '',
 	});
@@ -77,6 +128,16 @@ function Comments() {
 			content: value,
 		});
 		console.log(commentCont);
+	};
+
+	const handleButtonClick = () => {
+		axios.post('http://192.249.18.238:5000/post/createcomment', {
+			_id: postId,
+			name: writer,
+			body: commentCont.content,
+		});
+		forceUpdate();
+		fetchData();
 	};
 	return (
 		<div>
@@ -111,7 +172,13 @@ function Comments() {
 					fullWidth
 					onChange={getValue}
 				/>
-				<Button variant="contained" color="primary" className={classes.button} endIcon={<SendIcon />} />
+				<Button
+					variant="contained"
+					color="primary"
+					className={classes.button}
+					endIcon={<SendIcon />}
+					onClick={handleButtonClick}
+				/>
 			</div>
 		</div>
 	);

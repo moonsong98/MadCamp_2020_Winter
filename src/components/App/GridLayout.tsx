@@ -1,20 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { ImageSearch } from '@material-ui/icons';
 
 const itemList = [
-	{ itemName: 'Jeans', itemPrice: '200,000' },
-	{ itemName: 'Black Jeans', itemPrice: '200,000' },
-	{ itemName: 'Jeans', itemPrice: '200,000' },
-	{ itemName: 'Ripped Jeans', itemPrice: '200,000' },
-	{ itemName: 'Shorts', itemPrice: '100,000' },
-	{ itemName: 'White Shorts', itemPrice: '100,000' },
-	{ itemName: 'Black Shorts', itemPrice: '100,000' },
-	{ itemName: 'Cap', itemPrice: '50,000' },
-	{ itemName: 'white Cap', itemPrice: '50,000' },
-	{ itemName: 'Yellow Cap', itemPrice: '50,000' },
+	{ itemName: 'Jeans', itemSource: 'http://192.249.18.238:5000/post/getDummyImage/1.jpeg' },
+	{ itemName: 'Black Jeans', itemSource: 'http://192.249.18.238:5000/post/getDummyImage/2.jpeg' },
+	{ itemName: 'Jeans', itemSource: 'http://192.249.18.238:5000/post/getDummyImage/3.jpeg' },
+	{ itemName: 'Ripped Jeans', itemSource: 'http://192.249.18.238:5000/post/getDummyImage/4.jpeg' },
+	{ itemName: 'Shorts', itemSource: 'http://192.249.18.238:5000/post/getDummyImage/5.jpeg' },
+	{ itemName: 'White Shorts', itemSource: 'http://192.249.18.238:5000/post/getDummyImage/6.jpeg' },
 ];
 
 interface priceRowProps {
@@ -31,6 +29,10 @@ const useStyles = makeStyles((theme: Theme) =>
 			textAlign: 'center',
 			color: theme.palette.text.secondary,
 		},
+		image: {
+			width: '200px',
+			height: 'auto',
+		},
 	})
 );
 
@@ -42,6 +44,29 @@ export default function NestedGrid() {
 	const style = {
 		flexDirection: 'column',
 	};
+	const [images, setImages] = useState([...itemList]);
+	const url = 'http://192.249.18.238:5000';
+	useEffect(() => {
+		async function fetchData() {
+			axios.get(`${url}/post/all`).then((response) => {
+				if (images.length < 7) {
+					setImages([
+						...images,
+						{
+							itemName: response.data[0].title,
+							itemSource: `${url}/post/getPostImage/${response.data[0].imageName[0]}`,
+						},
+					]);
+				}
+				console.log(images.length);
+				// itemList.push({
+				// 	itemName: response.data[0].title,
+				// 	itemSource: `${url}/post/getPostImage/${response.data[0].imageName[0]}`,
+				// });
+			});
+		}
+		fetchData();
+	}, [images]);
 
 	function FormRow(props: priceRowProps) {
 		const { rowIndex } = props;
@@ -50,35 +75,36 @@ export default function NestedGrid() {
 				<Grid item xs={4}>
 					<Paper className={classes.paper}>
 						<div>
-							<Link to={`/pricedetail?idx=${3 * rowIndex}`}>
-								<img alt="이미지 준비중" />
+
+							<Link to="/pricedetail">
+								<img className={classes.image} alt="이미지 준비중" src={images[rowIndex * 3].itemSource} />
 							</Link>
 						</div>
-						<div>{itemList[rowIndex * 3].itemName}</div>
+						<div>{images[rowIndex * 3].itemName}</div>
 					</Paper>
 				</Grid>
 
-				{rowIndex * 3 + 1 < itemList.length && (
+				{rowIndex * 3 + 1 < images.length && (
 					<Grid item xs={4}>
 						<Paper className={classes.paper}>
 							<div>
-								<Link to={`/pricedetail?idx=${3 * rowIndex}`}>
-									<img alt="이미지 준비중" />
+								<Link to="/pricedetail">
+									<img className={classes.image} alt="이미지 준비중" src={images[rowIndex * 3 + 1].itemSource} />
 								</Link>
 							</div>
-							<div>{itemList[rowIndex * 3 + 1].itemName}</div>
+							<div>{images[rowIndex * 3 + 1].itemName}</div>
 						</Paper>
 					</Grid>
 				)}
-				{rowIndex * 3 + 2 < itemList.length && (
+				{rowIndex * 3 + 2 < images.length && (
 					<Grid item xs={4}>
 						<Paper className={classes.paper}>
 							<div>
-								<Link to={`/pricedetail?idx=${3 * rowIndex}`}>
-									<img alt="이미지 준비중" />
+								<Link to="/pricedetail">
+									<img className={classes.image} alt="이미지 준비중" src={images[rowIndex * 3 + 2].itemSource} />
 								</Link>
 							</div>
-							<div>{itemList[rowIndex * 3 + 2].itemName}</div>
+							<div>{images[rowIndex * 3 + 2].itemName}</div>
 						</Paper>
 					</Grid>
 				)}
@@ -86,7 +112,7 @@ export default function NestedGrid() {
 		);
 	}
 	let i: number;
-	for (i = 0; i < rowNum; i += 1) {
+	for (i = 0; i < images.length / 3; i += 1) {
 		lis.push(
 			<Grid container item xs={12} spacing={3}>
 				<FormRow rowIndex={i} />
