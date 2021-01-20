@@ -75,6 +75,7 @@ export default function NestedGrid() {
 				<Grid item xs={4}>
 					<Paper className={classes.paper}>
 						<div>
+
 							<Link to="/pricedetail">
 								<img className={classes.image} alt="이미지 준비중" src={images[rowIndex * 3].itemSource} />
 							</Link>

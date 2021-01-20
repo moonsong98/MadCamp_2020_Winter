@@ -15,10 +15,23 @@ const useStyles = makeStyles((theme: Theme) =>
 			position: 'relative',
 			margin: '0 auto',
 			width: '80%',
-			top: '-50px',
+			marginTop: '-100px',
 		},
 		grid: {
+			position: 'relative',
 			marginLeft: '25px',
+		},
+		title: {
+			margin: '0 auto',
+			textAlign: 'center',
+			marginBottom: '10px',
+			fontSize: '20px',
+		},
+		content: {
+			margin: '0 auto',
+			textAlign: 'center',
+			marginBottom: '10px',
+			fontSize: '20px',
 		},
 	})
 );
@@ -42,6 +55,12 @@ function PostPrices() {
 			</div>
 			<div className={classes.gridCover}>
 				<Paper>
+					<div className={classes.title}>
+						<h1>제목</h1>
+					</div>
+					<div className={classes.content}>
+						<h2>내용~~</h2>
+					</div>
 					<div className={classes.grid}>
 						<NestedGrid />
 					</div>
