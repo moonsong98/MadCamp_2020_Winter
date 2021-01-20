@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-interface Comment {
+export interface Comment {
 	name: string;
 	body: string;
 	time: Date;

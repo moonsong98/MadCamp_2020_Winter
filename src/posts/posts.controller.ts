@@ -102,6 +102,18 @@ export class PostsController {
 		res.sendFile(filePath);
 	}
 
+	@Get('getExhibitionImage/:id')
+	async getExibitionImage(@Param('id') id: string, @Res() res: Response) {
+		const filePath = join('/home/ubuntu/exhibition/images', id);
+		res.sendFile(filePath);
+	}
+
+	@Get('getDummyImage/:id')
+	async getDummyImage(@Param('id') id: string, @Res() res: Response) {
+		const filePath = join('/home/ubuntu/dummy', id);
+		res.sendFile(filePath);
+	}
+
 	/* Update */
 
 	/* Delete */
