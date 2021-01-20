@@ -30,7 +30,8 @@ const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
 			marginTop: '1%',
-			maxWidth: 345,
+			maxWidth: '100%',
+			width: '100%',
 		},
 		media: {
 			height: 0,
@@ -73,7 +74,7 @@ function Comments() {
 		const { name, value } = e.target;
 		setCommentCont({
 			...commentCont,
-			[name]: value,
+			content: value,
 		});
 		console.log(commentCont);
 	};
@@ -108,6 +109,7 @@ function Comments() {
 						</InputAdornment>
 					}
 					fullWidth
+					onChange={getValue}
 				/>
 				<Button variant="contained" color="primary" className={classes.button} endIcon={<SendIcon />} />
 			</div>

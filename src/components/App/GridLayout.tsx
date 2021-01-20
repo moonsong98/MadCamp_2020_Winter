@@ -50,7 +50,7 @@ export default function NestedGrid() {
 				<Grid item xs={4}>
 					<Paper className={classes.paper}>
 						<div>
-							<Link to="/pricedetail">
+							<Link to={`/pricedetail?idx=${3 * rowIndex}`}>
 								<img alt="이미지 준비중" />
 							</Link>
 						</div>
@@ -62,7 +62,7 @@ export default function NestedGrid() {
 					<Grid item xs={4}>
 						<Paper className={classes.paper}>
 							<div>
-								<Link to="/pricedetail">
+								<Link to={`/pricedetail?idx=${3 * rowIndex}`}>
 									<img alt="이미지 준비중" />
 								</Link>
 							</div>
@@ -74,7 +74,7 @@ export default function NestedGrid() {
 					<Grid item xs={4}>
 						<Paper className={classes.paper}>
 							<div>
-								<Link to="/pricedetail">
+								<Link to={`/pricedetail?idx=${3 * rowIndex}`}>
 									<img alt="이미지 준비중" />
 								</Link>
 							</div>

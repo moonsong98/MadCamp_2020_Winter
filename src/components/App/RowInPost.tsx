@@ -15,7 +15,7 @@ function RowInPost(props: RowProps) {
 		<div className="row__post">
 			<h1>{title}</h1>
 			{/* containers -> posters */}
-			<h2>우리는 기가막힌 스타트업 입니다.</h2>
+			<h2>우리는 기가막힌 스타트업입니다.</h2>
 		</div>
 	);
 }
