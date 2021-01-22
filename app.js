@@ -9,7 +9,7 @@ require("dotenv").config();
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-const restaurantRouter = require("./routes/restaurants");
+const restaurantRouter = require("./routes/restaurant");
 
 var app = express();
 const PORT = 8080;
