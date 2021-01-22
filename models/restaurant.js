@@ -8,7 +8,7 @@ const restaurantSchema = new Schema({
   category: { type: String, required: true },
   description: { type: String },
   telephone: { type: String },
-  menu: [{ type: String, ref: "Menu" }],
+  menus: [{ type: mongoose.Schema.Types.ObjectId, ref: "Menu" }],
   comment: [Comment.schema],
 });
 
