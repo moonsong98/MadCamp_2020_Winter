@@ -1,11 +1,12 @@
 var express = require("express");
-var router = express.Router();
 const Restaurant = require("../models/restaurant");
 const Menu = require("../models/menu");
+var router = express.Router();
 
 /* CREATE new restaurant */
-router.post("/", async (req, res, next) => {
-  console.log("CREATE restaurant", req.body);
+router.post("/", async (req, res) => {
+  console.log("Request:\n", req);
+  console.log("CREATE restaurant:\n", req.body);
   try {
     const restaurant = new Restaurant(req.body);
     const menuList = req.body.menus;
@@ -30,4 +31,49 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+// RETRIEVE single Restaurant info
+router.get("/:restr_id", async (req, res) => {
+  const { restr_id } = req.params;
+  console.log(restr_id);
+  const restaurant = await Restaurant.findById(restr_id).populate("menus");
+
+  console.log(restaurant);
+  res.status(200).json(restaurant);
+});
+
+// UPDATE restaurant info
+router.put("/:restr_id", async (req, res) => {
+  const { restr_id } = req.params;
+  console.log("Update id:", restr_id);
+  console.log("UPDATE restraurant:\n", req.body);
+
+  try {
+    const updated = await Restaurant.findByIdAndUpdate(restr_id, req.body, {
+      new: true,
+    });
+    res.status(200).json(updated);
+  } catch (error) {
+    res.status(400).json({ message: "Update failed" });
+  }
+});
+
+// DELETE restaurant info
+router.delete("/:restr_id", async (req, res) => {
+  const { restr_id } = req.params;
+  console.log("Delete id:", restr_id);
+  try {
+    const restaurant = await Restaurant.findById(restr_id);
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+    const menus = restaurant.menus;
+
+    await Menu.deleteMany().where("_id").in(menus).exec();
+    await Restaurant.findByIdAndDelete(restr_id).exec();
+
+    res.status(200).json({ message: "Delete sucess" });
+  } catch (error) {
+    res.status(400).json({ message: "Deleted failed" });
+  }
+});
 module.exports = router;
