@@ -14,6 +14,7 @@ const restaurantSchema = new Schema({
   telephone: { type: String },
   menus: [{ type: mongoose.Schema.Types.ObjectId, ref: "menu" }],
   comment: [Comment.schema],
+  confirmed: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("restaurant", restaurantSchema);

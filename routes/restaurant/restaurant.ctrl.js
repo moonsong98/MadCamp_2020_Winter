@@ -1,7 +1,6 @@
 const Restaurant = require("../../models/restaurant");
 const Menu = require("../../models/menu");
 const Category = require("../../models/category");
-const verifyToken = require("../../middlewares/verifyToken");
 
 /* CREATE new restaurant */
 exports.createRestaurant = async (req, res) => {
@@ -51,6 +50,17 @@ exports.getRestaurant = async (req, res) => {
 
   console.log(restaurant);
   res.status(200).json(restaurant);
+};
+
+// RETRIEVE all restaurants info - ONLY allowed for admin
+exports.getAllRestaurants = async (req, res) => {
+  // if (!user || user.role !== "admin") {
+  //   return res.status(403).send("Viewing whole restaurant list is not allowed");
+  // }
+
+  const restaurants = await Restaurant.find();
+  console.log("Restaunrants: ", restaurants.length);
+  res.status(200).json(restaurants);
 };
 
 exports.getRestaurantsInCategory = async (req, res) => {
@@ -110,14 +120,5 @@ exports.deleteRestaurant = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Deleted failed" });
-  }
-};
-
-exports.getCategories = async (req, res) => {
-  try {
-    const categories = await Category.find().exec();
-    res.status(200).json(categories);
-  } catch (error) {
-    res.status(400).json({ message: "Invalid request" });
   }
 };

@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
 
   try {
     const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-    const user = User.findOne({ userId: verified.userId });
+    const user = User.findById(verified._id);
     if (!user) return res.status(400).json({ message: "Invalid user" });
 
     req.user = user;
