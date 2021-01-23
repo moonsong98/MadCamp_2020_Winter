@@ -1,12 +1,26 @@
 const Restaurant = require("../../models/restaurant");
 const Menu = require("../../models/menu");
+const Category = require("../../models/category");
+const verifyToken = require("../../middlewares/verifyToken");
 
 /* CREATE new restaurant */
 exports.createRestaurant = async (req, res) => {
   console.log("Request:\n", req);
   console.log("CREATE restaurant:\n", req.body);
+  const { name, category, description, telephone } = req.body;
   try {
-    const restaurant = new Restaurant(req.body);
+    const categoryObject = await Category.findOne({ name: category });
+    if (!categoryObject) {
+      res.status(400);
+      return res.json({ message: "Invalid category" });
+    }
+    const restaurant = new Restaurant({
+      category: categoryObject._id,
+      name,
+      description,
+      telephone,
+    });
+
     const menuList = req.body.menus;
 
     if (menuList) {
@@ -40,14 +54,18 @@ exports.getRestaurant = async (req, res) => {
 };
 
 exports.getRestaurantsInCategory = async (req, res) => {
-  let { category } = req.query;
-  category = category.substring(1, category.length - 1);
-  console.log(category);
+  const categoryId = req.params.category_id;
+  // category = category.substring(1, category.length - 1);
+  console.log(categoryId);
 
   try {
-    const restaurants = await Restaurant.find()
-      .where("category")
-      .equals(category);
+    const category = await Category.findById(categoryId);
+    const restaurants = await Restaurant.find(
+      {
+        category: category._id,
+      },
+      "-category"
+    );
 
     console.log(restaurants);
     res.status(200).json(restaurants);
@@ -92,5 +110,14 @@ exports.deleteRestaurant = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: "Deleted failed" });
+  }
+};
+
+exports.getCategories = async (req, res) => {
+  try {
+    const categories = await Category.find().exec();
+    res.status(200).json(categories);
+  } catch (error) {
+    res.status(400).json({ message: "Invalid request" });
   }
 };
