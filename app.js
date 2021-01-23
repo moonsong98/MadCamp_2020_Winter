@@ -7,9 +7,10 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+const indexRouter = require("./routes/index");
+const authRouter = require("./routes/auth");
 const restaurantRouter = require("./routes/restaurant");
+const categoryRouter = require("./routes/category");
 
 var app = express();
 const PORT = 8080;
@@ -38,8 +39,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/auth", authRouter);
 app.use("/restaurant", restaurantRouter);
+app.use("/category", categoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
