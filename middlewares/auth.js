@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const { User } = require("../models/user");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
@@ -17,7 +17,7 @@ exports.verifyToken = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.log(error.name);
+    console.log(error);
     if (error.name === "TokenExpiredError") {
       res.status(401).json({ message: "Token Expired" });
     }

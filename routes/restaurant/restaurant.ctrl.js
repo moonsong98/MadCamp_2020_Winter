@@ -54,9 +54,10 @@ exports.getRestaurant = async (req, res) => {
 
 // RETRIEVE all restaurants info - ONLY allowed for admin
 exports.getAllRestaurants = async (req, res) => {
-  // if (!user || user.role !== "admin") {
-  //   return res.status(403).send("Viewing whole restaurant list is not allowed");
-  // }
+  const user = req.user;
+  if (user.role !== "admin") {
+    return res.status(403).send("Viewing whole restaurant list is not allowed");
+  }
 
   const restaurants = await Restaurant.find();
   console.log("Restaunrants: ", restaurants.length);

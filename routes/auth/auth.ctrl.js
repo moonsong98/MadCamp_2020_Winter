@@ -1,8 +1,8 @@
-const User = require("../../models/user");
+const { User, RestaurantOwner, Customer } = require("../../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const auth = require("../../middlewares/auth");
-const { restrOwnerRegister, userRegister } = require("./register");
+const { restrOwnerRegister, customerRegister } = require("./register");
 require("dotenv").config();
 
 exports.register = async (req, res) => {
@@ -14,7 +14,7 @@ exports.register = async (req, res) => {
       restrOwnerRegister(req, res);
       break;
     case "user":
-      userRegister(req, res);
+      customerRegister(req, res);
       break;
 
     case "admin":
@@ -33,11 +33,13 @@ exports.login = async (req, res) => {
     if (!user)
       return res.status(400).json({ message: "ID or password is wrong" });
     console.log(user);
+
     const validPW = await bcrypt.compare(password, user.password);
     if (!validPW)
       return res.status(400).json({ message: "ID or password is wrong" });
+
     if (user.role === "user" && user.confirmed === false) {
-      res.status(401).json({
+      return res.status(401).json({
         message: "Your account is not verified. Please check your email",
       });
     }

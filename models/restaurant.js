@@ -7,14 +7,24 @@ const restaurantSchema = new Schema({
   name: { type: String, required: true },
   category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "category",
+    ref: "Category",
     required: true,
   },
   description: { type: String },
   telephone: { type: String },
-  menus: [{ type: mongoose.Schema.Types.ObjectId, ref: "menu" }],
+  menus: [{ type: mongoose.Schema.Types.ObjectId, ref: "Menu" }],
   comment: [Comment.schema],
   confirmed: { type: Boolean, default: false },
+
+  location: {
+    lat: Number,
+    lng: Number,
+    address: String,
+  },
+  openingHours: {
+    open: String,
+    close: String,
+  },
 });
 
-module.exports = mongoose.model("restaurant", restaurantSchema);
+module.exports = mongoose.model("Restaurant", restaurantSchema);

@@ -1,9 +1,9 @@
-const User = require("../../models/user");
+const { User, RestaurantOwner, Customer } = require("../../models/user");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 const auth = require("../../middlewares/auth");
 
-exports.userRegister = async (req, res) => {
+exports.customerRegister = async (req, res) => {
   const { username, password, nickname, role } = req.body;
 
   const idExist = await User.findOne({ username: username });
@@ -13,11 +13,12 @@ exports.userRegister = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   try {
-    const user = new User({
+    const user = new Customer({
       username: username,
       password: hashedPassword,
-      nickname: nickname,
       role: role,
+
+      nickname: nickname,
       confirmed: false,
       emailVerifyKey: uuidv4(),
     });
@@ -46,10 +47,11 @@ exports.restrOwnerRegister = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   try {
-    const user = new User({
+    const user = new RestaurantOwner({
       username: username,
       password: hashedPassword,
       role: role,
+
       isInitialPassword: true,
     });
 

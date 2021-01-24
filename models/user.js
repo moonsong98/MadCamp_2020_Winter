@@ -1,25 +1,34 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-  username: { type: String, required: true },
-  password: { type: String, required: true },
-  nickname: { type: String },
-  role: { type: String, required: true },
-  // admin, user, restaurantOwner
-  isInitialPassword: { type: Boolean },
-  confirmed: { type: Boolean },
-  emailVerifyKey: { type: String },
-  ownedRestaurant: { type: Schema.Types.ObjectId, ref: "restaurant" },
-  location: {
-    lat: Number,
-    lng: Number,
-    address: String,
-  },
-  openingHours: {
-    open: String,
-    close: String,
-  },
-});
+const User = mongoose.model(
+  "User",
+  new Schema({
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+    role: { type: String, required: true },
 
-module.exports = mongoose.model("user", userSchema);
+    // admin, customer, restaurantOwner
+  })
+);
+
+const RestaurantOwner = User.discriminator(
+  "RestaurantOwner",
+  new Schema({
+    isInitialPassword: { type: Boolean },
+    restaurant: { type: Schema.Types.ObjectId, ref: "Restaurant" },
+  })
+);
+
+const Customer = User.discriminator(
+  "Customer",
+  new Schema({
+    nickname: { type: String },
+    confirmed: { type: Boolean },
+    emailVerifyKey: { type: String },
+  })
+);
+
+exports.User = User;
+exports.RestaurantOwner = RestaurantOwner;
+exports.Customer = Customer;
