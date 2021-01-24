@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const restrCtrl = require("./restaurant.ctrl");
-const verifyToken = require("../../middlewares/verifyToken");
+const auth = require("../../middlewares/auth");
 
-router.get("/", restrCtrl.getAllRestaurants);
+router.get("/", auth.verifyToken, restrCtrl.getAllRestaurants);
 router.get("/:restr_id", restrCtrl.getRestaurant);
 router.get("/category/:category_id", restrCtrl.getRestaurantsInCategory);
 

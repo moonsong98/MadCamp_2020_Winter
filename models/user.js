@@ -8,7 +8,18 @@ const userSchema = new Schema({
   role: { type: String, required: true },
   // admin, user, restaurantOwner
   isInitialPassword: { type: Boolean },
+  confirmed: { type: Boolean },
+  emailVerifyKey: { type: String },
   ownedRestaurant: { type: Schema.Types.ObjectId, ref: "restaurant" },
+  location: {
+    lat: Number,
+    lng: Number,
+    address: String,
+  },
+  openingHours: {
+    open: String,
+    close: String,
+  },
 });
 
 module.exports = mongoose.model("user", userSchema);

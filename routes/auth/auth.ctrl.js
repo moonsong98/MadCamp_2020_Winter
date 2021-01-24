@@ -1,42 +1,26 @@
 const User = require("../../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
-const userRegister = async (req, res) => {};
+const auth = require("../../middlewares/auth");
+const { restrOwnerRegister, userRegister } = require("./register");
+require("dotenv").config();
 
 exports.register = async (req, res) => {
   console.log(req.body);
-  const { username, password, nickname, role } = req.body;
-  if (role !== "admin" && role !== "restaurantOwner" && role !== "user") {
-    return res.status(400).send("Invalid request");
-  }
-  //   if (username === "admin" || role === "admin") {
-  // return res.status(400).send("Register as admin is not Allowed");
-  //   }
-  const idExist = await User.findOne({ username: username });
-  if (idExist) return res.status(400).send("ID already exists");
+  const { role } = req.body;
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+  switch (role) {
+    case "restaurantOwner":
+      restrOwnerRegister(req, res);
+      break;
+    case "user":
+      userRegister(req, res);
+      break;
 
-  try {
-    const user = new User({
-      username: username,
-      password: hashedPassword,
-      nickname: nickname,
-      role: role,
-    });
-    if (role === "restaurantOwner") user.isInitialPassword = true;
-
-    const savedUser = await user.save();
-    res.json({
-      _id: savedUser._id,
-      username: savedUser.username,
-      role: savedUser.role,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ message: "Register failed" });
+    case "admin":
+      return res.status(400).send("Register as admin is not Allowed");
+    default:
+      return res.status(400).send("Invalid request");
   }
 };
 
@@ -52,15 +36,24 @@ exports.login = async (req, res) => {
     const validPW = await bcrypt.compare(password, user.password);
     if (!validPW)
       return res.status(400).json({ message: "ID or password is wrong" });
+    if (user.role === "user" && user.confirmed === false) {
+      res.status(401).json({
+        message: "Your account is not verified. Please check your email",
+      });
+    }
 
     // assign token
-    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-    console.log(token);
+    const token = auth.createAccessToken(user);
+    const refreshToken = auth.createRefreshToken(user);
+
+    console.log(token, refreshToken);
     res.status(200).json({
       nickname: user.nickname,
       role: user.role,
-      token: token,
       isInitialPassword: user.isInitialPassword,
+
+      token: token,
+      refreshToken: refreshToken,
     });
   } catch (error) {
     console.log(error);
@@ -79,7 +72,7 @@ exports.updatePassword = async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   try {
-    const user = await User.findById(req.user._id);
+    const user = req.user;
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -87,7 +80,7 @@ exports.updatePassword = async (req, res) => {
       user.isInitialPassword = false;
     }
 
-    savedUser.password = hashedPassword;
+    user.password = hashedPassword;
     const savedUser = await user.save();
 
     console.log("After change Password: ", savedUser);
@@ -95,5 +88,45 @@ exports.updatePassword = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Change password failed" });
+  }
+};
+
+exports.refreshToken = async (req, res) => {
+  const refreshToken = req.headers["refresh-token"];
+  if (!refreshToken) {
+    return res.status(401).send("Token not provided");
+  }
+
+  let user = null;
+  try {
+    const verified = jwt.verify(refreshToken, process.env.TOKEN_SECRET);
+    console.log("verified: ", verified);
+    user = await User.findById(verified._id);
+  } catch (error) {
+    console.log(error);
+    return res.status(401).send("Invalid token");
+  }
+
+  return res.status(200).json({
+    token: auth.createRefreshToken(user),
+    refreshToken: auth.createAccessToken(user),
+  });
+};
+
+exports.verifyEmail = async (req, res) => {
+  const verifiedUser = await User.findOne({
+    emailVerifyKey: req.params.verify_key,
+  });
+  if (!verifiedUser) {
+    return res.status(401).send("Invalid verify key");
+  }
+
+  try {
+    verifiedUser.confirmed = true;
+    await verifiedUser.save();
+    res.status(200).send("Successfully verify email");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Failed to verify email");
   }
 };
