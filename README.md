@@ -11,7 +11,7 @@
 | Method | URI                              | Action                                |
 | ------ | -------------------------------- | ------------------------------------- |
 | GET    | /restaurant                      | 모든 식당 리스트 읽기                 |
-| GET    | /restaurant?category=category_id | 특정 카테고리에 속한 식당 리스트 반환 |
+| GET    | /restaurant?category=category_id | 특정 카테고리에 속한 식당 리스트 읽기 |
 | GET    | /restaurant/:restr_id            | 특정 식당 정보 읽기                   |
 | POST   | /restaurant                      | 특정 식당 정보 추가                   |
 | PUT    | /restaurant/:restr_id            | 특정 식당 정보 업데이트               |
