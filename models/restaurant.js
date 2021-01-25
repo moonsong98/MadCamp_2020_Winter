@@ -17,14 +17,15 @@ const restaurantSchema = new Schema({
   confirmed: { type: Boolean, default: false },
 
   location: {
-    lat: Number,
-    lng: Number,
-    address: String,
+    fullAddress: String,
+    extraAddress: String,
   },
-  openingHours: {
-    open: String,
-    close: String,
-  },
+  openingHours: [
+    {
+      openTime: String,
+      closeTime: String,
+    },
+  ],
 });
 
 module.exports = mongoose.model("Restaurant", restaurantSchema);

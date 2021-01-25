@@ -4,24 +4,26 @@ const Category = require("../../models/category");
 
 /* CREATE new restaurant */
 exports.createRestaurant = async (req, res) => {
-  console.log("Request:\n", req);
+  console.log(req.user);
+  const user = req.user;
+
+  if (user.role !== "admin" && user.role !== "restaurantOwner") {
+    return res.status(403).json({
+      message: "Admin or Restaurant owner can create new restaurant info",
+    });
+  }
+
   console.log("CREATE restaurant:\n", req.body);
-  const { name, category, description, telephone } = req.body;
+  const { category } = req.body;
   try {
     const categoryObject = await Category.findOne({ name: category });
     if (!categoryObject) {
       res.status(400);
       return res.json({ message: "Invalid category" });
     }
-    const restaurant = new Restaurant({
-      category: categoryObject._id,
-      name,
-      description,
-      telephone,
-    });
 
     const menuList = req.body.menus;
-
+    let menuIds = [];
     if (menuList) {
       const promises = menuList.map((element) => {
         const menu = new Menu(element);
@@ -29,16 +31,24 @@ exports.createRestaurant = async (req, res) => {
       });
 
       const savedMenus = await Promise.all(promises);
-      const menuIds = savedMenus.map((element) => element._id);
-      restaurant.menus = menuIds;
+      menuIds = savedMenus.map((element) => element._id);
     }
+    const restaurant = new Restaurant({
+      ...req.body,
+      category: categoryObject._id,
+      menus: menuIds,
+    });
 
     console.log("Restaurant", restaurant);
     const output = await restaurant.save();
+    user.restaurant = output._id;
+    console.log(user);
+    user.save();
+
     res.status(200).json(output);
   } catch (error) {
     console.log(error);
-    res.status(400).send({ message: "Restaurant was ill-formed" });
+    res.status(400).json({ message: "Restaurant was ill-formed" });
   }
 };
 
@@ -53,24 +63,35 @@ exports.getRestaurant = async (req, res) => {
 };
 
 // RETRIEVE all restaurants info - ONLY allowed for admin
-exports.getAllRestaurants = async (req, res) => {
+exports.getRestaurants = async (req, res) => {
   const user = req.user;
-  if (user.role !== "admin") {
-    return res.status(403).send("Viewing whole restaurant list is not allowed");
+  const serachOption = {};
+  if (req.query.category) {
+    console.log("Category:", req.query.category);
+    const categoryId = req.query.category;
+    try {
+      const category = await Category.findById(categoryId);
+      console.log(category.name);
+      serachOption.category = category._id;
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json("Category was ill-formed");
+    }
   }
 
-  const restaurants = await Restaurant.find();
-  console.log("Restaunrants: ", restaurants.length);
-  res.status(200).json(restaurants);
+  const restaurants = await Restaurant.find(serachOption);
+  console.log("Restaurants: ", restaurants.length);
+  return res.status(200).json(restaurants);
 };
 
 exports.getRestaurantsInCategory = async (req, res) => {
   const categoryId = req.params.category_id;
   // category = category.substring(1, category.length - 1);
-  console.log(categoryId);
+  console.log("Category:", categoryId);
 
   try {
     const category = await Category.findById(categoryId);
+    console.log(category.name);
     const restaurants = await Restaurant.find(
       {
         category: category._id,
@@ -78,7 +99,7 @@ exports.getRestaurantsInCategory = async (req, res) => {
       "-category"
     );
 
-    console.log(restaurants);
+    console.log(restaurants.length);
     res.status(200).json(restaurants);
   } catch (error) {
     console.log(error);

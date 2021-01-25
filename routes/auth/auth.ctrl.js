@@ -25,16 +25,16 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  const { username, password } = req.body;
   console.log(req.body);
 
   try {
+    const { username, password: inputPassword } = req.body;
     const user = await User.findOne({ username: username });
     if (!user)
       return res.status(400).json({ message: "ID or password is wrong" });
     console.log(user);
 
-    const validPW = await bcrypt.compare(password, user.password);
+    const validPW = await bcrypt.compare(inputPassword, user.password);
     if (!validPW)
       return res.status(400).json({ message: "ID or password is wrong" });
 
@@ -47,13 +47,12 @@ exports.login = async (req, res) => {
     // assign token
     const token = auth.createAccessToken(user);
     const refreshToken = auth.createRefreshToken(user);
+    res.cookie("refresh-token", refreshToken, { sameSite: "none" });
 
     console.log(token, refreshToken);
+    const { password, __v, ...responseData } = user._doc;
     res.status(200).json({
-      nickname: user.nickname,
-      role: user.role,
-      isInitialPassword: user.isInitialPassword,
-
+      ...responseData,
       token: token,
       refreshToken: refreshToken,
     });

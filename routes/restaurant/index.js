@@ -4,11 +4,11 @@ const router = express.Router();
 const restrCtrl = require("./restaurant.ctrl");
 const auth = require("../../middlewares/auth");
 
-router.get("/", auth.verifyToken, restrCtrl.getAllRestaurants);
+router.get("/", restrCtrl.getRestaurants);
 router.get("/:restr_id", restrCtrl.getRestaurant);
 router.get("/category/:category_id", restrCtrl.getRestaurantsInCategory);
 
-router.post("/", restrCtrl.createRestaurant);
+router.post("/", auth.verifyToken, restrCtrl.createRestaurant);
 router.put("/:restr_id", restrCtrl.updateRestaurant);
 router.delete("/:restr_id", restrCtrl.deleteRestaurant);
 
