@@ -27,9 +27,18 @@
 | POST   | /auth/update-password | 초기 비밀번호 변경 (Restaurant Owner 한정) | O    | 500:<br />- Request와 관련 없는 서버 상의 오류                                                                                           |
 | POST   | /auth/refresh-token   | Access token 재발급 (Refresh token 필요)   |      | 401:<br />- Request에 refresh token이 들어 있지 않음<br />- Refresh token이 유효하지 않음                                                |
 
+### User
+
+| Method | URI            | Action                                          | 인증 | Status code                                                                                                                                           |
+| ------ | -------------- | ----------------------------------------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | /user/:user_id | 특정 유저 정보 읽기                             | O    | 400:<br />- Request가 User schema를 만족하지 않음<br />403: <br />- 토큰에 든 ID와 user_id가 일치하지 않음 (자신의 정보에만 접근 가능, 관리자는 예외) |
+| PUT    | /user/:user_id | 특정 유저 정보 업데이트<br />(user에 한해 가능) | O    | 400:<br />- Request가 User schema를 만족하지 않음<br />403: <br />- 토큰에 든 ID와 user_id가 일치하지 않음 (자신의 정보에만 접근 가능, 관리자는 예외) |
+| DELETE | /user/:user_id | 특정 유저 정보 삭제                             | O    | 400:<br />- Request가 User schema를 만족하지 않음<br />403: <br />- 토큰에 든 ID와 user_id가 일치하지 않음 (자신의 정보에만 접근 가능, 관리자는 예외) |
+
 #### 인증 실패시 - 401 (Unauthorized)
 
-인증에 사용되는 Access token이 유효하지 않은 경우. 아래의 이유 중 하나일 수 있음.
+Access token이 유효하지 않아 인증에 실패한 경우 일괄적으로 401 응답 코드를 반환함.
+아래의 이유 중 하나일 수 있음.
 
 - 토큰이 만료됨
 - 해당 토큰으로 유저를 식별할 수 없음
