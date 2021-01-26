@@ -15,6 +15,7 @@ const menuSchema = new Schema({
       required: true,
     },
   ],
+  image: { type: String },
 });
 
 module.exports = mongoose.model("Menu", menuSchema);
