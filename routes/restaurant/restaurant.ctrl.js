@@ -1,3 +1,6 @@
+const fs = require("fs");
+const path = require("path");
+
 const Restaurant = require("../../models/restaurant");
 const Menu = require("../../models/menu");
 const Category = require("../../models/category");
@@ -22,10 +25,10 @@ exports.createRestaurant = async (req, res) => {
       return res.json({ message: "Invalid category" });
     }
 
-    const menuList = req.body.menus;
+    const menus = req.body.menus;
     let menuIds = [];
-    if (menuList) {
-      const promises = menuList.map((element) => {
+    if (menus) {
+      const promises = menus.map((element) => {
         const menu = new Menu(element);
         return menu.save();
       });
@@ -56,71 +59,109 @@ exports.createRestaurant = async (req, res) => {
 exports.getRestaurant = async (req, res) => {
   const { restr_id } = req.params;
   console.log(restr_id);
-  const restaurant = await Restaurant.findById(restr_id).populate("menus");
-
-  console.log(restaurant);
-  res.status(200).json(restaurant);
+  try {
+    const restaurant = await Restaurant.findById(restr_id)
+      .populate("menus")
+      .populate("category");
+    console.log(restaurant);
+    return res.status(200).json({
+      ...restaurant._doc,
+      category: restaurant.category.name,
+    });
+  } catch (error) {
+    return res.status(400).json({ message: "Invalid restaurant id" });
+  }
 };
 
 // RETRIEVE all restaurants info - ONLY allowed for admin
 exports.getRestaurants = async (req, res) => {
+  // console.log("cookie", req.headers);
   const user = req.user;
-  const serachOption = {};
+  const searchOption = {};
   if (req.query.category) {
     console.log("Category:", req.query.category);
     const categoryId = req.query.category;
     try {
       const category = await Category.findById(categoryId);
       console.log(category.name);
-      serachOption.category = category._id;
+      searchOption.category = category._id;
     } catch (error) {
       console.log(error);
       return res.status(400).json("Category was ill-formed");
     }
   }
 
-  const restaurants = await Restaurant.find(serachOption);
+  const restaurants = await Restaurant.find(searchOption, "-category");
   console.log("Restaurants: ", restaurants.length);
   return res.status(200).json(restaurants);
 };
 
-exports.getRestaurantsInCategory = async (req, res) => {
-  const categoryId = req.params.category_id;
-  // category = category.substring(1, category.length - 1);
-  console.log("Category:", categoryId);
-
-  try {
-    const category = await Category.findById(categoryId);
-    console.log(category.name);
-    const restaurants = await Restaurant.find(
-      {
-        category: category._id,
-      },
-      "-category"
+const deleteFiles = async (files) => {
+  const promises = files.map((file) => {
+    const filePath = path.join(
+      __dirname,
+      `../images/menus/${file.originalname}`
     );
+    return fs.unlink(filePath);
+  });
 
-    console.log(restaurants.length);
-    res.status(200).json(restaurants);
-  } catch (error) {
-    console.log(error);
-    res.status(400).json("Category was ill-formed");
-  }
+  const output = await Promise.all(promises);
+  console.log("Delete files output:", output);
 };
 
 // UPDATE restaurant info
 exports.updateRestaurant = async (req, res) => {
   const { restr_id } = req.params;
   console.log("Update id:", restr_id);
-  console.log("UPDATE restraurant:\n", req.body);
+  console.log("UPDATE restraurant:\n", req.body.updates);
+  console.log("Files:", req.files);
 
+  const restaurant = await Restaurant.findById(restr_id).exec();
   try {
-    const updated = await Restaurant.findByIdAndUpdate(restr_id, req.body, {
-      new: true,
-    }).exec();
-    res.status(200).json(updated);
+    if (!restaurant) throw new Error("Invalid restuarant ID");
+
+    const updates = req.body.updates;
+    if (!updates) throw new Error("Update not found");
+
+    if (updates.menus) {
+      const { added, modified, deleted } = updates.menus;
+      let menuIds = [];
+      const promises = [];
+
+      deleted.forEach((menu) => {
+        Menu.findByIdAndRemove(menu._id);
+      });
+
+      promises.concat(
+        added.map((menu) => {
+          return new Menu(menu);
+        })
+      );
+      promises.concat(
+        modified.map((menu) => {
+          return Menu.findByIdAndUpdate(menu._id, menu, { new: true });
+        })
+      );
+
+      const savedMenus = await Promise.all(promises);
+      menuIds = savedMenus.map((element) => element._id);
+    }
+    const updatedRestaurant = await Restaurant.findByIdAndUpdate(
+      restr_id,
+      {
+        ...req.body,
+        menus: menuIds,
+      },
+      { new: true }
+    );
+    console.log("After update:", updatedRestaurant);
+    return res.status(200).json(updatedRestaurant);
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Update failed" });
+    deleteFiles(req.files);
+    return res.status(400).json({
+      message: "Invalid request",
+    });
   }
 };
 
@@ -135,7 +176,8 @@ exports.deleteRestaurant = async (req, res) => {
     }
     const menus = restaurant.menus;
 
-    await Menu.deleteMany().where("_id").in(menus).exec();
+    const output = await Menu.deleteMany().where("_id").in(menus).exec();
+    console.log(output);
     await Restaurant.findByIdAndDelete(restr_id).exec();
 
     res.status(200).json({ message: "Delete sucess" });
