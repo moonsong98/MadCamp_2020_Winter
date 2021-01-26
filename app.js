@@ -11,6 +11,8 @@ const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
 const restaurantRouter = require("./routes/restaurant");
 const categoryRouter = require("./routes/category");
+const userRouter = require("./routes/user");
+const imageRouter = require("./routes/image");
 
 var app = express();
 const PORT = 8080;
@@ -42,6 +44,8 @@ app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/restaurant", restaurantRouter);
 app.use("/category", categoryRouter);
+app.use("/image", imageRouter);
+app.use("/user", userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -18,9 +18,11 @@ exports.register = async (req, res) => {
       break;
 
     case "admin":
-      return res.status(400).send("Register as admin is not Allowed");
+      return res
+        .status(400)
+        .json({ message: "Register as admin is not Allowed" });
     default:
-      return res.status(400).send("Invalid request");
+      return res.status(400).json({ message: "Invalid request" });
   }
 };
 
@@ -45,15 +47,16 @@ exports.login = async (req, res) => {
     }
 
     // assign token
-    const token = auth.createAccessToken(user);
+    const accessToken = auth.createAccessToken(user);
     const refreshToken = auth.createRefreshToken(user);
     res.cookie("refresh-token", refreshToken, { sameSite: "none" });
 
-    console.log(token, refreshToken);
-    const { password, __v, ...responseData } = user._doc;
+    console.log(accessToken, refreshToken);
+    const { password, __v, restaurant, ...responseData } = user._doc;
     res.status(200).json({
       ...responseData,
-      token: token,
+      restaurantId: restaurant,
+      accessToken: accessToken,
       refreshToken: refreshToken,
     });
   } catch (error) {
@@ -74,9 +77,6 @@ exports.updatePassword = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
   try {
     const user = req.user;
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
-    }
     if (user.role === "restaurantOwner" && user.isInitialPassword) {
       user.isInitialPassword = false;
     }
@@ -124,6 +124,7 @@ exports.verifyEmail = async (req, res) => {
 
   try {
     verifiedUser.confirmed = true;
+    verifiedUser.emailVerifyKey = "";
     await verifiedUser.save();
     res.status(200).send("Successfully verify email");
   } catch (error) {

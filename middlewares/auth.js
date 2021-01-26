@@ -21,6 +21,7 @@ exports.verifyToken = async (req, res, next) => {
     if (error.name === "TokenExpiredError") {
       res.status(401).json({ message: "Token Expired" });
     }
+    res.status(401).json({ message: "Invalid token" });
   }
 };
 
@@ -39,28 +40,28 @@ exports.createRefreshToken = (user) => {
 };
 
 exports.sendVerifyEmail = async (user) => {
-  const smtpTransport = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: process.env.ADMIN_EMAIL_ID,
-      pass: process.env.ADMIN_EMAIL_PASSWORD,
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
-
-  const verifyUrl = `${process.env.BASE_URL}/auth/email-verify/${user.emailVerifyKey}`;
-  const mailOptions = {
-    from: process.env.ADMIN_EMAIL_ID,
-    to: `${user.username}@gmail.com`,
-    subject: "인증 메일입니다.",
-    html:
-      `Hello, ${user.username} <br /> Click to verify your account <br />` +
-      verifyUrl,
-  };
-
   try {
+    const smtpTransport = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.ADMIN_EMAIL_ID,
+        pass: process.env.ADMIN_EMAIL_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    const verifyUrl = `${process.env.BASE_URL}/auth/email-verify/${user.emailVerifyKey}`;
+    const mailOptions = {
+      from: process.env.ADMIN_EMAIL_ID,
+      to: `${user.username}@gmail.com`,
+      subject: "인증 메일입니다.",
+      html:
+        `Hello, ${user.username} <br /> Click to verify your account <br />` +
+        `<a href=${verifyUrl}> 이메일 인증하기 </a>`,
+    };
+
     const result = await smtpTransport.sendMail(mailOptions);
     console.log(result);
   } catch (error) {

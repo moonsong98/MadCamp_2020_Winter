@@ -7,7 +7,11 @@ exports.customerRegister = async (req, res) => {
   const { username, password, nickname, role } = req.body;
 
   const idExist = await User.findOne({ username: username });
-  if (idExist) return res.status(400).send("ID already exists");
+  if (idExist)
+    return res.status(400).json({
+      error: "DuplicateID",
+      message: "ID already exists",
+    });
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -33,7 +37,10 @@ exports.customerRegister = async (req, res) => {
     auth.sendVerifyEmail(user);
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Register failed" });
+    res.status(400).json({
+      error: "MissingField",
+      message: "Register failed",
+    });
   }
 };
 
@@ -47,6 +54,7 @@ exports.restrOwnerRegister = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   try {
+    console.log("!!");
     const user = new RestaurantOwner({
       username: username,
       password: hashedPassword,
