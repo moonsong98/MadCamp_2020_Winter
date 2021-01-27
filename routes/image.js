@@ -1,5 +1,6 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const path = require("path");
 
 router.get("/:dirname/:filename", async (req, res) => {
   try {
@@ -8,9 +9,10 @@ router.get("/:dirname/:filename", async (req, res) => {
     const filePath = path.join(__dirname, `../images/${dirname}/${filename}`);
     console.log(filePath);
 
-    res.set("Content-Type", "images/*");
+    res.set("Content-Type", "images/jpg");
     res.status(200).sendFile(filePath);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: "Invalid image request" });
   }
 });

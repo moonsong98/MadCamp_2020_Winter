@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Category = require("./category");
 const Comment = require("./comment");
 const Schema = mongoose.Schema;
 
@@ -13,8 +12,13 @@ const restaurantSchema = new Schema({
   description: { type: String },
   telephone: { type: String },
   menus: [{ type: mongoose.Schema.Types.ObjectId, ref: "Menu" }],
-  comment: [Comment.schema],
+  comments: [Comment.schema],
   confirmed: { type: Boolean, default: false },
+  contractExpiredAt: {
+    type: Date,
+    // one year after from now
+    default: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+  },
 
   location: {
     fullAddress: String,

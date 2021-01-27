@@ -3,8 +3,10 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 
-const restrCtrl = require("./restaurant.ctrl");
-const auth = require("../../middlewares/auth");
+const restrCtrl = require("../controllers/restaurant.ctrl");
+const menuRouter = require("./menu");
+const commentRouter = require("./comment");
+const { verifyToken } = require("../middlewares/auth");
 
 // handling file upload
 const storage = multer.diskStorage({
@@ -13,7 +15,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
-  }, // format: {fieldname}-{date} (with ext)
+  },
 });
 
 const fileFilter = (req, file, cb) => {
@@ -25,6 +27,7 @@ const fileFilter = (req, file, cb) => {
     cb(null, true);
   } else {
     req.fileValidationError = "Image uploaded is not of type jpg/jpeg or png";
+    console.log("111");
     cb(null, false);
   }
 };
@@ -32,12 +35,14 @@ let upload = multer({ storage: storage, fileFilter: fileFilter });
 
 router.get("/", restrCtrl.getRestaurants);
 router.get("/:restr_id", restrCtrl.getRestaurant);
+router.use("/:restr_id/menu", menuRouter);
+router.use("/:restr_id/comment", commentRouter);
 
-router.post("/", auth.verifyToken, restrCtrl.createRestaurant);
+router.post("/", verifyToken, restrCtrl.createRestaurant);
 router.put(
   "/:restr_id",
-  auth.verifyToken,
-  upload.array("images"),
+  verifyToken,
+  upload.single("image"),
   restrCtrl.updateRestaurant
 );
 router.delete("/:restr_id", restrCtrl.deleteRestaurant);
