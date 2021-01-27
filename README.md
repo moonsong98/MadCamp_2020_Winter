@@ -35,6 +35,15 @@
 | PUT    | /user/:user_id | 특정 유저 정보 업데이트<br />(user에 한해 가능) | O    | 400:<br />- Request가 User schema를 만족하지 않음<br />403: <br />- 토큰에 든 ID와 user_id가 일치하지 않음 (자신의 정보에만 접근 가능, 관리자는 예외) |
 | DELETE | /user/:user_id | 특정 유저 정보 삭제                             | O    | 400:<br />- Request가 User schema를 만족하지 않음<br />403: <br />- 토큰에 든 ID와 user_id가 일치하지 않음 (자신의 정보에만 접근 가능, 관리자는 예외) |
 
+### Comment
+
+| Method | URI                                             | Action                | 인증 | Status code                                                                                                                                                                                                                    |
+| ------ | ----------------------------------------------- | --------------------- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| GET    | /restaurant/:restr_id/comment                   | 모든 댓글 리스트 읽기 | O    | 400:<br />- restr_id로 검색된 식당이 없음<br />- Request가 Comment schema를 만족하지 않음                                                                                                                                      |
+| POST   | /restaurant/:restr_id/comment                   | 댓글 추가             | O    | 400:<br />- restr_id로 검색된 식당이 없음<br />- 요청에 body 항목이 없음                                                                                                                                                       |
+| PUT    | /restaurant/:restr_id/comment/:comment_id       | 특정 댓글 수정        | O    | 400:<br />- restr_id로 검색된 식당이 없음<br />- 검색된 식당에 comment_id를 가진 comment가 없음<br />- 요청에 body 항목이 없음<br />403:<br />- 토큰에 든 ID와 댓글 작성자 ID가 일치하지 않음 (자신이 작성한 댓글만 수정 가능) |
+| DELETE | /restaurant/:restr_id<br />/comment/:comment_id | 특정 댓글 삭제        | O    | 400:<br />- restr_id로 검색된 식당이 없음<br />403: <br />- 토큰에 든 ID와 댓글 작성자 ID가 일치하지 않음 (자신이 작성한 댓글만 삭제 가능)                                                                                     |
+
 #### 인증 실패시 - 401 (Unauthorized)
 
 Access token이 유효하지 않아 인증에 실패한 경우 일괄적으로 401 응답 코드를 반환함.
