@@ -28,7 +28,9 @@ exports.addComment = async (req, res) => {
       message: "Invalid Restaurant ID",
     });
   }
-  const { _id: userId, nickname } = req.user;
+  const userId = req.user._id;
+  const nickname =
+    req.user.role === "restaurantOwner" ? restaurant.name : req.user.nickname;
   const { body } = req.body;
 
   try {
@@ -53,7 +55,7 @@ exports.addComment = async (req, res) => {
 exports.updateComment = async (req, res) => {
   const { restr_id, comment_id } = req.params;
   const restaurant = await Restaurant.findById(restr_id);
-  console.log(restaurant);
+  //   console.log(restaurant);
 
   try {
     if (!restaurant) {

@@ -11,10 +11,10 @@ const { verifyToken } = require("../middlewares/auth");
 // handling file upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../images/menus"));
+    cb(null, path.join(__dirname, "../images/restaurants"));
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    cb(null, `restaurant-${Date.now()}${path.extname(file.originalname)}`);
   },
 });
 
@@ -38,7 +38,12 @@ router.get("/:restr_id", restrCtrl.getRestaurant);
 router.use("/:restr_id/menu", menuRouter);
 router.use("/:restr_id/comment", commentRouter);
 
-router.post("/", verifyToken, restrCtrl.createRestaurant);
+router.post(
+  "/",
+  verifyToken,
+  upload.single("image"),
+  restrCtrl.createRestaurant
+);
 router.put(
   "/:restr_id",
   verifyToken,

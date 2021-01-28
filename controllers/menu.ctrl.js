@@ -6,6 +6,25 @@ const Menu = require("../models/menu");
 const Category = require("../models/category");
 const { deleteFile } = require("../middlewares/file");
 
+exports.getMenu = async (req, res) => {
+  const { menu_id } = req.params;
+  console.log("Menu:", menu_id);
+
+  try {
+    const menu = await Menu.findById(menu_id).exec();
+    if (!menu) throw new Error();
+
+    console.log(menu.name);
+    return res.status(200).json(menu);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      error: "InvalidMenuReadError",
+      message: "Invalid request",
+    });
+  }
+};
+
 exports.addMenu = async (req, res) => {
   const { restr_id } = req.params;
   console.log("Restaurant:", restr_id);
@@ -21,7 +40,10 @@ exports.addMenu = async (req, res) => {
   try {
     const menuInfo = JSON.parse(req.body.menu);
     console.log(menuInfo);
-    const menu = new Menu(menuInfo);
+    const menu = new Menu({
+      ...menuInfo,
+      image: req.file.filename,
+    });
     const savedMenu = await menu.save();
     console.log(savedMenu);
 
@@ -62,14 +84,19 @@ exports.updateMenu = async (req, res) => {
       });
     }
 
-    const newMenu = req.body;
-    const menu = await Menu.findByIdAndUpdate(menu_id, newMenu);
-
-    console.log(menu);
-    if (newMenu.image) {
-      deleteFile(prevMenu.image);
+    const menu = await Menu.findById(menu_id);
+    const { image, ...newMenu } = JSON.parse(req.body.menu);
+    if (req.file) {
+      console.log(req.file);
+      newMenu.image = req.file.filename;
+      deleteFile("menus", menu.image);
     }
+
     console.log(newMenu);
+    const output = await Menu.findByIdAndUpdate(menu_id, newMenu, {
+      new: true,
+    }).exec();
+    console.log(output);
 
     return res.json({ message: "Update success" });
   } catch (error) {
@@ -105,6 +132,7 @@ exports.deleteMenu = async (req, res) => {
       });
     }
     const menu = await Menu.findById(menu_id).exec();
+    deleteFile("menus", menu.image);
     menu.remove();
     return res.status(200).json({ message: "Delete success" });
   } catch (error) {

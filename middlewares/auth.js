@@ -11,7 +11,7 @@ exports.verifyToken = async (req, res, next) => {
   }
   try {
     const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-    console.log("verified: ", verified);
+    console.log("verifiedASDF: ", verified);
     const user = await User.findById(verified._id);
     if (!user) return res.status(401).json({ message: "Invalid user" });
     console.log(user);
@@ -21,9 +21,9 @@ exports.verifyToken = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     if (error.name === "TokenExpiredError") {
-      res.status(401).json({ message: "Token Expired" });
+      return res.status(401).json({ message: "Token Expired" });
     }
-    res.status(401).json({ message: "Invalid token" });
+    return res.status(401).json({ message: "Invalid token" });
   }
 };
 

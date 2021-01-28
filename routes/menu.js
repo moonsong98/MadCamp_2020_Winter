@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
     cb(null, path.join(__dirname, "../images/menus"));
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    cb(null, `menu-${Date.now()}${path.extname(file.originalname)}`);
   },
 });
 
@@ -31,6 +31,7 @@ const fileFilter = (req, file, cb) => {
 };
 let upload = multer({ storage: storage, fileFilter: fileFilter });
 
+router.get("/:menu_id", menuCtrl.getMenu);
 router.post("/", verifyToken, upload.single("image"), menuCtrl.addMenu);
 router.put(
   "/:menu_id",

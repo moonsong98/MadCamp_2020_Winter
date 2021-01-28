@@ -17,8 +17,9 @@ exports.createRestaurant = async (req, res) => {
     });
   }
 
-  console.log("CREATE restaurant:\n", req.body);
-  const { category } = req.body;
+  const newRestaurant = JSON.parse(req.body.restaurant);
+  console.log("CREATE restaurant:\n", newRestaurant);
+  const { category } = newRestaurant;
   try {
     const categoryObject = await Category.findOne({ name: category });
     if (!categoryObject) {
@@ -26,7 +27,9 @@ exports.createRestaurant = async (req, res) => {
       return res.json({ message: "Invalid category" });
     }
 
-    const menus = req.body.menus;
+    if (req.file) newRestaurant.image = req.file.filename;
+
+    const menus = newRestaurant.menus;
     let menuIds = [];
     if (menus) {
       const promises = menus.map((element) => {
@@ -37,8 +40,9 @@ exports.createRestaurant = async (req, res) => {
       const savedMenus = await Promise.all(promises);
       menuIds = savedMenus.map((element) => element._id);
     }
+
     const restaurant = new Restaurant({
-      ...req.body,
+      ...newRestaurant,
       category: categoryObject._id,
       menus: menuIds,
     });
@@ -65,7 +69,7 @@ exports.getRestaurant = async (req, res) => {
       .populate("menus")
       .populate("category")
       .lean();
-    console.log(restaurant);
+    console.log(restaurant.name);
     return res.status(200).json({
       ...restaurant,
       category: restaurant.category.name,
@@ -113,22 +117,25 @@ exports.updateRestaurant = async (req, res) => {
     console.log("Update id:", restr_id);
     console.log("Files:", req.file);
 
-    const restaurant = await Restaurant.findById(restr_id)
-      .populate("category")
-      .exec();
+    const restaurant = await Restaurant.findById(restr_id).exec();
     if (!restaurant) throw new Error("Invalid restaurant ID");
 
     const updateInfo = JSON.parse(req.body.restaurant);
     console.log("UPDATE restaurant:\n", updateInfo);
     if (!updateInfo) throw new Error("Update not found");
 
-    const { category, ...updateWithoutCategory } = updateInfo;
+    const { category, image, ...updateData } = updateInfo;
+    if (req.file) {
+      updateData.image = req.file.filename;
+      deleteFile("restaurants", restaurant.image);
+    }
+
     restaurant.category = await Category.findOne({ name: updateInfo.category });
     await restaurant.save();
 
     const updatedRestaurant = await Restaurant.findByIdAndUpdate(
       restr_id,
-      updateWithoutCategory,
+      updateData,
       { new: true }
     );
 

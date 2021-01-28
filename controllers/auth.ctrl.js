@@ -95,23 +95,34 @@ exports.updatePassword = async (req, res) => {
 exports.refreshToken = async (req, res) => {
   const refreshToken = req.headers["refresh-token"];
   if (!refreshToken) {
-    return res.status(401).send("Token not provided");
+    return res.status(401).json({
+      error: "TokenNotFoundError",
+      message: "Token not found",
+    });
   }
 
-  let user = null;
   try {
     const verified = jwt.verify(refreshToken, process.env.TOKEN_SECRET);
-    console.log("verified: ", verified);
-    user = await User.findById(verified._id);
+    console.log("verified@@: ", verified);
+    const user = await User.findById(verified._id);
+    if (!user) {
+      return res.status(401).json({
+        error: "InvalidTokenError",
+        message: "Invalid Token",
+      });
+    }
+
+    return res.status(200).json({
+      accessToken: auth.createRefreshToken(user),
+      refreshToken: auth.createAccessToken(user),
+    });
   } catch (error) {
     console.log(error);
-    return res.status(401).send("Invalid token");
+    return res.status(401).json({
+      error: error.name,
+      message: "Invalid Token",
+    });
   }
-
-  return res.status(200).json({
-    token: auth.createRefreshToken(user),
-    refreshToken: auth.createAccessToken(user),
-  });
 };
 
 exports.verifyEmail = async (req, res) => {
@@ -130,5 +141,41 @@ exports.verifyEmail = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("Failed to verify email");
+  }
+};
+
+exports.checkTokenExpired = async (req, res) => {
+  const token = req.header("token");
+  if (!token) {
+    console.log("Token not found");
+    return res
+      .status(401)
+      .json({ error: "TokenNotFoundError", message: "Token not found" });
+  }
+  try {
+    const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+    console.log("verified!!!: ", verified);
+    const user = await User.findById(verified._id);
+    if (!user)
+      return res.status(401).json({
+        error: "InvalidTokenError",
+        message: "Invalid token",
+      });
+
+    return res.status(200).json({
+      success: true,
+      message: "Valid Token",
+    });
+  } catch (error) {
+    console.log(error);
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        error: error.name,
+        message: "Token Expired",
+      });
+    }
+    return res
+      .status(401)
+      .json({ error: "InvalidTokenError", message: "Invalid token" });
   }
 };

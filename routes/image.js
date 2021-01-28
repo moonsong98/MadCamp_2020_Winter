@@ -6,10 +6,10 @@ router.get("/:dirname/:filename", async (req, res) => {
   try {
     console.log("Get image:", req.params);
     const { dirname, filename } = req.params;
-    const filePath = path.join(__dirname, `../images/${dirname}/${filename}`);
+    const filePath = path.join(__dirname, `../images/${dirname}`, filename);
     console.log(filePath);
 
-    res.set("Content-Type", "images/jpg");
+    res.set("Content-Type", "image/jpg");
     res.status(200).sendFile(filePath);
   } catch (error) {
     console.log(error);

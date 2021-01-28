@@ -10,6 +10,7 @@ const restaurantSchema = new Schema({
     required: true,
   },
   description: { type: String },
+  image: { type: String },
   telephone: { type: String },
   menus: [{ type: mongoose.Schema.Types.ObjectId, ref: "Menu" }],
   comments: [Comment.schema],
