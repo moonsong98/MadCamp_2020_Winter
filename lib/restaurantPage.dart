@@ -214,11 +214,14 @@ class _Page1WidgetState extends State<Page1Widget> {
                       Icons.article_outlined
                   ),
                   SizedBox(width: 10 * ratio),
-                  Text(
-                      widget.restaurant.description,
-                      style: TextStyle(
-                          fontSize: 16 * ratio
-                      )
+                  Container(
+                    width: 390 * ratio,
+                    child: Text(
+                        widget.restaurant.description,
+                        style: TextStyle(
+                            fontSize: 16 * ratio
+                        )
+                    ),
                   )
                 ]
             ),
