@@ -39,10 +39,13 @@ class _MainPageState extends State<MainPage> {
             this.categoryList = value;
 
             if (value.length > 0) {
+
               server.getRestaurants(value[0].getId())
                   .then((list) {
-                  restaurantList = list;
-                  newRestaurantList = list;
+                    setState(() {
+                      this.restaurantList = list;
+                      this.newRestaurantList = list;
+                    });
               });
             }
 
