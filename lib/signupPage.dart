@@ -154,160 +154,172 @@ class _SignupPageState extends State<SignupPage> {
           )
         )
       ),
-      body: Container(
-        color: Colors.white,
+      body: SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
         child: Container(
-            margin: EdgeInsets.all(40.0* ratio),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Icon(Icons.auto_fix_high),
-                      Text("아이디는 학교 이메일과 동일해야 합니다.")
-                    ]
-                  ),
-                  TextField(
-                    onChanged: (value) {
-                      if (value.compareTo("") == 0) {
-                        setState(() {
-                          this.idBorderColor = Colors.red;
-                        });
-                      } else {
-                        setState(() {
-                          this.idBorderColor = Colors.black87;
-                        });
-                      }
-                    },
-                      controller: myControllerId,
-                      decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50* ratio),
-                            borderSide: BorderSide(
-                              color: idBorderColor,
-                              width: 1.3* ratio,
-                              //style: BorderStyle.none
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50* ratio),
-                            borderSide: BorderSide(
-                              color: idBorderColor,
-                              width: 1.3* ratio,
-                              //style: BorderStyle.none
-                            ),
-                          ),
-                          hintText: '아이디'
-                      )
-                  ),
-                  SizedBox(height: 15* ratio),
-                  Row(
+          color: Colors.white,
+          child: Container(
+              margin: EdgeInsets.all(40.0* ratio),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
                       children: <Widget>[
                         Icon(Icons.auto_fix_high),
-                        Text("비밀번호는 영문, 숫자, 특수문자의 조합으로 8자리 이상 입력해주세요.", style: TextStyle(fontSize: 10)),
+                        Text("아이디는 학교 이메일과 동일해야 합니다.", style: TextStyle(fontSize: 10))
                       ]
-                  ),
-                  TextField(
-                    onChanged: onItemChanged,
-                      controller: myControllerPw,
-                      decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50* ratio),
-                            borderSide: BorderSide(
-                              color: Colors.black87,
-                              width: 1.3* ratio,
-                              //style: BorderStyle.none
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50* ratio),
-                            borderSide: BorderSide(
-                              color: Colors.black87,
-                              width: 1.3* ratio,
-                              //style: BorderStyle.none
-                            ),
-                          ),
-                          hintText: '비밀번호'
-                      )
-                  ),
-                  SizedBox(height: 15* ratio),
-                  Row(
-                      children: <Widget>[
-                        Icon(Icons.auto_fix_high),
-                        Text("비밀번호를 확인해주세요.")
-                      ]
-                  ),
-                  TextField(
-                    onChanged: onItemChanged,
-                      controller: myControllerPwCf,
-                      decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50* ratio),
-                            borderSide: BorderSide(
-                              color: borderColor,
-                              width: 1.3* ratio,
-                              //style: BorderStyle.none
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50* ratio),
-                            borderSide: BorderSide(
-                              color: borderColor,
-                              width: 1.3* ratio,
-                              //style: BorderStyle.none
-                            ),
-                          ),
-                          hintText: '비밀번호 확인',
-                          hintStyle: TextStyle(
-                              color: hintColor
-                          )
-                      )
-                  ),
-                  SizedBox(height:35* ratio),
-                  ButtonTheme(
-                      buttonColor: Colors.white,
-                      height: 35* ratio,
-                      minWidth: 150* ratio,
-                      child: FlatButton(
-                          child: Text('회원가입', style: TextStyle(fontSize: 25* ratio)),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50* ratio)
-                          ),
-                          onPressed: () {
-                            if (myControllerId.text.compareTo("") != 0
-                                && pwValidate(myControllerPw.text)
-                                && myControllerPw.text.compareTo(myControllerPwCf.text) == 0) {
-
-                              UserRegister user = UserRegister(myControllerId.text, myControllerPw.text, "", "user");
-                              server.postRegister(user)
-                                  .then((value) {
-                                    if (value == 400) {
-                                      showAlertDialogRegisterFail(context);
-                                    } else if (value == 502) {
-                                      showToast("502 bad gateway error!");
-                                    } else if (value == 200) {
-                                      showAlertDialog(context);
-                                    }
-                                  });
-
-                            } else {
-                              showAlertDialogWrong(context);
-                            }
+                    ),
+                    Container(
+                      height: 60*ratio,
+                      child: TextField(
+                        onChanged: (value) {
+                          if (value.compareTo("") == 0) {
+                            setState(() {
+                              this.idBorderColor = Colors.red;
+                            });
+                          } else {
+                            setState(() {
+                              this.idBorderColor = Colors.black87;
+                            });
                           }
-                      )
-                  )
-                      ]
-                  )
+                        },
+                          controller: myControllerId,
+                          decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50* ratio),
+                                borderSide: BorderSide(
+                                  color: idBorderColor,
+                                  width: 1.3* ratio,
+                                  //style: BorderStyle.none
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50* ratio),
+                                borderSide: BorderSide(
+                                  color: idBorderColor,
+                                  width: 1.3* ratio,
+                                  //style: BorderStyle.none
+                                ),
+                              ),
+                              hintText: '아이디'
+                          )
+                      ),
+                    ),
+                    SizedBox(height: 15* ratio),
+                    Row(
+                        children: <Widget>[
+                          Icon(Icons.auto_fix_high),
+                          Text("비밀번호는 영문, 숫자, 특수문자의 조합으로 8자리 이상 입력해주세요.", style: TextStyle(fontSize: 10)),
+                        ]
+                    ),
+                    Container(
+                      height: 60*ratio,
+                      child: TextField(
+                        onChanged: onItemChanged,
+                          controller: myControllerPw,
+                          decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50* ratio),
+                                borderSide: BorderSide(
+                                  color: Colors.black87,
+                                  width: 1.3* ratio,
+                                  //style: BorderStyle.none
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50* ratio),
+                                borderSide: BorderSide(
+                                  color: Colors.black87,
+                                  width: 1.3* ratio,
+                                  //style: BorderStyle.none
+                                ),
+                              ),
+                              hintText: '비밀번호'
+                          )
+                      ),
+                    ),
+                    SizedBox(height: 15* ratio),
+                    Row(
+                        children: <Widget>[
+                          Icon(Icons.auto_fix_high),
+                          Text("비밀번호를 확인해주세요.", style: TextStyle(fontSize: 10))
+                        ]
+                    ),
+                    Container(
+                      height: 60*ratio,
+                      child: TextField(
+                        onChanged: onItemChanged,
+                          controller: myControllerPwCf,
+                          decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50* ratio),
+                                borderSide: BorderSide(
+                                  color: borderColor,
+                                  width: 1.3* ratio,
+                                  //style: BorderStyle.none
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(50* ratio),
+                                borderSide: BorderSide(
+                                  color: borderColor,
+                                  width: 1.3* ratio,
+                                  //style: BorderStyle.none
+                                ),
+                              ),
+                              hintText: '비밀번호 확인',
+                              hintStyle: TextStyle(
+                                  color: hintColor
+                              )
+                          )
+                      ),
+                    ),
+                    SizedBox(height:35* ratio),
+                    ButtonTheme(
+                        buttonColor: Colors.white,
+                        height: 35* ratio,
+                        minWidth: 150* ratio,
+                        child: FlatButton(
+                            child: Text('회원가입', style: TextStyle(fontSize: 25* ratio)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50* ratio)
+                            ),
+                            onPressed: () {
+                              if (myControllerId.text.compareTo("") != 0
+                                  && pwValidate(myControllerPw.text)
+                                  && myControllerPw.text.compareTo(myControllerPwCf.text) == 0) {
 
-            )
-        )
+                                UserRegister user = UserRegister(myControllerId.text, myControllerPw.text, "", "user");
+                                server.postRegister(user)
+                                    .then((value) {
+                                      if (value == 400) {
+                                        showAlertDialogRegisterFail(context);
+                                      } else if (value == 502) {
+                                        showToast("502 bad gateway error!");
+                                      } else if (value == 200) {
+                                        showAlertDialog(context);
+                                      }
+                                    });
+
+                              } else {
+                                showAlertDialogWrong(context);
+                              }
+                            }
+                        )
+                    )
+                        ]
+                    )
+
+              )
+          ),
+      )
 
     );
   }

@@ -374,11 +374,15 @@ class _MainPageState extends State<MainPage> {
                                                           Column(
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
-                                                              Text(
-                                                                  newRestaurantList[index].name,
-                                                                  style: TextStyle(
-                                                                      fontSize: 25 * ratio
-                                                                  )
+
+                                                              Container(
+                                                                width: 200*ratio,
+                                                                child: Text(
+                                                                    newRestaurantList[index].name,
+                                                                    style: TextStyle(
+                                                                        fontSize: 25 * ratio
+                                                                    )
+                                                                ),
                                                               ),
                                                               SizedBox(height: 15*ratio),
                                                               Text(

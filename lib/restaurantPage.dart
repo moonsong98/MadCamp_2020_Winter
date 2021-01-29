@@ -320,12 +320,15 @@ class _Page1WidgetState extends State<Page1Widget> {
                                                         )
                                                     ),
                                                     SizedBox(height: 15*ratio),
-                                                    Text(
-                                                        widget.restaurant.menus[index].description,
-                                                        style: TextStyle(
-                                                            fontSize: 16 * ratio,
-                                                            color: Colors.black45
-                                                        )
+                                                    Container(
+                                                      width: 200 *ratio,
+                                                      child: Text(
+                                                          widget.restaurant.menus[index].description,
+                                                          style: TextStyle(
+                                                              fontSize: 16 * ratio,
+                                                              color: Colors.black45
+                                                          )
+                                                      ),
                                                     )
                                                   ],
                                                 )
@@ -388,8 +391,9 @@ class _Page2WidgetState extends State<Page2Widget> {
     );
   }
 
-  showAlertDialog(BuildContext context, int index) {
+  showAlertDialog(BuildContext context, int index, String text) {
     TextEditingController myController = TextEditingController();
+    myController.text = text;
 
     Widget okButton = FlatButton(
       child: Text("확인"),
@@ -515,18 +519,21 @@ class _Page2WidgetState extends State<Page2Widget> {
                                 ),
                                 Row(
                                     children: <Widget>[
-                                      Text(
-                                          widget.comments[index].body,
-                                          style: TextStyle(
-                                              fontSize: 16* ratio
-                                          )
+                                      Container(
+                                        width: 200*ratio,
+                                        child: Text(
+                                            widget.comments[index].body,
+                                            style: TextStyle(
+                                                fontSize: 16* ratio
+                                            )
+                                        ),
                                       ),
                                       Expanded(
                                           child: Align(
                                               alignment: Alignment.bottomRight,
                                               child: IconButton(
                                                   onPressed: () {
-                                                    showAlertDialog(context, index);
+                                                    showAlertDialog(context, index, widget.comments[index].body);
                                                   },
                                                   icon: Icon(Icons.edit),
                                                   iconSize: 16* ratio
@@ -570,13 +577,16 @@ class _Page2WidgetState extends State<Page2Widget> {
                               children: <Widget>[
                                 Row(
                                     children: <Widget>[
-                                      Text(
-                                          widget.comments[index].nickname,
-                                          style: TextStyle(
-                                              fontSize: 20* ratio,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black87
-                                          )
+                                      Container(
+                                        //width: 200*ratio,
+                                        child: Text(
+                                            widget.comments[index].nickname,
+                                            style: TextStyle(
+                                                fontSize: 20* ratio,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black87
+                                            )
+                                        ),
                                       ),
                                       Expanded(
                                           child: Align(
@@ -594,11 +604,14 @@ class _Page2WidgetState extends State<Page2Widget> {
                                 ),
                                 Row(
                                     children: <Widget>[
-                                      Text(
-                                          widget.comments[index].body,
-                                          style: TextStyle(
-                                              fontSize: 16 * ratio
-                                          )
+                                      Container(
+                                        width: 200*ratio,
+                                        child: Text(
+                                            widget.comments[index].body,
+                                            style: TextStyle(
+                                                fontSize: 16 * ratio
+                                            )
+                                        ),
                                       ),
                                       Expanded(
                                           child: Align(

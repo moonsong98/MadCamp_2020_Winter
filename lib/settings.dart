@@ -114,8 +114,8 @@ class _SettingsState extends State<Settings> {
                           child: Text('변경사항 저장', style: TextStyle(fontSize: 25* ratio)),
                           onPressed: () {
                             // TODO: 서버 db 업데이트, secureStorage 업데이트
-                            if (myControllerNickname.text.length >= 8) {
-                              showToast("닉네임은 최대 7자까지 가능합니다.");
+                            if (myControllerNickname.text.length >= 11) {
+                              showToast("닉네임은 최대 10자까지 가능합니다.");
                             } else {
                               String nickname = myControllerNickname.text;
                               Map<String, String> nicknameJson = {'nickname': nickname};

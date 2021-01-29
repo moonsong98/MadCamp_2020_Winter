@@ -210,9 +210,9 @@ class Server{
 
     for (int i = 0; i < responseList.length; i++) {
       var restaurant = fromJsonRestaurant(responseList[i]);
-      //if (restaurant.confirmed) {
+      if (restaurant.confirmed) {
         restaurants.add(restaurant);
-      //}
+      }
     }
 
     return restaurants;

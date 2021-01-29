@@ -86,7 +86,7 @@ class _MenuPageState extends State<MenuPage> {
                   SizedBox(width: 40* ratio)
                 ]
             ),
-            SizedBox(height: 20* ratio),
+            SizedBox(height: 50* ratio),
             Flex(
               direction: Axis.vertical,
               children: <Widget>[
@@ -96,12 +96,47 @@ class _MenuPageState extends State<MenuPage> {
                     physics: ClampingScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (BuildContext context, int index) {
-                      return  Column(
+                      return Container(
+                            padding: EdgeInsets.symmetric(vertical: 10 * ratio, horizontal: 0),
+                            width: 200 * ratio,
+                            height: 130*ratio,
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(width: 50*ratio),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          widget.sizes[index].size,
+                                          style: TextStyle(
+                                              fontSize: 20* ratio
+                                          )
+                                      ),
+                                      SizedBox(height: 15*ratio),
+                                      Container(
+                                        width: 200 *ratio,
+                                        child: Text(
+                                            "${widget.sizes[index].price.toString()}원",
+                                            style: TextStyle(
+                                                fontSize: 16* ratio
+                                            )
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ]
+                            )
+                        );
+
+                      /*
+                        Column(
                               children: <Widget>[
                                 Container(
                                     padding: EdgeInsets.symmetric(vertical: 0* ratio, horizontal: 0),
                                     child: ListTile(
-                                      leading: SizedBox(width:10*ratio),
+                                      //leading: SizedBox(width:10*ratio),
                                       title: Text(
                                           widget.sizes[index].size,
                                           style: TextStyle(
@@ -122,6 +157,7 @@ class _MenuPageState extends State<MenuPage> {
                               ]
 
                       );
+                      */
                     }
                 )
               ],
