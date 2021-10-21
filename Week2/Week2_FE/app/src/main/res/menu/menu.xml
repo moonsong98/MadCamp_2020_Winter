@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/add_group"
+        android:title="add_group"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/logout"
+        android:title="로그아웃"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/test"
+        android:title="약속 만들기 테스트"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/test_image"
+        android:title="이미지 테스트"
+        app:showAsAction="never" />
+
+</menu>

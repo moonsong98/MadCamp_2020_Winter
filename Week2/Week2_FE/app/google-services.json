@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "90704101464",
+    "project_id": "eattogether-b1949",
+    "storage_bucket": "eattogether-b1949.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90704101464:android:552a0d49a43b7be7270a2d",
+        "android_client_info": {
+          "package_name": "com.madcamp.eattogether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90704101464-k8k0sipsouiaf4fsn0ecdgaq2h0sluua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw24U4SMQmNK69dMGXshVEe6lbK-dUM_w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90704101464-k8k0sipsouiaf4fsn0ecdgaq2h0sluua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

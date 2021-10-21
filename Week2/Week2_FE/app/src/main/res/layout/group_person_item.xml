@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical = "15dp"
+    android:paddingHorizontal="20dp"
+    android:orientation="horizontal">
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <ImageView
+        android:id = "@+id/contact_image"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:adjustViewBounds="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="60dp"
+        android:src="@drawable/contact_default_image"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/contact_image"
+        android:layout_marginLeft="15dp"
+        android:orientation="vertical"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@id/contact_image">
+
+        <TextView
+            android:id = "@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize = "18dp"
+            android:text = "default"
+            />
+        <TextView
+            android:id = "@+id/phoneNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "01000000000"
+            />
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>
