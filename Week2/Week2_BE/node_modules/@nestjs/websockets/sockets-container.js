@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SocketsContainer = void 0;
+class SocketsContainer {
+    constructor() {
+        this.socketEventHosts = new Map();
+    }
+    getAllSocketEventHosts() {
+        return this.socketEventHosts;
+    }
+    getSocketEventsHostByPort(port) {
+        return this.socketEventHosts.get(`${port}`);
+    }
+    addSocketEventsHost(namespace, port, host) {
+        this.socketEventHosts.set(namespace ? `${namespace}:${port}` : `${port}`, host);
+    }
+    clear() {
+        this.socketEventHosts.clear();
+    }
+}
+exports.SocketsContainer = SocketsContainer;
