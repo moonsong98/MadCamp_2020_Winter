@@ -1,0 +1,55 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserType {
+  id: String!
+  username: String!
+  password: String!
+  name: String!
+  email: String!
+  confirmed: Boolean!
+}
+
+type PostType {
+  id: String!
+  title: String!
+  body: String!
+}
+
+type Query {
+  readAllUsers: [UserType!]!
+  login(input: LoginInput!): String!
+  getUser(id: String!): UserType!
+  readAllPosts: [PostType!]!
+}
+
+input LoginInput {
+  username: String!
+  password: String!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): UserType!
+  confirmUser(redisId: String!): Boolean!
+  deleteUser(id: String!): Boolean!
+  deleteAllUsers: Boolean!
+  createPost(input: CreatePostInput!): PostType!
+  deleteAllPosts: Boolean!
+  uploadFile(file: Upload!): Boolean!
+}
+
+input CreateUserInput {
+  username: String!
+  password: String!
+  name: String!
+  email: String!
+}
+
+input CreatePostInput {
+  title: String!
+  body: String!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
